@@ -40,14 +40,15 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithRec
             float max = (float) this.getMaxItemUseDuration(stack);
             EntitySmokeBomb entitySmokeBomb = new EntitySmokeBomb(world, entity, 4*(max - timeLeft)/max);
             world.spawnEntityInWorld(entitySmokeBomb);
+            if(entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.isCreativeMode) {
+                EntityPlayer player = (EntityPlayer) entity;
+                player.inventory.decrStackSize(player.inventory.currentItem, 1);
+            }
         }
     }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-        if(!player.capabilities.isCreativeMode) {
-            player.inventory.decrStackSize(player.inventory.currentItem, 1);
-        }
         player.setActiveHand(hand);
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
