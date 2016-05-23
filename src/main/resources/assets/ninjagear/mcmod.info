@@ -3,8 +3,8 @@
 		"modid": "ninjagear",
 		"name": "NinjaGear",
 
-		"version": "${version}",
-		"mcversion": "${mcversion}",
+		"version": "${mod.version}",
+		"mcversion": "${mod.version_minecraft}",
 
 		"logoFile": "",
 		"screenshots": [],

@@ -45,7 +45,7 @@ public class BlockSmoke extends BlockBase {
     public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
         int meta = this.getMetaFromState(state);
         if(meta < 15) {
-            world.setBlockState(pos, this.getStateFromMeta(Math.min(meta + random.nextInt(3), 15)), 6);
+            world.setBlockState(pos, this.getStateFromMeta(Math.min(meta + 2 + random.nextInt(3), 15)), 6);
         } else {
             world.setBlockToAir(pos);
         }

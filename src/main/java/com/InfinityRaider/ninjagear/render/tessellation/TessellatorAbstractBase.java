@@ -2,7 +2,7 @@ package com.InfinityRaider.ninjagear.render.tessellation;
 
 import com.InfinityRaider.ninjagear.reference.Constants;
 import com.InfinityRaider.ninjagear.utility.TransformationMatrix;
-import com.sun.javafx.geom.Vec3f;
+import com.InfinityRaider.ninjagear.utility.Vec3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;

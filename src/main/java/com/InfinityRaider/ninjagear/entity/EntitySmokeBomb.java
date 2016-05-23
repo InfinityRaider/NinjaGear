@@ -42,9 +42,6 @@ public class EntitySmokeBomb extends EntityThrowable {
         BlockPos pos = this.getBlockPosFromImpact(impact);
         this.clearRevealedStatus(world, pos);
         this.createSmokeCloud(world, pos);
-        if(world.isRemote) {
-            this.spawnSmokeParticles(world, pos);
-        }
     }
 
     private BlockPos getBlockPosFromImpact(RayTraceResult impact) {
@@ -76,12 +73,15 @@ public class EntitySmokeBomb extends EntityThrowable {
                     BlockPos posAt = pos.add(x, y, z);
                     IBlockState state = world.getBlockState(posAt);
                     if(state.getMaterial() == Material.air) {
-                        world.setBlockState(posAt, BlockRegistry.getInstance().blockSmoke.getStateFromMeta(getDarknessValue(radius, world.rand)), 5);
+                        if(world.isRemote) {
+                            this.spawnSmokeParticle(posAt);
+                        } else {
+                            world.setBlockState(posAt, BlockRegistry.getInstance().blockSmoke.getStateFromMeta(getDarknessValue(radius, world.rand)), 3);
+                        }
                     }
                 }
             }
         }
-
     }
 
     private int getDarknessValue(int radius, Random rand) {
@@ -101,24 +101,15 @@ public class EntitySmokeBomb extends EntityThrowable {
     }
 
     @SideOnly(Side.CLIENT)
-    private void spawnSmokeParticles(World world, BlockPos pos) {
-        if(ConfigurationHandler.getInstance().disableSmokeParticles) {
+    private void spawnSmokeParticle(BlockPos pos) {
+        if (ConfigurationHandler.getInstance().disableSmokeParticles) {
             return;
         }
-        for(int phi = 0; phi < 360; phi = phi + 10) {
-            for(int theta = -90; theta <= 90; theta = theta + 10) {
-                float v = 0.1F + world.rand.nextFloat()*0.2F;
-                double cosPhi = Math.cos(phi * Math.PI / 180);
-                double sinPhi = Math.sin(phi*Math.PI/180);
-                double cosTheta = phi == theta ? cosPhi : Math.cos(theta*Math.PI/180);
-                double sinTheta = phi == theta ? sinPhi : Math.sin(phi*Math.PI/180);
-                Minecraft.getMinecraft().renderGlobal.spawnParticle(
-                        EnumParticleTypes.SMOKE_LARGE.getParticleID(), true,
-                        pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5D,
-                        v*cosTheta*cosPhi, v*sinTheta, v*cosTheta*sinPhi,
-                        10
-                );
-            }
-        }
+        Minecraft.getMinecraft().renderGlobal.spawnParticle(
+                EnumParticleTypes.SMOKE_LARGE.getParticleID(), true,
+                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5D,
+                0, 0, 0,
+                50
+        );
     }
 }

@@ -124,7 +124,7 @@ public class TessellatorBakedQuad extends TessellatorAbstractBase {
         double[] coords = this.getTransformationMatrix().transform(x, y, z);
         vertexData.add(new VertexData(getVertexFormat(), (float) coords[0], (float) coords[1], (float) coords[2], u, v)
                 .setRGBA(getRedValueFloat(), getGreenValueFloat(), getBlueValueFloat(), getAlphaValueFloat())
-                .setNormal(getNormal().x, getNormal().y, getNormal().z));
+                .setNormal(getNormal().getX(), getNormal().getY(), getNormal().getZ()));
         if(vertexData.size() == drawMode) {
             UnpackedBakedQuad.Builder quadBuilder = new UnpackedBakedQuad.Builder(getVertexFormat());
             quadBuilder.setQuadTint(getTintIndex());

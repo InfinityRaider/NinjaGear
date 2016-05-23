@@ -1,6 +1,6 @@
 package com.InfinityRaider.ninjagear.render.tessellation;
 
-import com.sun.javafx.geom.Vec3f;
+import com.InfinityRaider.ninjagear.utility.Vec3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
