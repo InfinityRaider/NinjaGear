@@ -1,0 +1,60 @@
+//Creative tabs
+itemGroup.ninjagear.creativeTab=Ninja Gear
+
+//Items
+item.ninjagear:ninjaGear_head.name=Ninja Gear Mask
+item.ninjagear:ninjaGear_chest.name=Ninja Gear Chest
+item.ninjagear:ninjaGear_legs.name=Ninja Gear Leggings
+item.ninjagear:ninjaGear_feet.name=Ninja Gear Shoes
+item.ninjagear:katana.name=Katana
+item.ninjagear:sai.name=Sai
+item.ninjagear:shuriken.name=Shuriken
+item.ninjagear:smokebomb.name=Smoke Bomb
+item.ninjagear:ropeCoil.name=Rope Coil
+item.ninjagear:ropeItem.name=Ninja Rope
+
+//Blocks
+tile.ninjagear:ropeBlock.name=Ninja Rope
+tile.ninjagear:smoke.name=Smoke Bomb Smoke Cloud
+
+//Potion
+ninjagear:potion.ninjaAura=Ninja Sense
+ninjagear:potion.ninjaRevealed=Revealed
+ninjagear:potion.ninjaHidden=Hidden
+
+
+//Tooltips
+ninjagear.tooltip:ninjaGear_head_L1=Head piece for the ninja gear set, wearing the full set will grant a set bonus
+ninjagear.tooltip:ninjaGear_chest_L1=Chest piece for the ninja gear set, wearing the full set will grant a set bonus
+ninjagear.tooltip:ninjaGear_legs_L1=Leg piece for the ninja gear set, wearing the full set will grant a set bonus
+ninjagear.tooltip:ninjaGear_feet_L1=Feet piece for the ninja gear set, wearing the full set will grant a set bonus
+ninjagear.tooltip:ninjaGear_L1=Ninja gear set bonus: makes you more agile, nimble and fast, allows hiding in the dark
+
+ninjagear.tooltip:katana_L1=The katana is the signature weapon of the ninja.
+ninjagear.tooltip:katana_L2=It is faster and deals more damage than conventional swords,
+ninjagear.tooltip:katana_L3=but it requires both hands, an off hand will impede its performance.
+
+ninjagear.tooltip:sai_L1=The sai is the stealthy ninja's best friend,
+ninjagear.tooltip:sai_L2=To use this weapon proficiently, one needs to be equipped in each hand.
+ninjagear.tooltip:sai_L3=Attacking from hiding will result in a critical hit,
+ninjagear.tooltip:sai_L4=but be aware that this will reveal you.
+
+ninjagear.tooltip:shuriken_L1=The shuriken is the ninja's answer to deal with foes at range.
+ninjagear.tooltip:shuriken_L2=Attacking from hiding will result in a critical hit,
+ninjagear.tooltip:shuriken_L3=but be aware that this will reveal you.
+
+ninjagear.tooltip:smokebomb_L1=Sometimes, the ninja needs to make a tactical retreat.
+ninjagear.tooltip:smokebomb_L2=The smoke bomb allows the ninja to vanish into thin air.
+
+ninjagear.tooltip:ropeCoil_L1=Sometimes, the ninja feels the urge to climb things.
+ninjagear.tooltip:ropeCoil_L2=A rope coil can be thrown to a ceiling or anchor points,
+ninjagear.tooltip:ropeCoil_L3=from there a rope of 16m will be attached which can be climbed.
+ninjagear.tooltip:ropeCoil_L4=A rope coil can be made by tying together 16 ninja ropes
+
+ninjagear.tooltip:ropeItem_L1=Climbable ninja rope, attach to ceilings or anchor points.
+ninjagear.tooltip:ropeItem_L2=A rope can be extended downwards by attaching new ropes to an existing rope.
+ninjagear.tooltip:ropeItem_L3=Left click will break the rope up to the clicked part.
+ninjagear.tooltip:ropeItem_L4=Shift+left click will break the entire rope.
+ninjagear.tooltip:ropeItem_L5=16 or more ropes can be tied together into a rope coil by shift+clicking.
+
+ninjagear.tooltip:hiddenItem_L1=This item will not reveal you when equipped.

@@ -1,0 +1,7 @@
+{
+    "parent": "ninjagear:item/base",
+    "textures": {
+        "layer0": "ninjagear:items/ninjaGear_chest",
+        "layer1": "ninjagear:items/ninjaGear_chest_overlay"
+    }
+}

@@ -1,0 +1,22 @@
+[
+	{
+		"modid": "ninjagear",
+		"name": "NinjaGear",
+
+		"version": "${version}",
+		"mcversion": "${mcversion}",
+
+		"logoFile": "",
+		"screenshots": [],
+
+		"parent":"",
+		"dependencies": [],
+
+		"authorList": [ "\n    - InfinityRaider" ],
+		"credits": "\n  Author:\n    - InfinityRaider\n  - Textures:\n    - SkeletonPunk",
+
+		"url": "",
+
+		"description": "We have to be sneaky, Charlie!"
+	}
+]
