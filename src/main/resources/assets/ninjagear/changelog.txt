@@ -1,4 +1,7 @@
 Changelog
 ---------
-0.1
+0.0.2
+-1.9.4 port
+
+0.0.1
 -Initial build
