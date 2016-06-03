@@ -24,7 +24,7 @@ public class PotionRegistry {
     public Potion potionNinjaRevealed;
 
     private PotionRegistry() {
-        this.potionRegistry = Potion.potionRegistry;
+        this.potionRegistry = Potion.REGISTRY;
         getNextId();
     }
 

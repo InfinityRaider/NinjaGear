@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
 public class EntitySmokeBomb extends EntityThrowable {
@@ -37,6 +38,7 @@ public class EntitySmokeBomb extends EntityThrowable {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected void onImpact(RayTraceResult impact) {
         World world = this.getEntityWorld();
         BlockPos pos = this.getBlockPosFromImpact(impact);
@@ -61,6 +63,7 @@ public class EntitySmokeBomb extends EntityThrowable {
         });
     }
 
+    @SuppressWarnings("deprecation")
     private void createSmokeCloud(World world, BlockPos pos) {
         int r = ConfigurationHandler.getInstance().smokeCloudRadius;
         for(int x = -r; x <= r; x++) {
@@ -72,7 +75,7 @@ public class EntitySmokeBomb extends EntityThrowable {
                     }
                     BlockPos posAt = pos.add(x, y, z);
                     IBlockState state = world.getBlockState(posAt);
-                    if(state.getMaterial() == Material.air) {
+                    if(state.getMaterial() == Material.AIR) {
                         if(world.isRemote) {
                             this.spawnSmokeParticle(posAt);
                         } else {

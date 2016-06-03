@@ -6,6 +6,7 @@ import com.InfinityRaider.ninjagear.render.tessellation.TessellatorBakedQuad;
 import com.InfinityRaider.ninjagear.render.tessellation.TessellatorVertexBuffer;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -33,12 +34,14 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import javax.vecmath.Matrix4f;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
+@MethodsReturnNonnullByDefault
 public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRenderer<T> implements IModel {
     private final IBlockRenderingHandler<T> renderer;
 
@@ -67,6 +70,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void renderTileEntityAt(T te, double x, double y, double z, float partialTicks, int destroyStage) {
         ITessellator tessellator = TessellatorVertexBuffer.getInstance(Tessellator.getInstance());
         World world = te.getWorld();
@@ -75,7 +79,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
         Block block = state.getBlock();
         IBlockState extendedState = block.getExtendedState(state, world, pos);
 
-        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
@@ -176,6 +180,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
         }
 
         @Override
+        @ParametersAreNonnullByDefault
         public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
             return new BakedItemModel<>(world, block, tile, stack, entity, renderer, format, bakedTextureGetter);
         }
@@ -244,7 +249,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
         @Override
         public TextureAtlasSprite getParticleTexture() {
-            return null;
+            return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
         }
 
         @Override
@@ -254,7 +259,7 @@ public class BlockRenderer<T extends TileEntity> extends TileEntitySpecialRender
 
         @Override
         public ItemOverrideList getOverrides() {
-            return null;
+            return ItemOverrideList.NONE;
         }
 
         @Override

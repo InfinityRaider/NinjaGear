@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+
 public abstract class BlockBase<T extends TileEntity> extends Block implements ICustomRenderedBlock<T> {
     private final String internalName;
 
@@ -77,6 +79,7 @@ public abstract class BlockBase<T extends TileEntity> extends Block implements I
      * @return the block's class, may be null if no specific ItemBlock class is
      * desired.
      */
+    @Nullable
     protected abstract Class<? extends ItemBlock> getItemBlockClass();
 
     /**

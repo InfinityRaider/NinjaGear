@@ -2,6 +2,7 @@ package com.InfinityRaider.ninjagear.render.entity;
 
 import com.InfinityRaider.ninjagear.entity.EntityShuriken;
 import com.InfinityRaider.ninjagear.registry.ItemRegistry;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
@@ -16,7 +17,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @SideOnly(Side.CLIENT)
+@MethodsReturnNonnullByDefault
 public class RenderEntityShuriken extends Render<EntityShuriken> {
     private final RenderItem renderItem;
     private final ItemStack item;
@@ -28,6 +32,7 @@ public class RenderEntityShuriken extends Render<EntityShuriken> {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void doRender(EntityShuriken entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
         //translate and rotate according to throwing heading
@@ -50,7 +55,7 @@ public class RenderEntityShuriken extends Render<EntityShuriken> {
 
         GlStateManager.enableRescaleNormal();
 
-        this.bindTexture(TextureMap.locationBlocksTexture);
+        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
@@ -66,8 +71,9 @@ public class RenderEntityShuriken extends Render<EntityShuriken> {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(EntityShuriken entity) {
-        return TextureMap.locationBlocksTexture;
+        return TextureMap.LOCATION_BLOCKS_TEXTURE;
     }
 
     public static IRenderFactory<EntityShuriken> getFactory() {

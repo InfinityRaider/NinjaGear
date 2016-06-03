@@ -23,13 +23,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Random;
 
 public class BlockSmoke extends BlockBase {
 
     public BlockSmoke() {
-        super("smoke", Material.air);
+        super("smoke", Material.AIR);
         this.setCreativeTab(null);
         this.fullBlock = false;
         this.needsRandomTick = true;
@@ -42,6 +44,7 @@ public class BlockSmoke extends BlockBase {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
         int meta = this.getMetaFromState(state);
         if(meta < 15) {
@@ -52,19 +55,23 @@ public class BlockSmoke extends BlockBase {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {}
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
         return true;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
@@ -75,6 +82,7 @@ public class BlockSmoke extends BlockBase {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
         return 0;
     }
@@ -119,6 +127,7 @@ public class BlockSmoke extends BlockBase {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }
@@ -143,6 +152,8 @@ public class BlockSmoke extends BlockBase {
         return true;
     }
 
+    @Override
+    @ParametersAreNonnullByDefault
     public boolean canCreatureSpawn(IBlockState state, IBlockAccess world, BlockPos pos, EntityLiving.SpawnPlacementType type) {
         return false;
     }
@@ -153,7 +164,9 @@ public class BlockSmoke extends BlockBase {
     }
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity entity) {}
+    @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity entity) {}
 
     @Override
     protected RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {

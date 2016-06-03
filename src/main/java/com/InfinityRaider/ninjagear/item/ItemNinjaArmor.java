@@ -100,28 +100,28 @@ public class ItemNinjaArmor extends ItemArmor implements IItemWithModel, IItemWi
             case HEAD:
                 list.add(new ShapedOreRecipe(this, "dhd", "sls",
                         'd', "dyeBlack",
-                        'h', Items.leather_helmet,
+                        'h', Items.LEATHER_HELMET,
                         's', "string",
                         'l', "leather"));
                 break;
             case CHEST:
                 list.add(new ShapedOreRecipe(this, "dsd", "lcl", "lsl",
                         'd', "dyeBlack",
-                        'c', Items.leather_chestplate,
+                        'c', Items.LEATHER_CHESTPLATE,
                         's', "string",
                         'l', "leather"));
                 break;
             case LEGS:
                 list.add(new ShapedOreRecipe(this, "dpd", "lsl", "lsl",
                         'd', "dyeBlack",
-                        'p', Items.leather_leggings,
+                        'p', Items.LEATHER_LEGGINGS,
                         's', "string",
                         'l', "leather"));
                 break;
             case FEET:
                 list.add(new ShapedOreRecipe(this, "s s", "dbd", "lll",
                         'd', "dyeBlack",
-                        'b', Items.leather_boots,
+                        'b', Items.LEATHER_BOOTS,
                         's', "string",
                         'l', "leather"));
                 break;
@@ -131,8 +131,8 @@ public class ItemNinjaArmor extends ItemArmor implements IItemWithModel, IItemWi
 
     public static ArmorMaterial getMaterial() {
         if(ninjaCloth == null) {
-            ninjaCloth = EnumHelper.addArmorMaterial("ninjaCloth", "ninja_cloth", 15, new int[]{2, 3, 4, 2}, 12, SoundEvents.item_armor_equip_leather);
-            ninjaCloth.customCraftingMaterial = Item.getItemFromBlock(Blocks.wool);
+            ninjaCloth = EnumHelper.addArmorMaterial("ninjaCloth", "ninja_cloth", 15, new int[]{2, 3, 4, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F);
+            ninjaCloth.customCraftingMaterial = Item.getItemFromBlock(Blocks.WOOL);
         }
         return ninjaCloth;
     }

@@ -3,6 +3,7 @@ package com.InfinityRaider.ninjagear.item;
 import com.InfinityRaider.ninjagear.api.v1.IHiddenItem;
 import com.InfinityRaider.ninjagear.entity.EntitySmokeBomb;
 import com.InfinityRaider.ninjagear.reference.Reference;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -18,9 +19,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
 public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithRecipe {
     public ItemSmokeBomb() {
         super("smokebomb");
@@ -48,12 +51,14 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithRec
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         player.setActiveHand(hand);
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
@@ -68,9 +73,9 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithRec
     public List<IRecipe> getRecipes() {
         List<IRecipe> list = new ArrayList<>();
         list.add(new ShapelessOreRecipe(new ItemStack(this, 8),
-                Items.fire_charge,
+                Items.FIRE_CHARGE,
                 "dyeBlack",
-                Items.paper,
+                Items.PAPER,
                 "dyeBlack"));
         return list;
     }

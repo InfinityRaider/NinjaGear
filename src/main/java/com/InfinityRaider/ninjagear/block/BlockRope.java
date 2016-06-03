@@ -7,6 +7,7 @@ import com.InfinityRaider.ninjagear.reference.Reference;
 import com.InfinityRaider.ninjagear.registry.ItemRegistry;
 import com.InfinityRaider.ninjagear.render.block.IBlockRenderingHandler;
 import com.InfinityRaider.ninjagear.render.block.RenderBlockRope;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -26,14 +27,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
+@MethodsReturnNonnullByDefault
 public class BlockRope extends BlockBase implements IRopeAttachable {
     private final ResourceLocation texture;
     private final AxisAlignedBB box;
 
     public BlockRope() {
-        super("ropeBlock", Material.vine);
+        super("ropeBlock", Material.VINE);
         this.texture = new ResourceLocation(Reference.MOD_ID, "blocks/" + this.getInternalName());
         float u = Constants.UNIT;
         this.box = new AxisAlignedBB(7.5*u, 0, 7.5*u, 8.5*u, 1, 8.5*u);
@@ -51,7 +54,8 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
     }
 
     @Override
-    public void onNeighborBlockChange(World world, BlockPos pos, IBlockState state, Block neighborBlock) {
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
         if(!this.canRopeStay(world, pos)) {
             this.breakRope(world, pos, state, false);
         }
@@ -71,6 +75,7 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canPlaceBlockAt(World world, BlockPos pos) {
         return world.getBlockState(pos).getBlock().isReplaceable(world, pos) && canRopeStay(world, pos);
     }
@@ -137,6 +142,7 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
     @Override
     @Deprecated
     @SuppressWarnings("deprecation")
+    @ParametersAreNonnullByDefault
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
         return new ItemStack(ItemRegistry.getInstance().itemRope);
     }
@@ -157,21 +163,25 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return false;
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
         return side == EnumFacing.UP || side == EnumFacing.DOWN;
     }
@@ -187,6 +197,7 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return false;
     }

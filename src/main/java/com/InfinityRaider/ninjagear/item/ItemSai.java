@@ -6,6 +6,7 @@ import com.InfinityRaider.ninjagear.handler.NinjaAuraHandler;
 import com.InfinityRaider.ninjagear.reference.Reference;
 import com.InfinityRaider.ninjagear.registry.PotionRegistry;
 import com.google.common.collect.Multimap;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,9 +29,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
 public class ItemSai extends ItemBase implements IHiddenItem, IItemWithRecipe {
     private ItemStack repairItem;
 
@@ -43,11 +46,16 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithRecipe {
     @Override
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
         Block block = state.getBlock();
-        if (block == Blocks.web) {
+        if (block == Blocks.WEB) {
             return 15.0F;
         } else {
             Material material = state.getMaterial();
-            return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : 1.5F;
+            return material != Material.PLANTS
+                    && material != Material.VINE
+                    && material != Material.CORAL
+                    && material != Material.LEAVES
+                    && material != Material.GOURD
+                    ? 1.0F : 1.5F;
         }
     }
 
@@ -78,7 +86,7 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithRecipe {
 
     @Override
     public boolean canHarvestBlock(IBlockState blockIn) {
-        return blockIn.getBlock() == Blocks.web;
+        return blockIn.getBlock() == Blocks.WEB;
     }
 
     @Override
@@ -95,9 +103,7 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithRecipe {
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         ItemStack mat = this.getRepairItemStack();
-        return mat != null
-                && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)
-                || super.getIsRepairable(toRepair, repair);
+        return net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false) || super.getIsRepairable(toRepair, repair);
     }
 
     public ItemStack getRepairItemStack() {
@@ -106,7 +112,7 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithRecipe {
             if (steel.size() > 0) {
                 this.repairItem = steel.get(0);
             } else {
-                this.repairItem = new ItemStack(Items.iron_ingot);
+                this.repairItem = new ItemStack(Items.IRON_INGOT);
             }
         }
         return this.repairItem;
@@ -138,11 +144,13 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithRecipe {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         return  getAttributeModifiers(slot, stack, true, false);
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
@@ -160,7 +168,7 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithRecipe {
         List<IRecipe> list = new ArrayList<>();
         String steel = OreDictionary.doesOreNameExist("ingotSteel") ? "ingotSteel" : "ingotIron";
         list.add(new ShapedOreRecipe(this," s ", "sis", " h ",
-                's', Items.iron_sword,
+                's', Items.IRON_SWORD,
                 'i', steel,
                 'h', "stickWood"));
         return list;

@@ -3,6 +3,7 @@ package com.InfinityRaider.ninjagear.item;
 import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
 import com.InfinityRaider.ninjagear.reference.Reference;
 import com.google.common.collect.Multimap;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -24,9 +25,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
 public class ItemKatana extends ItemBase implements IItemWithRecipe {
     private ItemStack repairItem;
 
@@ -39,11 +42,16 @@ public class ItemKatana extends ItemBase implements IItemWithRecipe {
     @Override
     public float getStrVsBlock(ItemStack stack, IBlockState state) {
         Block block = state.getBlock();
-        if (block == Blocks.web) {
+        if (block == Blocks.WEB) {
             return 15.0F;
         } else {
             Material material = state.getMaterial();
-            return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : 1.5F;
+            return material != Material.PLANTS
+                    && material != Material.VINE
+                    && material != Material.CORAL
+                    && material != Material.LEAVES
+                    && material != Material.GOURD
+                    ? 1.0F : 1.5F;
         }
     }
 
@@ -63,7 +71,7 @@ public class ItemKatana extends ItemBase implements IItemWithRecipe {
 
     @Override
     public boolean canHarvestBlock(IBlockState blockIn) {
-        return blockIn.getBlock() == Blocks.web;
+        return blockIn.getBlock() == Blocks.WEB;
     }
 
     @Override
@@ -91,7 +99,7 @@ public class ItemKatana extends ItemBase implements IItemWithRecipe {
             if (steel.size() > 0) {
                 this.repairItem = steel.get(0);
             } else {
-                this.repairItem = new ItemStack(Items.iron_ingot);
+                this.repairItem = new ItemStack(Items.IRON_INGOT);
             }
         }
         return this.repairItem;
@@ -119,11 +127,13 @@ public class ItemKatana extends ItemBase implements IItemWithRecipe {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         return  getAttributeModifiers(slot, stack, true);
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L1"));
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L2"));
@@ -137,8 +147,8 @@ public class ItemKatana extends ItemBase implements IItemWithRecipe {
         list.add(new ShapedOreRecipe(this," i ", "gsg", "wiw",
                 'i', steel,
                 'g', "ingotGold",
-                's', Items.iron_sword,
-                'w', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE)));
+                's', Items.IRON_SWORD,
+                'w', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)));
         return list;
     }
 }

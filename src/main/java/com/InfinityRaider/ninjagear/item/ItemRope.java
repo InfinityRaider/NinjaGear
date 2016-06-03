@@ -6,6 +6,7 @@ import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
 import com.InfinityRaider.ninjagear.reference.Reference;
 import com.InfinityRaider.ninjagear.registry.BlockRegistry;
 import com.InfinityRaider.ninjagear.registry.ItemRegistry;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -21,9 +22,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
 public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, IItemWithRecipe {
     private final BlockRope block;
 
@@ -48,7 +51,7 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
             int i = this.getMetadata(stack.getMetadata());
             IBlockState newState = this.block.onBlockPlaced(world, pos, face, hitX, hitY, hitZ, i, player);
             if (this.block.canPlaceBlockAt(world, pos) && placeBlockAt(stack, player, world, pos, newState)) {
-                SoundType soundtype = this.block.getStepSound();
+                SoundType soundtype = this.block.getSoundType();
                 world.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                 --stack.stackSize;
             }
@@ -59,6 +62,7 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if(player.isSneaking()) {
             if(world.isRemote) {
@@ -82,6 +86,7 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));

@@ -6,6 +6,7 @@ import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
 import com.InfinityRaider.ninjagear.handler.NinjaAuraHandler;
 import com.InfinityRaider.ninjagear.reference.Reference;
 import com.InfinityRaider.ninjagear.registry.PotionRegistry;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -19,15 +20,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
+@MethodsReturnNonnullByDefault
 public class ItemShuriken extends ItemBase implements IHiddenItem, IItemWithRecipe {
     public ItemShuriken() {
         super("shuriken");
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
         if(!world.isRemote) {
             boolean crit = player.isPotionActive(PotionRegistry.getInstance().potionNinjaHidden);
@@ -42,6 +46,7 @@ public class ItemShuriken extends ItemBase implements IHiddenItem, IItemWithReci
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
         tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
@@ -57,7 +62,7 @@ public class ItemShuriken extends ItemBase implements IHiddenItem, IItemWithReci
     public List<IRecipe> getRecipes() {
         List<IRecipe> list = new ArrayList<>();
         list.add(new ShapedOreRecipe(new ItemStack(this, 16)," b ", "bib", " b ",
-                'b', Blocks.iron_bars,
+                'b', Blocks.IRON_BARS,
                 'i', "ingotIron"));
         return list;
     }

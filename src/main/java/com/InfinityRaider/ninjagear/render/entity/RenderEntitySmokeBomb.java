@@ -2,6 +2,7 @@ package com.InfinityRaider.ninjagear.render.entity;
 
 import com.InfinityRaider.ninjagear.entity.EntitySmokeBomb;
 import com.InfinityRaider.ninjagear.registry.ItemRegistry;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
@@ -15,7 +16,10 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 @SideOnly(Side.CLIENT)
+@MethodsReturnNonnullByDefault
 public class RenderEntitySmokeBomb extends Render<EntitySmokeBomb> {
     private final RenderItem renderItem;
     private final ItemStack item;
@@ -27,6 +31,7 @@ public class RenderEntitySmokeBomb extends Render<EntitySmokeBomb> {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public void doRender(EntitySmokeBomb entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)x, (float)y, (float)z);
@@ -34,7 +39,7 @@ public class RenderEntitySmokeBomb extends Render<EntitySmokeBomb> {
         GlStateManager.rotate(-this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
         GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-        this.bindTexture(TextureMap.locationBlocksTexture);
+        this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         if (this.renderOutlines) {
             GlStateManager.enableColorMaterial();
             GlStateManager.enableOutlineMode(this.getTeamColor(entity));
@@ -50,8 +55,9 @@ public class RenderEntitySmokeBomb extends Render<EntitySmokeBomb> {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(EntitySmokeBomb entity) {
-        return TextureMap.locationBlocksTexture;
+        return TextureMap.LOCATION_BLOCKS_TEXTURE;
     }
 
     public static IRenderFactory<EntitySmokeBomb> getFactory() {
