@@ -1,8 +1,8 @@
-package com.InfinityRaider.ninjagear.entity;
+package com.infinityraider.ninjagear.entity;
 
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.registry.BlockRegistry;
-import com.InfinityRaider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.registry.BlockRegistry;
+import com.infinityraider.ninjagear.registry.PotionRegistry;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

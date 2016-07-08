@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.api;
+package com.infinityraider.ninjagear.api;
 
-import com.InfinityRaider.ninjagear.api.v0.NoAPI;
+import com.infinityraider.ninjagear.api.v0.NoAPI;
 
 /**
  * This is the main entry point for the NinjaGear API.

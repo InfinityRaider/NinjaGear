@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.proxy;
+package com.infinityraider.ninjagear.proxy;
 
-import com.InfinityRaider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.registry.PotionRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;

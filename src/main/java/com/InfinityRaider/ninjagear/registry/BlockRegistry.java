@@ -1,11 +1,11 @@
-package com.InfinityRaider.ninjagear.registry;
+package com.infinityraider.ninjagear.registry;
 
-import com.InfinityRaider.ninjagear.block.BlockRope;
-import com.InfinityRaider.ninjagear.block.BlockSmoke;
-import com.InfinityRaider.ninjagear.block.ICustomRenderedBlock;
-import com.InfinityRaider.ninjagear.item.IItemWithRecipe;
-import com.InfinityRaider.ninjagear.render.block.BlockRendererRegistry;
-import com.InfinityRaider.ninjagear.utility.LogHelper;
+import com.infinityraider.ninjagear.block.BlockRope;
+import com.infinityraider.ninjagear.block.BlockSmoke;
+import com.infinityraider.ninjagear.block.ICustomRenderedBlock;
+import com.infinityraider.ninjagear.item.IItemWithRecipe;
+import com.infinityraider.ninjagear.render.block.BlockRendererRegistry;
+import com.infinityraider.ninjagear.utility.LogHelper;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;

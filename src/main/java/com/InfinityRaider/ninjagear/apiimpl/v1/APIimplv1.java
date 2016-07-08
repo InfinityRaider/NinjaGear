@@ -1,11 +1,11 @@
-package com.InfinityRaider.ninjagear.apiimpl.v1;
+package com.infinityraider.ninjagear.apiimpl.v1;
 
-import com.InfinityRaider.ninjagear.NinjaGear;
-import com.InfinityRaider.ninjagear.api.API;
-import com.InfinityRaider.ninjagear.api.APIBase;
-import com.InfinityRaider.ninjagear.api.APIStatus;
-import com.InfinityRaider.ninjagear.api.v1.APIv1;
-import com.InfinityRaider.ninjagear.handler.NinjaAuraHandler;
+import com.infinityraider.ninjagear.NinjaGear;
+import com.infinityraider.ninjagear.api.API;
+import com.infinityraider.ninjagear.api.APIBase;
+import com.infinityraider.ninjagear.api.APIStatus;
+import com.infinityraider.ninjagear.api.v1.APIv1;
+import com.infinityraider.ninjagear.handler.NinjaAuraHandler;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class APIimplv1 implements APIv1 {

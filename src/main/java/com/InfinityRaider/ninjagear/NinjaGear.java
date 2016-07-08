@@ -1,8 +1,8 @@
-package com.InfinityRaider.ninjagear;
+package com.infinityraider.ninjagear;
 
-import com.InfinityRaider.ninjagear.proxy.IProxy;
-import com.InfinityRaider.ninjagear.reference.Reference;
-import com.InfinityRaider.ninjagear.utility.LogHelper;
+import com.infinityraider.ninjagear.proxy.IProxy;
+import com.infinityraider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.utility.LogHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

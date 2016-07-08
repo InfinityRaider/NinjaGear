@@ -1,17 +1,21 @@
-package com.InfinityRaider.ninjagear.reference;
+package com.infinityraider.ninjagear.reference;
 
 public interface Reference {
-    String MOD_ID = "ninjagear";
-    String MOD_NAME = "${mod.name}";
+	
+	String MOD_NAME = /*^${mod.name}^*/ "AgriCraft";
+	String MOD_ID = /*^${mod.id}^*/ "agricraft";
+	String AUTHOR = /*^${mod.author}^*/ "Captain Nemo";
 
-    String VER_MAJOR = "${mod.version_major}";
-    String VER_MINOR = "${mod.version_minor}";
-    String VER_REVIS = "${mod.version_patch}";
-    String MOD_VERSION = "${mod.version}";
-    String VERSION = "${mod.version_minecraft}-${mod.version}";
+	String VER_MAJOR = /*^${mod.version_major}^*/ "0";
+	String VER_MINOR = /*^${mod.version_minor}^*/ "0";
+	String VER_PATCH = /*^${mod.version_patch}^*/ "0";
+	String MOD_VERSION = /*^${mod.version}^*/ "0.0.0";
+	String VERSION = /*^${mod.version_minecraft}-${mod.version}^*/ "0.0-0.0.0";
 
-    String AUTHOR = "${mod.author}";
-    String CLIENT_PROXY_CLASS = "com.InfinityRaider.ninjagear.proxy.ClientProxy";
-    String SERVER_PROXY_CLASS = "com.InfinityRaider.ninjagear.proxy.ServerProxy";
-    String GUI_FACTORY_CLASS = "com.InfinityRaider.ninjagear.gui.GuiFactory";
+	String CLIENT_PROXY_CLASS = "com.infinityraider.ninjagear.proxy.ClientProxy";
+    String SERVER_PROXY_CLASS = "com.infinityraider.ninjagear.proxy.ServerProxy";
+    String GUI_FACTORY_CLASS = "com.infinityraider.ninjagear.gui.GuiFactory";
+	
+	String UPDATE_URL = /*^${mod.update_url}^*/ "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+	
 }

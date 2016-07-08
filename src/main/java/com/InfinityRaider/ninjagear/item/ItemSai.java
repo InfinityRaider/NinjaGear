@@ -1,10 +1,10 @@
-package com.InfinityRaider.ninjagear.item;
+package com.infinityraider.ninjagear.item;
 
-import com.InfinityRaider.ninjagear.api.v1.IHiddenItem;
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.handler.NinjaAuraHandler;
-import com.InfinityRaider.ninjagear.reference.Reference;
-import com.InfinityRaider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.api.v1.IHiddenItem;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.handler.NinjaAuraHandler;
+import com.infinityraider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.registry.PotionRegistry;
 import com.google.common.collect.Multimap;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;

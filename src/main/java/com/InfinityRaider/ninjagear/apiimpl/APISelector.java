@@ -1,9 +1,9 @@
-package com.InfinityRaider.ninjagear.apiimpl;
+package com.infinityraider.ninjagear.apiimpl;
 
-import com.InfinityRaider.ninjagear.api.API;
-import com.InfinityRaider.ninjagear.api.APIBase;
-import com.InfinityRaider.ninjagear.api.APIStatus;
-import com.InfinityRaider.ninjagear.apiimpl.v1.APIimplv1;
+import com.infinityraider.ninjagear.api.API;
+import com.infinityraider.ninjagear.api.APIBase;
+import com.infinityraider.ninjagear.api.APIStatus;
+import com.infinityraider.ninjagear.apiimpl.v1.APIimplv1;
 
 public class APISelector implements APIBase{
     private APISelector() {}

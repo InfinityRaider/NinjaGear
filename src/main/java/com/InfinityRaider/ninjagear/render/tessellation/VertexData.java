@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.render.tessellation;
+package com.infinityraider.ninjagear.render.tessellation;
 
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;

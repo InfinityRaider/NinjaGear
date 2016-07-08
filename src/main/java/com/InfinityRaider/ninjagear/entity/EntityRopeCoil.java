@@ -1,9 +1,9 @@
-package com.InfinityRaider.ninjagear.entity;
+package com.infinityraider.ninjagear.entity;
 
-import com.InfinityRaider.ninjagear.block.BlockRope;
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.registry.BlockRegistry;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.block.BlockRope;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.registry.BlockRegistry;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;

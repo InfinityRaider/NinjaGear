@@ -1,12 +1,12 @@
-package com.InfinityRaider.ninjagear.registry;
+package com.infinityraider.ninjagear.registry;
 
-import com.InfinityRaider.ninjagear.NinjaGear;
-import com.InfinityRaider.ninjagear.entity.EntityRopeCoil;
-import com.InfinityRaider.ninjagear.entity.EntityShuriken;
-import com.InfinityRaider.ninjagear.entity.EntitySmokeBomb;
-import com.InfinityRaider.ninjagear.render.entity.RenderEntityRopeCoil;
-import com.InfinityRaider.ninjagear.render.entity.RenderEntityShuriken;
-import com.InfinityRaider.ninjagear.render.entity.RenderEntitySmokeBomb;
+import com.infinityraider.ninjagear.NinjaGear;
+import com.infinityraider.ninjagear.entity.EntityRopeCoil;
+import com.infinityraider.ninjagear.entity.EntityShuriken;
+import com.infinityraider.ninjagear.entity.EntitySmokeBomb;
+import com.infinityraider.ninjagear.render.entity.RenderEntityRopeCoil;
+import com.infinityraider.ninjagear.render.entity.RenderEntityShuriken;
+import com.infinityraider.ninjagear.render.entity.RenderEntitySmokeBomb;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

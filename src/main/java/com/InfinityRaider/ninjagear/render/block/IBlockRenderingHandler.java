@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.render.block;
+package com.infinityraider.ninjagear.render.block;
 
-import com.InfinityRaider.ninjagear.render.tessellation.ITessellator;
+import com.infinityraider.ninjagear.render.tessellation.ITessellator;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;

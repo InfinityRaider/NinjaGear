@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.render.block;
+package com.infinityraider.ninjagear.render.block;
 
-import com.InfinityRaider.ninjagear.block.ICustomRenderedBlock;
+import com.infinityraider.ninjagear.block.ICustomRenderedBlock;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

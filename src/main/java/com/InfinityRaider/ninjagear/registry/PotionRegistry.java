@@ -1,10 +1,10 @@
-package com.InfinityRaider.ninjagear.registry;
+package com.infinityraider.ninjagear.registry;
 
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.potion.PotionNinjaAura;
-import com.InfinityRaider.ninjagear.potion.PotionNinjaHidden;
-import com.InfinityRaider.ninjagear.potion.PotionNinjaRevealed;
-import com.InfinityRaider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.potion.PotionNinjaAura;
+import com.infinityraider.ninjagear.potion.PotionNinjaHidden;
+import com.infinityraider.ninjagear.potion.PotionNinjaRevealed;
+import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.RegistryNamespaced;

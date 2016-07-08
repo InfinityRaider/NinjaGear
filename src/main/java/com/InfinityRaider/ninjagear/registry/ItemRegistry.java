@@ -1,9 +1,9 @@
-package com.InfinityRaider.ninjagear.registry;
+package com.infinityraider.ninjagear.registry;
 
-import com.InfinityRaider.ninjagear.item.*;
-import com.InfinityRaider.ninjagear.reference.Reference;
-import com.InfinityRaider.ninjagear.render.item.ItemRendererRegistry;
-import com.InfinityRaider.ninjagear.utility.LogHelper;
+import com.infinityraider.ninjagear.item.*;
+import com.infinityraider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.render.item.ItemRendererRegistry;
+import com.infinityraider.ninjagear.utility.LogHelper;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;

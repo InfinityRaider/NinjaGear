@@ -1,8 +1,8 @@
-package com.InfinityRaider.ninjagear.entity;
+package com.infinityraider.ninjagear.entity;
 
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.reference.Names;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.reference.Names;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

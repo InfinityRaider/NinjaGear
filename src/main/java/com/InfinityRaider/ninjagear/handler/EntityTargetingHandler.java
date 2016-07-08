@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.handler;
+package com.infinityraider.ninjagear.handler;
 
-import com.InfinityRaider.ninjagear.api.v1.IEntityTrueSight;
-import com.InfinityRaider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.api.v1.IEntityTrueSight;
+import com.infinityraider.ninjagear.registry.PotionRegistry;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

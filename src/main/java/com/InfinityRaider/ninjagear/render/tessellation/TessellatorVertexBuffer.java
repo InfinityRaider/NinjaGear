@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.render.tessellation;
+package com.infinityraider.ninjagear.render.tessellation;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.Tessellator;

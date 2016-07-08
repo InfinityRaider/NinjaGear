@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.utility;
+package com.infinityraider.ninjagear.utility;
 
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraftforge.fml.common.FMLLog;
 import org.apache.logging.log4j.Level;
 

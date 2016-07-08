@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.render.tessellation;
+package com.infinityraider.ninjagear.render.tessellation;
 
 import com.google.common.base.Function;
 import net.minecraft.client.renderer.block.model.BakedQuad;

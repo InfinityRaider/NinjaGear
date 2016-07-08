@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.api.v1;
+package com.infinityraider.ninjagear.api.v1;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;

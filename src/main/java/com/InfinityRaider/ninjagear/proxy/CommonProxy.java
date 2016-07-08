@@ -1,14 +1,14 @@
-package com.InfinityRaider.ninjagear.proxy;
+package com.infinityraider.ninjagear.proxy;
 
-import com.InfinityRaider.ninjagear.apiimpl.APISelector;
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.handler.EntityTargetingHandler;
-import com.InfinityRaider.ninjagear.handler.NinjaAuraHandler;
-import com.InfinityRaider.ninjagear.network.NetworkWrapper;
-import com.InfinityRaider.ninjagear.registry.BlockRegistry;
-import com.InfinityRaider.ninjagear.registry.EntityRegistry;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
-import com.InfinityRaider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.apiimpl.APISelector;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.handler.EntityTargetingHandler;
+import com.infinityraider.ninjagear.handler.NinjaAuraHandler;
+import com.infinityraider.ninjagear.network.NetworkWrapper;
+import com.infinityraider.ninjagear.registry.BlockRegistry;
+import com.infinityraider.ninjagear.registry.EntityRegistry;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.registry.PotionRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;

@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.utility;
+package com.infinityraider.ninjagear.utility;
 
-import com.InfinityRaider.ninjagear.reference.Names;
+import com.infinityraider.ninjagear.reference.Names;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;

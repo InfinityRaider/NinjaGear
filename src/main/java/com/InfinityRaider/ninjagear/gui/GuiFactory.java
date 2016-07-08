@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.gui;
+package com.infinityraider.ninjagear.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

@@ -1,9 +1,9 @@
-package com.InfinityRaider.ninjagear.item;
+package com.infinityraider.ninjagear.item;
 
-import com.InfinityRaider.ninjagear.reference.Reference;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
-import com.InfinityRaider.ninjagear.registry.PotionRegistry;
-import com.InfinityRaider.ninjagear.utility.RegisterHelper;
+import com.infinityraider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.utility.RegisterHelper;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

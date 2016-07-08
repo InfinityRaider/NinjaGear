@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.item;
+package com.infinityraider.ninjagear.item;
 
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.reference.Reference;
 import com.google.common.collect.Multimap;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;

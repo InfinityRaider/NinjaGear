@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.network;
+package com.infinityraider.ninjagear.network;
 
-import com.InfinityRaider.ninjagear.reference.Reference;
-import com.InfinityRaider.ninjagear.utility.LogHelper;
+import com.infinityraider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.utility.LogHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;

@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.block;
+package com.infinityraider.ninjagear.block;
 
-import com.InfinityRaider.ninjagear.block.blockstate.IBlockStateSpecial;
-import com.InfinityRaider.ninjagear.render.block.IBlockRenderingHandler;
+import com.infinityraider.ninjagear.block.blockstate.IBlockStateSpecial;
+import com.infinityraider.ninjagear.render.block.IBlockRenderingHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;

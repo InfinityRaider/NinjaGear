@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.utility;
+package com.infinityraider.ninjagear.utility;
 
 
 import net.minecraft.util.math.Vec3d;

@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.item;
+package com.infinityraider.ninjagear.item;
 
 import net.minecraft.item.crafting.IRecipe;
 

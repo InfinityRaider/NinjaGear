@@ -1,9 +1,9 @@
-package com.InfinityRaider.ninjagear.render.block;
+package com.infinityraider.ninjagear.render.block;
 
-import com.InfinityRaider.ninjagear.block.blockstate.IBlockStateSpecial;
-import com.InfinityRaider.ninjagear.render.tessellation.ITessellator;
-import com.InfinityRaider.ninjagear.render.tessellation.TessellatorBakedQuad;
-import com.InfinityRaider.ninjagear.render.tessellation.TessellatorVertexBuffer;
+import com.infinityraider.ninjagear.block.blockstate.IBlockStateSpecial;
+import com.infinityraider.ninjagear.render.tessellation.ITessellator;
+import com.infinityraider.ninjagear.render.tessellation.TessellatorBakedQuad;
+import com.infinityraider.ninjagear.render.tessellation.TessellatorVertexBuffer;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import mcp.MethodsReturnNonnullByDefault;

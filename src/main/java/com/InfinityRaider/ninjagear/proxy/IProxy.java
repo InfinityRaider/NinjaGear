@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.proxy;
+package com.infinityraider.ninjagear.proxy;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

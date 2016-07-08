@@ -1,9 +1,9 @@
-package com.InfinityRaider.ninjagear.block;
+package com.infinityraider.ninjagear.block;
 
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
-import com.InfinityRaider.ninjagear.registry.BlockRegistry;
-import com.InfinityRaider.ninjagear.render.block.IBlockRenderingHandler;
-import com.InfinityRaider.ninjagear.render.block.RenderBlockSmoke;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.registry.BlockRegistry;
+import com.infinityraider.ninjagear.render.block.IBlockRenderingHandler;
+import com.infinityraider.ninjagear.render.block.RenderBlockSmoke;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;

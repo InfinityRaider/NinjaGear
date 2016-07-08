@@ -1,10 +1,10 @@
-package com.InfinityRaider.ninjagear.block;
+package com.infinityraider.ninjagear.block;
 
-import com.InfinityRaider.ninjagear.block.blockstate.BlockStateSpecial;
-import com.InfinityRaider.ninjagear.block.blockstate.IBlockStateSpecial;
-import com.InfinityRaider.ninjagear.reference.Reference;
-import com.InfinityRaider.ninjagear.registry.BlockRegistry;
-import com.InfinityRaider.ninjagear.utility.RegisterHelper;
+import com.infinityraider.ninjagear.block.blockstate.BlockStateSpecial;
+import com.infinityraider.ninjagear.block.blockstate.IBlockStateSpecial;
+import com.infinityraider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.registry.BlockRegistry;
+import com.infinityraider.ninjagear.utility.RegisterHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
