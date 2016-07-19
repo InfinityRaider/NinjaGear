@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.api;
+package com.infinityraider.ninjagear.api;
 
 public interface APIBase {
 

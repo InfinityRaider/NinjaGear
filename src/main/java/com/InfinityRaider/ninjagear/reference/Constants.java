@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.reference;
+package com.infinityraider.ninjagear.reference;
 
 public class Constants {
     /**

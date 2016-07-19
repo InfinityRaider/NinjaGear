@@ -1,8 +1,8 @@
-package com.InfinityRaider.ninjagear.render.item;
+package com.infinityraider.ninjagear.render.item;
 
-import com.InfinityRaider.ninjagear.render.RenderUtilBase;
-import com.InfinityRaider.ninjagear.render.tessellation.ITessellator;
-import com.InfinityRaider.ninjagear.render.tessellation.TessellatorBakedQuad;
+import com.infinityraider.ninjagear.render.RenderUtilBase;
+import com.infinityraider.ninjagear.render.tessellation.ITessellator;
+import com.infinityraider.ninjagear.render.tessellation.TessellatorBakedQuad;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;

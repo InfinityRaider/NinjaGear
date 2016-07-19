@@ -1,10 +1,10 @@
-package com.InfinityRaider.ninjagear.handler;
+package com.infinityraider.ninjagear.handler;
 
-import com.InfinityRaider.ninjagear.NinjaGear;
-import com.InfinityRaider.ninjagear.item.ItemNinjaArmor;
-import com.InfinityRaider.ninjagear.network.MessageUpdateGadgetRenderMaskServer;
-import com.InfinityRaider.ninjagear.network.NetworkWrapper;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.NinjaGear;
+import com.infinityraider.ninjagear.item.ItemNinjaArmor;
+import com.infinityraider.ninjagear.network.MessageUpdateGadgetRenderMaskServer;
+import com.infinityraider.ninjagear.network.NetworkWrapper;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;

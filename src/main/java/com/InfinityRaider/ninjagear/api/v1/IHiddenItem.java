@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.api.v1;
+package com.infinityraider.ninjagear.api.v1;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

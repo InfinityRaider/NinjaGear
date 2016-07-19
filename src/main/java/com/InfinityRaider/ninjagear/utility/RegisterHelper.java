@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.utility;
+package com.infinityraider.ninjagear.utility;
 
-import com.InfinityRaider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;

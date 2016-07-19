@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.api.v1;
+package com.infinityraider.ninjagear.api.v1;
 
-import com.InfinityRaider.ninjagear.api.APIBase;
+import com.infinityraider.ninjagear.api.APIBase;
 import net.minecraft.entity.player.EntityPlayer;
 
 /**

@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.render.item;
+package com.infinityraider.ninjagear.render.item;
 
-import com.InfinityRaider.ninjagear.item.ICustomRenderedItem;
+import com.infinityraider.ninjagear.item.ICustomRenderedItem;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.IResourceManager;

@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.handler;
+package com.infinityraider.ninjagear.handler;
 
-import com.InfinityRaider.ninjagear.api.v1.IHiddenItem;
-import com.InfinityRaider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.api.v1.IHiddenItem;
+import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;

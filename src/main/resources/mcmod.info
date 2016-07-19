@@ -3,10 +3,10 @@
 		"modid": "ninjagear",
 		"name": "NinjaGear",
 
-		"version": "${mod.version}",
-		"mcversion": "${mod.version_minecraft}",
+		"version": "${version}",
+		"mcversion": "${mcversion}",
 
-		"logoFile": "",
+		"logoFile": "assets/ninjagear/textures/logo.png",
 		"screenshots": [],
 
 		"parent":"",
@@ -15,7 +15,7 @@
 		"authorList": [ "\n    - InfinityRaider" ],
 		"credits": "\n  Author:\n    - InfinityRaider\n  - Textures:\n    - SkeletonPunk",
 
-		"url": "",
+		"url": "http://minecraft.curseforge.com/projects/ninjagear",
 
 		"description": "We have to be sneaky, Charlie!"
 	}

@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.render.entity;
+package com.infinityraider.ninjagear.render.entity;
 
-import com.InfinityRaider.ninjagear.entity.EntityRopeCoil;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.entity.EntityRopeCoil;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;

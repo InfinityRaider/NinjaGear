@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.network;
+package com.infinityraider.ninjagear.network;
 
-import com.InfinityRaider.ninjagear.NinjaGear;
+import com.infinityraider.ninjagear.NinjaGear;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

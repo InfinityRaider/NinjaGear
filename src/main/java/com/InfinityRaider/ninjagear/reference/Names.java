@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.reference;
+package com.infinityraider.ninjagear.reference;
 
 public final class Names {
     public static class NBT {

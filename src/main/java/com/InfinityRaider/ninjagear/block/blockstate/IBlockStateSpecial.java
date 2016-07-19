@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.block.blockstate;
+package com.infinityraider.ninjagear.block.blockstate;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;

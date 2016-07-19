@@ -1,12 +1,12 @@
-package com.InfinityRaider.ninjagear.block;
+package com.infinityraider.ninjagear.block;
 
-import com.InfinityRaider.ninjagear.api.v1.IRopeAttachable;
-import com.InfinityRaider.ninjagear.item.ItemRope;
-import com.InfinityRaider.ninjagear.reference.Constants;
-import com.InfinityRaider.ninjagear.reference.Reference;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
-import com.InfinityRaider.ninjagear.render.block.IBlockRenderingHandler;
-import com.InfinityRaider.ninjagear.render.block.RenderBlockRope;
+import com.infinityraider.ninjagear.api.v1.IRopeAttachable;
+import com.infinityraider.ninjagear.item.ItemRope;
+import com.infinityraider.ninjagear.reference.Constants;
+import com.infinityraider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.render.block.IBlockRenderingHandler;
+import com.infinityraider.ninjagear.render.block.RenderBlockRope;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

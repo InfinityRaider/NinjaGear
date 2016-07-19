@@ -1,4 +1,4 @@
-package com.InfinityRaider.ninjagear.utility;
+package com.infinityraider.ninjagear.utility;
 
 public class Vec3f {
     private float x;

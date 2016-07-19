@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.potion;
+package com.infinityraider.ninjagear.potion;
 
-import com.InfinityRaider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;

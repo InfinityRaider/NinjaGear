@@ -1,8 +1,8 @@
-package com.InfinityRaider.ninjagear.item;
+package com.infinityraider.ninjagear.item;
 
-import com.InfinityRaider.ninjagear.api.v1.IHiddenItem;
-import com.InfinityRaider.ninjagear.entity.EntitySmokeBomb;
-import com.InfinityRaider.ninjagear.reference.Reference;
+import com.infinityraider.ninjagear.api.v1.IHiddenItem;
+import com.infinityraider.ninjagear.entity.EntitySmokeBomb;
+import com.infinityraider.ninjagear.reference.Reference;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

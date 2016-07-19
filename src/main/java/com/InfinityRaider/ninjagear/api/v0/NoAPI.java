@@ -1,7 +1,7 @@
-package com.InfinityRaider.ninjagear.api.v0;
+package com.infinityraider.ninjagear.api.v0;
 
-import com.InfinityRaider.ninjagear.api.APIBase;
-import com.InfinityRaider.ninjagear.api.APIStatus;
+import com.infinityraider.ninjagear.api.APIBase;
+import com.infinityraider.ninjagear.api.APIStatus;
 
 /**
  * Filler object to represent the API until SettlerCraft had the chance to

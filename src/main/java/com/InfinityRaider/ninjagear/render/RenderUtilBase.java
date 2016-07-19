@@ -1,6 +1,6 @@
-package com.InfinityRaider.ninjagear.render;
+package com.infinityraider.ninjagear.render;
 
-import com.InfinityRaider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;

@@ -1,9 +1,9 @@
-package com.InfinityRaider.ninjagear.render.player;
+package com.infinityraider.ninjagear.render.player;
 
-import com.InfinityRaider.ninjagear.NinjaGear;
-import com.InfinityRaider.ninjagear.handler.RenderPlayerHandler;
-import com.InfinityRaider.ninjagear.registry.ItemRegistry;
-import com.InfinityRaider.ninjagear.render.RenderUtilBase;
+import com.infinityraider.ninjagear.NinjaGear;
+import com.infinityraider.ninjagear.handler.RenderPlayerHandler;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.render.RenderUtilBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
