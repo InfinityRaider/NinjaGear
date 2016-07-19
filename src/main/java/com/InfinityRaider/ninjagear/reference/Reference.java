@@ -2,8 +2,8 @@ package com.infinityraider.ninjagear.reference;
 
 public interface Reference {
 	
-	String MOD_NAME = /*^${mod.name}^*/ "AgriCraft";
-	String MOD_ID = /*^${mod.id}^*/ "agricraft";
+	String MOD_NAME = /*^${mod.name}^*/ "NinjaGear";
+	String MOD_ID = /*^${mod.id}^*/ "ninjagear";
 	String AUTHOR = /*^${mod.author}^*/ "Captain Nemo";
 
 	String VER_MAJOR = /*^${mod.version_major}^*/ "0";
