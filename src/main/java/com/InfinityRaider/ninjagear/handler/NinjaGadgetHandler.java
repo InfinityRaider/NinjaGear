@@ -1,9 +1,9 @@
 package com.infinityraider.ninjagear.handler;
 
+import com.infinityraider.infinitylib.network.NetworkWrapper;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.network.MessageUpdateGadgetRenderMaskServer;
-import com.infinityraider.ninjagear.network.NetworkWrapper;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

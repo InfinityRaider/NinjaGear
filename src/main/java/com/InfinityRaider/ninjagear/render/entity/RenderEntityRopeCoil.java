@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,7 +23,7 @@ public class RenderEntityRopeCoil  extends Render<EntityRopeCoil> {
     private final RenderItem renderItem;
     private final ItemStack item;
 
-    private RenderEntityRopeCoil(RenderManager renderManager) {
+    public RenderEntityRopeCoil(RenderManager renderManager) {
         super(renderManager);
         this.renderItem = Minecraft.getMinecraft().getRenderItem();
         this.item = new ItemStack(ItemRegistry.getInstance().itemRopeCoil);
@@ -58,18 +57,5 @@ public class RenderEntityRopeCoil  extends Render<EntityRopeCoil> {
     @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(EntityRopeCoil entity) {
         return TextureMap.LOCATION_BLOCKS_TEXTURE;
-    }
-
-    public static IRenderFactory<EntityRopeCoil> getFactory() {
-        return Factory.INSTANCE;
-    }
-
-    private static class Factory implements IRenderFactory<EntityRopeCoil> {
-        private static Factory INSTANCE = new Factory();
-
-        @Override
-        public Render<? super EntityRopeCoil> createRenderFor(RenderManager manager) {
-            return new RenderEntityRopeCoil(manager);
-        }
     }
 }

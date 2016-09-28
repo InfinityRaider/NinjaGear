@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.network;
 
+import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.ninjagear.handler.RenderPlayerHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +9,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class MessageInvisibility extends MessageBase<IMessage> {
-    EntityPlayer player;
-    boolean invisible;
+    private EntityPlayer player;
+    private boolean invisible;
 
     @SuppressWarnings("unused")
     public MessageInvisibility() {}

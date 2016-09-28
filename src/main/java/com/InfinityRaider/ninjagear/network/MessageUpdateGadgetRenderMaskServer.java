@@ -1,5 +1,7 @@
 package com.infinityraider.ninjagear.network;
 
+import com.infinityraider.infinitylib.network.MessageBase;
+import com.infinityraider.infinitylib.network.NetworkWrapper;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

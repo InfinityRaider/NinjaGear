@@ -1,25 +1,28 @@
 package com.infinityraider.ninjagear.block;
 
+import com.infinityraider.infinitylib.block.BlockBase;
+import com.infinityraider.infinitylib.block.ICustomRenderedBlock;
+import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
+import com.infinityraider.infinitylib.render.block.IBlockRenderingHandler;
 import com.infinityraider.ninjagear.api.v1.IRopeAttachable;
 import com.infinityraider.ninjagear.item.ItemRope;
 import com.infinityraider.ninjagear.reference.Constants;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
-import com.infinityraider.ninjagear.render.block.IBlockRenderingHandler;
 import com.infinityraider.ninjagear.render.block.RenderBlockRope;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -28,28 +31,33 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 @MethodsReturnNonnullByDefault
-public class BlockRope extends BlockBase implements IRopeAttachable {
-    private final ResourceLocation texture;
+public class BlockRope extends BlockBase implements ICustomRenderedBlock, IRopeAttachable {
     private final AxisAlignedBB box;
 
     public BlockRope() {
         super("ropeBlock", Material.VINE);
-        this.texture = new ResourceLocation(Reference.MOD_ID, "blocks/" + this.getInternalName());
         float u = Constants.UNIT;
         this.box = new AxisAlignedBB(7.5*u, 0, 7.5*u, 8.5*u, 1, 8.5*u);
         this.setCreativeTab(null);
     }
 
     @Override
-    protected IProperty[] getPropertyArray() {
-        return new IProperty[0];
+    public List<String> getOreTags() {
+        return Collections.emptyList();
     }
 
     @Override
-    protected Class<? extends ItemBlock> getItemBlockClass() {
+    protected InfinityProperty[] getPropertyArray() {
+        return new InfinityProperty[0];
+    }
+
+    @Override
+    public Class<? extends ItemBlock> getItemBlockClass() {
         return null;
     }
 
@@ -140,6 +148,12 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return this.box;
+    }
+
+    @Override
     @Deprecated
     @SuppressWarnings("deprecation")
     @ParametersAreNonnullByDefault
@@ -155,11 +169,6 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
     @Override
     public boolean canSpawnInBlock() {
         return false;
-    }
-
-    @Override
-    public AxisAlignedBB getDefaultBoundingBox() {
-        return this.box;
     }
 
     @Override
@@ -209,14 +218,19 @@ public class BlockRope extends BlockBase implements IRopeAttachable {
 
     @Override
     @SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public IBlockRenderingHandler getRenderer() {
         return new RenderBlockRope(this);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public ResourceLocation getTexture(EnumFacing side) {
-        return texture;
+    public ModelResourceLocation getBlockModelResourceLocation() {
+        return new ModelResourceLocation(Reference.MOD_ID, this.getInternalName());
     }
 
     @Override

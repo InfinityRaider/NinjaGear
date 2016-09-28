@@ -4,7 +4,10 @@ import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.registry.BlockRegistry;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.render.entity.RenderEntityRopeCoil;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -13,6 +16,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityRopeCoil extends EntityThrowable {
     @SuppressWarnings("unused")
@@ -112,5 +118,21 @@ public class EntityRopeCoil extends EntityThrowable {
             }
         }
         this.setDead();
+    }
+
+    public static class RenderFactory implements IRenderFactory<EntityRopeCoil> {
+        private static final RenderFactory INSTANCE = new RenderFactory();
+
+        public static RenderFactory getInstance() {
+            return INSTANCE;
+        }
+
+        private RenderFactory() {}
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Render<? super EntityRopeCoil> createRenderFor(RenderManager manager) {
+            return new RenderEntityRopeCoil(manager);
+        }
     }
 }

@@ -1,9 +1,11 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.item.IInfinityItem;
+import com.infinityraider.infinitylib.item.IItemWithModel;
+import com.infinityraider.infinitylib.item.IItemWithRecipe;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import com.infinityraider.ninjagear.registry.PotionRegistry;
-import com.infinityraider.ninjagear.utility.RegisterHelper;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,9 +27,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ItemNinjaArmor extends ItemArmor implements IItemWithModel, IItemWithRecipe {
+public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWithModel, IItemWithRecipe {
     private static ArmorMaterial ninjaCloth;
 
     private final String internalName;
@@ -35,14 +38,20 @@ public class ItemNinjaArmor extends ItemArmor implements IItemWithModel, IItemWi
     public ItemNinjaArmor(String name, int renderIndex, EntityEquipmentSlot equipmentSlot) {
         super(getMaterial(), renderIndex, equipmentSlot);
         this.internalName = name;
-        this.setCreativeTab(ItemRegistry.getInstance().creativeTab());
-        RegisterHelper.registerItem(this, name);
-        ItemRegistry.getInstance().items.add(this);
+        this.setCreativeTab(ItemRegistry.CREATIVE_TAB);
     }
 
     public String getInternalName() {
         return internalName;
     }
+
+    @Override
+    public List<String> getOreTags() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void registerItemRenderer() {}
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
@@ -135,5 +144,10 @@ public class ItemNinjaArmor extends ItemArmor implements IItemWithModel, IItemWi
             ninjaCloth.customCraftingMaterial = Item.getItemFromBlock(Blocks.WOOL);
         }
         return ninjaCloth;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

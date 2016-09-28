@@ -1,14 +1,15 @@
 package com.infinityraider.ninjagear;
 
+import com.infinityraider.infinitylib.InfinityMod;
+import com.infinityraider.infinitylib.network.INetworkWrapper;
+import com.infinityraider.infinitylib.proxy.base.IProxyBase;
+import com.infinityraider.ninjagear.network.*;
 import com.infinityraider.ninjagear.proxy.IProxy;
 import com.infinityraider.ninjagear.reference.Reference;
-import com.infinityraider.ninjagear.utility.LogHelper;
+import com.infinityraider.ninjagear.registry.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 
 @Mod(
         modid = Reference.MOD_ID,
@@ -16,39 +17,90 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
         version = Reference.VERSION,
         guiFactory = Reference.GUI_FACTORY_CLASS
 )
-public class NinjaGear {
+public class NinjaGear extends InfinityMod {
     @Mod.Instance(Reference.MOD_ID)
     public static NinjaGear instance;
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static IProxy proxy;
 
-    @Mod.EventHandler
-    @SuppressWarnings("unused")
-    public static void preInit(FMLPreInitializationEvent event) {
-        LogHelper.debug("Starting Pre-Initialization");
-        proxy.preInit(event);
-        LogHelper.debug("Pre-Initialization Complete");
+    @Override
+    public IProxyBase proxy() {
+        return proxy;
+    }
+
+    @Override
+    public String getModId() {
+        return Reference.MOD_ID;
+    }
+
+    @Override
+    public Object getModBlockRegistry() {
+        return BlockRegistry.getInstance();
+    }
+
+    @Override
+    public Object getModItemRegistry() {
+        return ItemRegistry.getInstance();
+    }
+
+    @Override
+    public Object getModEntityRegistry() {
+        return EntityRegistry.getInstance();
+    }
+
+    @Override
+    public void registerMessages(INetworkWrapper wrapper) {
+        wrapper.registerMessage(MessageInvisibility.class);
+        wrapper.registerMessage(MessageUpdateGadgetRenderMaskClient.class);
+        wrapper.registerMessage(MessageUpdateGadgetRenderMaskServer.class);
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
-    public static void init(FMLInitializationEvent event) {
-        LogHelper.debug("Starting Initialization");
-        proxy.init(event);
-        LogHelper.debug("Initialization Complete");
+    public void onPreInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
-    public static void postInit(FMLPostInitializationEvent event) {
-        LogHelper.debug("Starting Post-Initialization");
-        proxy.postInit(event);
-        LogHelper.debug("Post-Initialization Complete");
+    public void onInit(FMLInitializationEvent event) {
+        super.init(event);
     }
 
     @Mod.EventHandler
     @SuppressWarnings("unused")
-    public static void onServerStart(FMLServerStartingEvent event) {
+    public void onPostInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
+    }
+
+    @Mod.EventHandler
+    @SuppressWarnings("unused")
+    public void serverAboutToStart(FMLServerAboutToStartEvent event) {
+        super.onServerAboutToStart(event);
+    }
+
+    @Mod.EventHandler
+    @SuppressWarnings("unused")
+    public void serverStart(FMLServerStartingEvent event) {
+        super.onServerStarting(event);
+    }
+
+    @Mod.EventHandler
+    @SuppressWarnings("unused")
+    public void serverStarted(FMLServerStartedEvent event) {
+        super.onServerStarted(event);
+    }
+
+    @Mod.EventHandler
+    @SuppressWarnings("unused")
+    public void serverStopping(FMLServerStoppingEvent event) {
+        super.onServerStopping(event);
+    }
+
+    @Mod.EventHandler
+    @SuppressWarnings("unused")
+    public void serverStopped(FMLServerStoppedEvent event) {
+        super.onServerStopped(event);
     }
 }

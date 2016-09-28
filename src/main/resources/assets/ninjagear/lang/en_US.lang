@@ -1,5 +1,5 @@
 //Creative tabs
-itemGroup.ninjagear.creativeTab=Ninja Gear
+itemGroup.ninjagear.creative_tab=Ninja Gear
 
 //Items
 item.ninjagear:ninjaGear_head.name=Ninja Gear Mask

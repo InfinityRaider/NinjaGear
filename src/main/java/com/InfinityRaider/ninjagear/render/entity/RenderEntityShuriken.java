@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -25,7 +24,7 @@ public class RenderEntityShuriken extends Render<EntityShuriken> {
     private final RenderItem renderItem;
     private final ItemStack item;
 
-    private RenderEntityShuriken(RenderManager renderManager) {
+    public RenderEntityShuriken(RenderManager renderManager) {
         super(renderManager);
         this.renderItem = Minecraft.getMinecraft().getRenderItem();
         this.item = new ItemStack(ItemRegistry.getInstance().itemShuriken);
@@ -74,18 +73,5 @@ public class RenderEntityShuriken extends Render<EntityShuriken> {
     @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(EntityShuriken entity) {
         return TextureMap.LOCATION_BLOCKS_TEXTURE;
-    }
-
-    public static IRenderFactory<EntityShuriken> getFactory() {
-        return Factory.INSTANCE;
-    }
-
-    private static class Factory implements IRenderFactory<EntityShuriken> {
-        private static Factory INSTANCE = new Factory();
-
-        @Override
-        public Render<? super EntityShuriken> createRenderFor(RenderManager manager) {
-            return new RenderEntityShuriken(manager);
-        }
     }
 }

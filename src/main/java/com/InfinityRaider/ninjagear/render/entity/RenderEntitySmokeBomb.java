@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,7 +23,7 @@ public class RenderEntitySmokeBomb extends Render<EntitySmokeBomb> {
     private final RenderItem renderItem;
     private final ItemStack item;
 
-    private RenderEntitySmokeBomb(RenderManager renderManager) {
+    public RenderEntitySmokeBomb(RenderManager renderManager) {
         super(renderManager);
         this.renderItem = Minecraft.getMinecraft().getRenderItem();
         this.item = new ItemStack(ItemRegistry.getInstance().itemSmokeBomb);
@@ -58,18 +57,5 @@ public class RenderEntitySmokeBomb extends Render<EntitySmokeBomb> {
     @ParametersAreNonnullByDefault
     protected ResourceLocation getEntityTexture(EntitySmokeBomb entity) {
         return TextureMap.LOCATION_BLOCKS_TEXTURE;
-    }
-
-    public static IRenderFactory<EntitySmokeBomb> getFactory() {
-        return Factory.INSTANCE;
-    }
-
-    private static class Factory implements IRenderFactory<EntitySmokeBomb> {
-        private static Factory INSTANCE = new Factory();
-
-        @Override
-        public Render<? super EntitySmokeBomb> createRenderFor(RenderManager manager) {
-            return new RenderEntitySmokeBomb(manager);
-        }
     }
 }

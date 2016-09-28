@@ -3,7 +3,10 @@ package com.infinityraider.ninjagear.entity;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
+import com.infinityraider.ninjagear.render.entity.RenderEntityShuriken;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -14,7 +17,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityShuriken extends EntityThrowable implements IEntityAdditionalSpawnData {
     private float crit;
@@ -107,5 +113,20 @@ public class EntityShuriken extends EntityThrowable implements IEntityAdditional
     public void readSpawnData(ByteBuf buffer) {
         this.crit = buffer.readFloat();
         this.direction =new Vec3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+    }
+
+
+    public static class RenderFactory implements IRenderFactory<EntityShuriken> {
+        private static final RenderFactory INSTANCE = new RenderFactory();
+
+        public static RenderFactory getInstance() {
+            return INSTANCE;
+        }
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Render<? super EntityShuriken> createRenderFor(RenderManager manager) {
+            return new RenderEntityShuriken(manager);
+        }
     }
 }

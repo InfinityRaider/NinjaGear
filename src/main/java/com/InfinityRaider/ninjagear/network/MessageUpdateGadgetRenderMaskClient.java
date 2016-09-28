@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.network;
 
+import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.ninjagear.render.player.RenderNinjaGadget;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

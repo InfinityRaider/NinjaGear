@@ -1,5 +1,8 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.item.IItemWithModel;
+import com.infinityraider.infinitylib.item.IItemWithRecipe;
+import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
@@ -10,6 +13,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -24,6 +28,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
@@ -33,8 +38,7 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
     public ItemRope() {
         super("ropeItem");
         this.block = (BlockRope) BlockRegistry.getInstance().blockRope;
-        this.setCreativeTab(ItemRegistry.getInstance().creativeTab());
-        ItemRegistry.getInstance().items.add(this);
+        this.setCreativeTab(ItemRegistry.CREATIVE_TAB);
     }
 
     @Override
@@ -120,5 +124,17 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
         list.add(new ShapelessOreRecipe(new ItemStack(this, ConfigurationHandler.getInstance().ropeCoilLength),
                 ItemRegistry.getInstance().itemRopeCoil));
         return list;
+    }
+
+    @Override
+    public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+        List<Tuple<Integer, ModelResourceLocation>> list = new ArrayList<>();
+        list.add(new Tuple<>(0, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + this.getInternalName(), "inventory")));
+        return list;
+    }
+
+    @Override
+    public List<String> getOreTags() {
+        return Collections.emptyList();
     }
 }

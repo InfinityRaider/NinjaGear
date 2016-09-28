@@ -1,60 +1,52 @@
 package com.infinityraider.ninjagear.render.block;
 
+import com.google.common.collect.ImmutableList;
+import com.infinityraider.infinitylib.render.RenderUtilBase;
+import com.infinityraider.infinitylib.render.block.IBlockRenderingHandler;
+import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.ninjagear.block.BlockRope;
-import com.infinityraider.ninjagear.render.RenderUtilBase;
-import com.infinityraider.ninjagear.render.tessellation.ITessellator;
-import net.minecraft.block.Block;
+import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class RenderBlockRope extends RenderUtilBase implements IBlockRenderingHandler {
+public class RenderBlockRope extends RenderUtilBase implements IBlockRenderingHandler<BlockRope> {
     private final BlockRope rope;
+    private final ResourceLocation texture;
 
     public RenderBlockRope(BlockRope rope) {
         this.rope = rope;
+        this.texture = new ResourceLocation(Reference.MOD_ID, "blocks/" + this.getBlock().getInternalName());
     }
 
     @Override
-    public Block getBlock() {
+    public BlockRope getBlock() {
         return rope;
     }
 
     @Override
-    public TileEntity getTileEntity() {
-        return null;
-    }
-
-    @Override
     public List<ResourceLocation> getAllTextures() {
-        List<ResourceLocation> textures = new ArrayList<>();
-        for(EnumFacing facing : EnumFacing.values()) {
-            ResourceLocation texture = rope.getTexture(facing);
-            if(texture != null && !textures.contains(texture)) {
-                textures.add(texture);
-            }
-        }
-        return textures;
+        return ImmutableList.of(this.texture);
     }
 
     @Override
-    public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, double x, double y, double z, IBlockState state, Block block, @Nullable TileEntity tile, boolean dynamicRender, float partialTick, int destroyStage) {
+    public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, BlockRope block) {
         this.addVertices(tessellator, this.getIcon());
     }
+
+    @Override
+    public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, BlockRope block,
+                                     ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {}
 
     private void addVertices(ITessellator tessellator, TextureAtlasSprite icon) {
         //face-11 front
@@ -87,27 +79,17 @@ public class RenderBlockRope extends RenderUtilBase implements IBlockRenderingHa
     }
 
     @Override
-    public void renderInventoryBlock(ITessellator tessellator, World world, IBlockState state, Block block, @Nullable TileEntity tile, ItemStack stack, EntityLivingBase entity, ItemCameraTransforms.TransformType type) {
-
-    }
-
-    @Override
     public TextureAtlasSprite getIcon() {
-        return this.getIcon(rope.getTexture(EnumFacing.UP));
+        return getIcon(this.texture);
     }
 
     @Override
-    public boolean doInventoryRendering() {
-        return true;
-    }
-
-    @Override
-    public boolean hasDynamicRendering() {
+    public boolean applyAmbientOcclusion() {
         return false;
     }
 
     @Override
-    public boolean hasStaticRendering() {
+    public boolean doInventoryRendering() {
         return true;
     }
 }

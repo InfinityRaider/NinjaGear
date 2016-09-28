@@ -3,9 +3,12 @@ package com.infinityraider.ninjagear.entity;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.registry.BlockRegistry;
 import com.infinityraider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.render.entity.RenderEntitySmokeBomb;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.EnumParticleTypes;
@@ -14,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -114,5 +118,21 @@ public class EntitySmokeBomb extends EntityThrowable {
                 0, 0, 0,
                 50
         );
+    }
+
+    public static class RenderFactory implements IRenderFactory<EntitySmokeBomb> {
+        private static final RenderFactory INSTANCE = new RenderFactory();
+
+        public static RenderFactory getInstance() {
+            return INSTANCE;
+        }
+
+        private RenderFactory() {}
+
+        @Override
+        @SideOnly(Side.CLIENT)
+        public Render<? super EntitySmokeBomb> createRenderFor(RenderManager manager) {
+            return new RenderEntitySmokeBomb(manager);
+        }
     }
 }

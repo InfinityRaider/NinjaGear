@@ -1,12 +1,17 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.item.IItemWithModel;
+import com.infinityraider.infinitylib.item.IItemWithRecipe;
+import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.google.common.collect.Multimap;
+import com.infinityraider.ninjagear.registry.ItemRegistry;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -17,6 +22,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -27,16 +33,18 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class ItemKatana extends ItemBase implements IItemWithRecipe {
+public class ItemKatana extends ItemBase implements IItemWithRecipe, IItemWithModel {
     private ItemStack repairItem;
 
     public ItemKatana() {
         super("katana");
         this.setMaxDamage(1000);
         this.setMaxStackSize(1);
+        this.setCreativeTab(ItemRegistry.CREATIVE_TAB);
     }
 
     @Override
@@ -149,6 +157,18 @@ public class ItemKatana extends ItemBase implements IItemWithRecipe {
                 'g', "ingotGold",
                 's', Items.IRON_SWORD,
                 'w', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE)));
+        return list;
+    }
+
+    @Override
+    public List<String> getOreTags() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
+        List<Tuple<Integer, ModelResourceLocation>> list = new ArrayList<>();
+        list.add(new Tuple<>(0, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + this.getInternalName(), "inventory")));
         return list;
     }
 }
