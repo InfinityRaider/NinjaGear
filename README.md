@@ -15,5 +15,5 @@ If you report a bug and I request more feedback, the label 'Awaiting reply' will
 [discord-link]:https://discord.gg/9qfhaWc/ "InfinityRaider Discord"
 [discord]:https://img.shields.io/badge/discord-InfinityRaider-ff69b4.svg "InfinityRaider Discord"
 
-[bug-link]:https://www.github.com/InfinityRaider/AgriCraft/issues
+[bug-link]:https://www.github.com/InfinityRaider/NinjaGear/issues
 [bug]:https://img.shields.io/badge/issue-bug-aa1111.svg
