@@ -1,0 +1,3 @@
+[submodule "lib/InfiinityLib"]
+	path = lib/InfiinityLib
+	url = https://github.com/InfinityRaider/InfinityLib.git
