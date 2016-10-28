@@ -25,6 +25,9 @@ public interface IProxy extends IProxyBase {
     }
 
     @Override
+    default void registerCapabilities() {}
+
+    @Override
     default void registerEventHandlers() {
         this.registerEventHandler(EntityTargetingHandler.getInstance());
         this.registerEventHandler(NinjaAuraHandler.getInstance());

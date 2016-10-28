@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.network;
 
 import com.infinityraider.infinitylib.network.MessageBase;
-import com.infinityraider.infinitylib.network.NetworkWrapper;
+import com.infinityraider.ninjagear.NinjaGear;
 import io.netty.buffer.ByteBuf;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -25,7 +25,7 @@ public class MessageUpdateGadgetRenderMaskServer extends MessageBase<IMessage> {
     @Override
     protected void processMessage(MessageContext ctx) {
         if(ctx.side == Side.SERVER && ctx.getServerHandler().playerEntity != null) {
-            NetworkWrapper.getInstance().sendToAll(new MessageUpdateGadgetRenderMaskClient(ctx.getServerHandler().playerEntity, this.mask));
+            NinjaGear.instance.getNetworkWrapper().sendToAll(new MessageUpdateGadgetRenderMaskClient(ctx.getServerHandler().playerEntity, this.mask));
         }
     }
 

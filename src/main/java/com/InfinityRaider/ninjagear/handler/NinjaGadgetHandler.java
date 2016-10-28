@@ -1,6 +1,5 @@
 package com.infinityraider.ninjagear.handler;
 
-import com.infinityraider.infinitylib.network.NetworkWrapper;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.network.MessageUpdateGadgetRenderMaskServer;
@@ -65,7 +64,7 @@ public class NinjaGadgetHandler {
                 }
             }
             if(flag || !hasSent) {
-                NetworkWrapper.getInstance().sendToServer(new MessageUpdateGadgetRenderMaskServer(Gadgets.getRenderMask()));
+                NinjaGear.instance.getNetworkWrapper().sendToServer(new MessageUpdateGadgetRenderMaskServer(Gadgets.getRenderMask()));
                 hasSent = true;
             }
         }
