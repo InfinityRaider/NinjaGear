@@ -2,7 +2,6 @@ package com.infinityraider.ninjagear.network;
 
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.ninjagear.handler.RenderPlayerHandler;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -27,7 +26,7 @@ public class MessageInvisibility extends MessageBase<IMessage> {
 
     @Override
     protected void processMessage(MessageContext ctx) {
-        if(ctx.side == Side.CLIENT && this.player != null) {
+        if(this.player != null) {
             RenderPlayerHandler.getInstance().setPlayerInvisibilityStatus(this.player, this.invisible);
         }
     }
@@ -35,17 +34,5 @@ public class MessageInvisibility extends MessageBase<IMessage> {
     @Override
     protected IMessage getReply(MessageContext ctx) {
         return null;
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.player = this.readPlayerFromByteBuf(buf);
-        this.invisible = buf.readBoolean();
-    }
-
-    @Override
-    public void toBytes(ByteBuf buf) {
-        this.writePlayerToByteBuf(buf, this.player);
-        buf.writeBoolean(this.invisible);
     }
 }

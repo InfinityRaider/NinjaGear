@@ -1,6 +1,5 @@
 package com.infinityraider.ninjagear.handler;
 
-import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.network.MessageInvisibility;
@@ -97,11 +96,11 @@ public class NinjaAuraHandler {
             if(shouldBeHidden != isHidden) {
                 if(shouldBeHidden) {
                     player.addPotionEffect(new PotionEffect(PotionRegistry.getInstance().potionNinjaHidden, Integer.MAX_VALUE, 0, false, true));
-                    NinjaGear.instance.getNetworkWrapper().sendToAll(new MessageInvisibility(player, true));
+                    new MessageInvisibility(player, true).sendToAll();
                 } else {
                     player.removePotionEffect(PotionRegistry.getInstance().potionNinjaHidden);
                     this.revealEntity(player, ConfigurationHandler.getInstance().hidingCoolDown);
-                    NinjaGear.instance.getNetworkWrapper().sendToAll(new MessageInvisibility(player, false));
+                    new MessageInvisibility(player, false).sendToAll();
                 }
             }
         }

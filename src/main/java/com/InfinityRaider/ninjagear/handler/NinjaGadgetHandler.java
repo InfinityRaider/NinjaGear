@@ -64,7 +64,7 @@ public class NinjaGadgetHandler {
                 }
             }
             if(flag || !hasSent) {
-                NinjaGear.instance.getNetworkWrapper().sendToServer(new MessageUpdateGadgetRenderMaskServer(Gadgets.getRenderMask()));
+                new MessageUpdateGadgetRenderMaskServer(Gadgets.getRenderMask()).sendToServer();
                 hasSent = true;
             }
         }
