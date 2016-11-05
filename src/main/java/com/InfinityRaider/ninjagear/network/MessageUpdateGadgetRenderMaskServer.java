@@ -8,10 +8,12 @@ import net.minecraftforge.fml.relauncher.Side;
 public class MessageUpdateGadgetRenderMaskServer extends MessageBase<IMessage> {
     private boolean[] mask;
 
-    @SuppressWarnings("unused")
-    public MessageUpdateGadgetRenderMaskServer() {}
+    public MessageUpdateGadgetRenderMaskServer() {
+        super();
+    }
 
     public MessageUpdateGadgetRenderMaskServer(boolean[] mask) {
+        this();
         this.mask = mask;
     }
 

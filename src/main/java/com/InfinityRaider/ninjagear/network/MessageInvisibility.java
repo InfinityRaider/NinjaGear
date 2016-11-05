@@ -11,10 +11,12 @@ public class MessageInvisibility extends MessageBase<IMessage> {
     private EntityPlayer player;
     private boolean invisible;
 
-    @SuppressWarnings("unused")
-    public MessageInvisibility() {}
+    public MessageInvisibility() {
+        super();
+    }
 
     public MessageInvisibility(EntityPlayer player, boolean invisible) {
+        this();
         this.player = player;
         this.invisible = invisible;
     }

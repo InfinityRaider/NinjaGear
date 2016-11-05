@@ -11,10 +11,12 @@ public class MessageUpdateGadgetRenderMaskClient extends MessageBase<IMessage> {
     private boolean[] mask;
     private EntityPlayer player;
 
-    @SuppressWarnings("unused")
-    public MessageUpdateGadgetRenderMaskClient() {}
+    public MessageUpdateGadgetRenderMaskClient() {
+        super();
+    }
 
     public MessageUpdateGadgetRenderMaskClient(EntityPlayer player, boolean[] mask) {
+        this();
         this.mask = mask;
         this.player = player;
     }
