@@ -1,8 +1,8 @@
 package com.infinityraider.ninjagear.render.block;
 
 import com.google.common.collect.ImmutableList;
-import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.block.IBlockRenderingHandler;
+import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.reference.Reference;
@@ -20,18 +20,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class RenderBlockRope extends RenderUtilBase implements IBlockRenderingHandler<BlockRope> {
-    private final BlockRope rope;
+public class RenderBlockRope extends RenderBlockBase<BlockRope> implements IBlockRenderingHandler<BlockRope> {
     private final ResourceLocation texture;
 
     public RenderBlockRope(BlockRope rope) {
-        this.rope = rope;
+        super(rope, true);
         this.texture = new ResourceLocation(Reference.MOD_ID, "blocks/" + this.getBlock().getInternalName());
-    }
-
-    @Override
-    public BlockRope getBlock() {
-        return rope;
     }
 
     @Override
@@ -86,10 +80,5 @@ public class RenderBlockRope extends RenderUtilBase implements IBlockRenderingHa
     @Override
     public boolean applyAmbientOcclusion() {
         return false;
-    }
-
-    @Override
-    public boolean doInventoryRendering() {
-        return true;
     }
 }

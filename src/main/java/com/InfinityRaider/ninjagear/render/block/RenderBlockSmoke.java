@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.render.block;
 
-import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.infinitylib.render.block.IBlockRenderingHandler;
+import com.infinityraider.infinitylib.render.block.RenderBlockBase;
 import com.infinityraider.infinitylib.render.tessellation.ITessellator;
 import com.infinityraider.ninjagear.block.BlockSmoke;
 import net.minecraft.block.state.IBlockState;
@@ -20,16 +20,9 @@ import java.util.Collections;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class RenderBlockSmoke extends RenderUtilBase implements IBlockRenderingHandler<BlockSmoke> {
-    private final BlockSmoke smoke;
-
+public class RenderBlockSmoke extends RenderBlockBase<BlockSmoke> implements IBlockRenderingHandler<BlockSmoke> {
     public RenderBlockSmoke(BlockSmoke smoke) {
-        this.smoke = smoke;
-    }
-
-    @Override
-    public BlockSmoke getBlock() {
-        return smoke;
+        super(smoke, true);
     }
 
     @Override
@@ -52,10 +45,5 @@ public class RenderBlockSmoke extends RenderUtilBase implements IBlockRenderingH
     @Override
     public boolean applyAmbientOcclusion() {
         return false;
-    }
-
-    @Override
-    public boolean doInventoryRendering() {
-        return true;
     }
 }
