@@ -1,6 +1,6 @@
 package com.infinityraider.ninjagear.handler;
 
-import com.infinityraider.ninjagear.utility.LogHelper;
+import com.infinityraider.ninjagear.NinjaGear;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -55,7 +55,7 @@ public class ConfigurationHandler {
         if(config.hasChanged()) {
             config.save();
         }
-        LogHelper.debug("Configuration Loaded");
+        NinjaGear.instance.getLogger().debug("Configuration Loaded");
     }
 
     @SideOnly(Side.CLIENT)
@@ -67,7 +67,7 @@ public class ConfigurationHandler {
         if(config.hasChanged()) {
             config.save();
         }
-        LogHelper.debug("Client configuration Loaded");
+        NinjaGear.instance.getLogger().debug("Client configuration Loaded");
     }
 
     private void loadConfiguration() {
