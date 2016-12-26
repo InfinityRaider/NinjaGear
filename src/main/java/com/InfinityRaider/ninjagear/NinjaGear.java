@@ -14,7 +14,8 @@ import net.minecraftforge.fml.common.SidedProxy;
         modid = Reference.MOD_ID,
         name = Reference.MOD_NAME,
         version = Reference.VERSION,
-        guiFactory = Reference.GUI_FACTORY_CLASS
+        guiFactory = Reference.GUI_FACTORY_CLASS,
+        dependencies = "required-after:infinitylib"
 )
 public class NinjaGear extends InfinityMod {
     @Mod.Instance(Reference.MOD_ID)
