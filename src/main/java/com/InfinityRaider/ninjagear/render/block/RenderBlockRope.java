@@ -11,8 +11,8 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,7 +34,7 @@ public class RenderBlockRope extends RenderBlockBase<BlockRope> implements IBloc
     }
 
     @Override
-    public void renderWorldBlock(ITessellator tessellator, World world, BlockPos pos, IBlockState state, BlockRope block) {
+    public void renderWorldBlockStatic(ITessellator tessellator, IBlockState state, BlockRope block, EnumFacing side) {
         this.addVertices(tessellator, this.getIcon());
     }
 

@@ -4,9 +4,9 @@ import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.infinitylib.block.ICustomRenderedBlock;
 import com.infinityraider.infinitylib.block.blockstate.InfinityProperty;
 import com.infinityraider.infinitylib.render.block.IBlockRenderingHandler;
+import com.infinityraider.infinitylib.render.block.RenderBlockEmpty;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.reference.Reference;
-import com.infinityraider.ninjagear.render.block.RenderBlockSmoke;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
@@ -33,6 +33,9 @@ import java.util.Random;
 
 public class BlockSmoke extends BlockBase implements ICustomRenderedBlock {
     public static final InfinityProperty<Integer> PROPERTY_AGE = new InfinityProperty<>(PropertyInteger.create("age", 0, 15), 0);
+
+    @SideOnly(Side.CLIENT)
+    private IBlockRenderingHandler<BlockSmoke> renderer;
 
     public BlockSmoke() {
         super("smoke", Material.AIR);
@@ -183,8 +186,11 @@ public class BlockSmoke extends BlockBase implements ICustomRenderedBlock {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public IBlockRenderingHandler getRenderer() {
-        return new RenderBlockSmoke(this);
+    public IBlockRenderingHandler<BlockSmoke> getRenderer() {
+        if(this.renderer == null) {
+            this.renderer = RenderBlockEmpty.createEmptyRender(this);
+        }
+        return this.renderer;
     }
 
     @Override
