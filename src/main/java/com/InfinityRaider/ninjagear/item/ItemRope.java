@@ -1,8 +1,8 @@
 package com.infinityraider.ninjagear.item;
 
 import com.infinityraider.infinitylib.item.IItemWithModel;
-import com.infinityraider.infinitylib.item.IItemWithRecipe;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
@@ -21,6 +21,7 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -32,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, IItemWithRecipe {
+public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, IRecipeRegister {
     private final BlockRope block;
 
     public ItemRope() {
@@ -115,8 +116,11 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
         return false;
     }
 
-
     @Override
+    public void registerRecipes() {
+        this.getRecipes().forEach(GameRegistry::addRecipe);
+    }
+
     public List<IRecipe> getRecipes() {
         List<IRecipe> list = new ArrayList<>();
         list.add(new ShapedOreRecipe(new ItemStack(this, 8),"s  ", "sss", "  s",

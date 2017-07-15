@@ -2,7 +2,7 @@ package com.infinityraider.ninjagear.item;
 
 import com.infinityraider.infinitylib.item.IInfinityItem;
 import com.infinityraider.infinitylib.item.IItemWithModel;
-import com.infinityraider.infinitylib.item.IItemWithRecipe;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import com.infinityraider.ninjagear.registry.PotionRegistry;
@@ -22,6 +22,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWithModel, IItemWithRecipe {
+public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWithModel, IRecipeRegister {
     private static ArmorMaterial ninjaCloth;
 
     private final String internalName;
@@ -99,7 +100,24 @@ public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWit
         return list;
     }
 
+    public static ArmorMaterial getMaterial() {
+        if(ninjaCloth == null) {
+            ninjaCloth = EnumHelper.addArmorMaterial("ninjaCloth", "ninja_cloth", 15, new int[]{2, 3, 4, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F);
+            ninjaCloth.customCraftingMaterial = Item.getItemFromBlock(Blocks.WOOL);
+        }
+        return ninjaCloth;
+    }
+
     @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public void registerRecipes() {
+        this.getRecipes().forEach(GameRegistry::addRecipe);
+    }
+
     public List<IRecipe> getRecipes() {
         List<IRecipe> list = new ArrayList<>();
         switch(this.armorType) {
@@ -133,18 +151,5 @@ public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWit
                 break;
         }
         return list;
-    }
-
-    public static ArmorMaterial getMaterial() {
-        if(ninjaCloth == null) {
-            ninjaCloth = EnumHelper.addArmorMaterial("ninjaCloth", "ninja_cloth", 15, new int[]{2, 3, 4, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F);
-            ninjaCloth.customCraftingMaterial = Item.getItemFromBlock(Blocks.WOOL);
-        }
-        return ninjaCloth;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

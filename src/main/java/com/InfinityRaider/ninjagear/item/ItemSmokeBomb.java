@@ -1,8 +1,8 @@
 package com.infinityraider.ninjagear.item;
 
 import com.infinityraider.infinitylib.item.IItemWithModel;
-import com.infinityraider.infinitylib.item.IItemWithRecipe;
 import com.infinityraider.infinitylib.item.ItemBase;
+import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.entity.EntitySmokeBomb;
 import com.infinityraider.ninjagear.reference.Reference;
@@ -21,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
@@ -31,7 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithRecipe, IItemWithModel {
+public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IRecipeRegister, IItemWithModel {
     public ItemSmokeBomb() {
         super("smokebomb");
         this.setCreativeTab(ItemRegistry.CREATIVE_TAB);
@@ -78,6 +79,10 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithRec
     }
 
     @Override
+    public void registerRecipes() {
+        this.getRecipes().forEach(GameRegistry::addRecipe);
+    }
+
     public List<IRecipe> getRecipes() {
         List<IRecipe> list = new ArrayList<>();
         list.add(new ShapelessOreRecipe(new ItemStack(this, 8),
