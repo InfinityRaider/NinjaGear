@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IItemWithModel;
@@ -19,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,7 +43,7 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         if(block instanceof BlockRope) {
@@ -52,13 +52,14 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
         if (!block.isReplaceable(world, pos)) {
             pos = pos.offset(face);
         }
-        if (stack.stackSize != 0 && player.canPlayerEdit(pos, face, stack) && world.canBlockBePlaced(this.block, pos, false, face, null, stack)) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.getCount() != 0 && player.canPlayerEdit(pos, face, stack) && world.mayPlace(this.block, pos, false, face, null)) {
             int i = this.getMetadata(stack.getMetadata());
-            IBlockState newState = this.block.onBlockPlaced(world, pos, face, hitX, hitY, hitZ, i, player);
+            IBlockState newState = this.block.getStateForPlacement(world, pos, face, hitX, hitY, hitZ, i, player, hand);
             if (this.block.canPlaceBlockAt(world, pos) && placeBlockAt(stack, player, world, pos, newState)) {
-                SoundType soundtype = this.block.getSoundType();
+                SoundType soundtype = this.block.getSoundType(state, world, pos, player);
                 world.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-                --stack.stackSize;
+                stack.setCount(stack.getCount() - 1);
             }
             return EnumActionResult.SUCCESS;
         } else {
@@ -68,7 +69,8 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
 
     @Override
     @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         if(player.isSneaking()) {
             if(world.isRemote) {
                 return new ActionResult<>(EnumActionResult.PASS, stack);
@@ -82,7 +84,7 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
 
     public void attemptToCreateRopeCoil(EntityPlayer player) {
         ItemStack stack = player.inventory.getCurrentItem();
-        if(stack != null && stack.getItem() instanceof ItemRope && stack.stackSize >= ConfigurationHandler.getInstance().ropeCoilLength) {
+        if(stack.getItem() instanceof ItemRope && stack.getCount() >= ConfigurationHandler.getInstance().ropeCoilLength) {
             ItemStack coil = new ItemStack(ItemRegistry.getInstance().itemRopeCoil, 1, 0);
             if(player.inventory.addItemStackToInventory(coil) && !player.capabilities.isCreativeMode) {
                 player.inventory.decrStackSize(player.inventory.currentItem, ConfigurationHandler.getInstance().ropeCoilLength);
@@ -93,11 +95,11 @@ public class ItemRope extends ItemBase implements IItemWithModel, IHiddenItem, I
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L3"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L4"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L5"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L3"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L4"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L5"));
     }
 
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, IBlockState newState) {

@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.ninjagear.registry.PotionRegistry;
 import com.infinityraider.infinitylib.item.IInfinityItem;
@@ -13,18 +14,17 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.ArrayList;
@@ -88,8 +88,8 @@ public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWit
 
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:ninjaGear_L1"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:ninjaGear_L1"));
     }
 
     @Override
@@ -103,9 +103,11 @@ public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWit
     public static ArmorMaterial getMaterial() {
         if(ninjaCloth == null) {
             ninjaCloth = EnumHelper.addArmorMaterial("ninjaCloth", "ninja_cloth", 15, new int[]{2, 3, 4, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F);
-            ninjaCloth.customCraftingMaterial = Item.getItemFromBlock(Blocks.WOOL);
+            if(ninjaCloth != null) {
+                ninjaCloth.repairMaterial = new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE);
+            }
         }
-        return ninjaCloth;
+        return ninjaCloth == null ? ArmorMaterial.LEATHER : ninjaCloth;
     }
 
     @Override

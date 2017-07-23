@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
@@ -19,7 +20,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -51,7 +51,7 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IRecipeRegis
         if(!world.isRemote) {
             float max = (float) this.getMaxItemUseDuration(stack);
             EntitySmokeBomb entitySmokeBomb = new EntitySmokeBomb(world, entity, 4*(max - timeLeft)/max);
-            world.spawnEntityInWorld(entitySmokeBomb);
+            world.spawnEntity(entitySmokeBomb);
             if(entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.isCreativeMode) {
                 EntityPlayer player = (EntityPlayer) entity;
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
@@ -61,16 +61,16 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IRecipeRegis
 
     @Override
     @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         player.setActiveHand(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
     }
 
     @Override

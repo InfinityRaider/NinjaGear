@@ -1,10 +1,10 @@
 package com.infinityraider.ninjagear.handler;
 
+import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,7 +37,7 @@ public class TooltipHandler {
     private void addTooltipForHiddenItem(List<String> tooltip, IHiddenItem item, ItemStack stack, EntityPlayer player) {
         if(!item.shouldRevealPlayerWhenEquipped(player, stack)) {
             tooltip.add("");
-            tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:hiddenItem_L1"));
+            tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:hiddenItem_L1"));
         }
     }
 }

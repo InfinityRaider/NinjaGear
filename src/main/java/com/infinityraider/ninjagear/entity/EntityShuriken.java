@@ -82,7 +82,7 @@ public class EntityShuriken extends EntityThrowable implements IEntityAdditional
     public void dropAsItem(double x, double y, double z) {
         EntityItem item = new EntityItem(getEntityWorld(), x, y, z,
                 new ItemStack(ItemRegistry.getInstance().itemShuriken));
-        getEntityWorld().spawnEntityInWorld(item);
+        getEntityWorld().spawnEntity(item);
         this.setDead();
     }
 

@@ -13,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -117,11 +116,6 @@ public class BlockSmoke extends BlockBase implements ICustomRenderedBlock {
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
-    }
-
-    @Override
     public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid) {
         return false;
     }
@@ -172,7 +166,7 @@ public class BlockSmoke extends BlockBase implements ICustomRenderedBlock {
     @Override
     @ParametersAreNonnullByDefault
     @SuppressWarnings("deprecation")
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, @Nullable Entity entity) { }
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean flag) {}
 
     @Override
     protected RayTraceResult rayTrace(BlockPos pos, Vec3d start, Vec3d end, AxisAlignedBB boundingBox) {

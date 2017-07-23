@@ -36,6 +36,9 @@ public interface IProxy extends IProxyBase {
     @Override
     default void activateRequiredModules() {}
 
+    @Override
+    default void registerSounds() {}
+
     /**
      * Checks if a player is hidden
      * @param player player to check

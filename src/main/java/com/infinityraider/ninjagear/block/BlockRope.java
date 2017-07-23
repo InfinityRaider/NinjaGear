@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -57,13 +56,8 @@ public class BlockRope extends BlockBase implements ICustomRenderedBlock, IRopeA
     }
 
     @Override
-    public Class<? extends ItemBlock> getItemBlockClass() {
-        return null;
-    }
-
-    @Override
     @SuppressWarnings("deprecation")
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
         if(!this.canRopeStay(world, pos)) {
             this.breakRope(world, pos, state, false);
         }
@@ -89,18 +83,18 @@ public class BlockRope extends BlockBase implements ICustomRenderedBlock, IRopeA
     }
 
     @Override
-    public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         BlockPos up = pos.up();
         IBlockState stateUp = world.getBlockState(up);
         if(stateUp.getBlock() instanceof IRopeAttachable) {
             ((IRopeAttachable) stateUp.getBlock()).onRopeAttached(world, up, stateUp);
         }
-        return this.getStateFromMeta(meta);
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (!world.isRemote && heldItem != null && heldItem.getItem() instanceof ItemRope) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = player.getHeldItem(hand);
+        if (!world.isRemote && heldItem.getItem() instanceof ItemRope) {
             if (this.extendRope(world, pos) && !player.capabilities.isCreativeMode) {
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
             }

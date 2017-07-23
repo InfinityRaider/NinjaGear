@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.entity.EntityShuriken;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
@@ -20,7 +21,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,25 +41,25 @@ public class ItemShuriken extends ItemBase implements IHiddenItem, IRecipeRegist
 
     @Override
     @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         if(!world.isRemote) {
             boolean crit = player.isPotionActive(PotionRegistry.getInstance().potionNinjaHidden);
             EntityShuriken shuriken = new EntityShuriken(world, player, crit);
-            world.spawnEntityInWorld(shuriken);
+            world.spawnEntity(shuriken);
             if (!player.capabilities.isCreativeMode) {
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
             }
             NinjaAuraHandler.getInstance().revealEntity(player, ConfigurationHandler.getInstance().hidingCoolDown);
         }
-        return new ActionResult<>(EnumActionResult.PASS, stack);
+        return new ActionResult<>(EnumActionResult.PASS, player.getHeldItem(hand));
     }
 
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L3"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L3"));
     }
 
     @Override

@@ -5,12 +5,13 @@ import com.infinityraider.ninjagear.item.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class ItemRegistry {
     public static final CreativeTabs CREATIVE_TAB = new CreativeTabs(Reference.MOD_ID.toLowerCase()+".creative_tab") {
         @Override
-        public Item getTabIconItem() {
-            return ItemRegistry.getInstance().itemShuriken;
+        public ItemStack getTabIconItem() {
+            return new ItemStack(ItemRegistry.getInstance().itemShuriken);
         }
     };
 

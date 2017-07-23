@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IItemWithModel;
@@ -24,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -127,9 +127,9 @@ public class ItemKatana extends ItemBase implements IRecipeRegister, IItemWithMo
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack, boolean effective) {
         Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
         if (slot == EntityEquipmentSlot.MAINHAND) {
-            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(),
+            multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(),
                     new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier",  3.0 + (effective ? ConfigurationHandler.getInstance().katanaDamage : 0), 0));
-            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(),
+            multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(),
                     new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", (effective ? 1 : -2), 0));
         }
         return multimap;
@@ -144,9 +144,9 @@ public class ItemKatana extends ItemBase implements IRecipeRegister, IItemWithMo
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("deprecation")
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L1"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L2"));
-        tooltip.add(I18n.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L3"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L1"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L2"));
+        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L3"));
     }
 
     @Override

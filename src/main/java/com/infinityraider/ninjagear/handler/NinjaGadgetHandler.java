@@ -42,7 +42,7 @@ public class NinjaGadgetHandler {
             //count relevant items in player's inventory
             ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
             if(chest != null && chest.getItem() instanceof ItemNinjaArmor) {
-                for(int i = 0; i < player.inventory.mainInventory.length; i++) {
+                for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
                     if(i == player.inventory.currentItem) {
                         continue;
                     }
@@ -109,8 +109,8 @@ public class NinjaGadgetHandler {
         public static boolean[] getRenderMask() {
             return new boolean[]{
                     KATANA.prevCount > 0,
-                    shouldRenderSai(Minecraft.getMinecraft().thePlayer, SAI.prevCount, false),
-                    shouldRenderSai(Minecraft.getMinecraft().thePlayer, SAI.prevCount, true),
+                    shouldRenderSai(Minecraft.getMinecraft().player, SAI.prevCount, false),
+                    shouldRenderSai(Minecraft.getMinecraft().player, SAI.prevCount, true),
                     SHURIKEN.prevCount > 0,
                     SMOKE_BOMB.prevCount > 0,
                     ROPE_COIL.prevCount > 0

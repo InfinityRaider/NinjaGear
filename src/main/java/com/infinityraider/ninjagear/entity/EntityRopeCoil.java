@@ -65,7 +65,7 @@ public class EntityRopeCoil extends EntityThrowable {
     public void dropAsItem(double x, double y, double z) {
         EntityItem item = new EntityItem(getEntityWorld(), x, y, z,
                 new ItemStack(ItemRegistry.getInstance().itemRopeCoil));
-        getEntityWorld().spawnEntityInWorld(item);
+        getEntityWorld().spawnEntity(item);
         this.setDead();
     }
 
@@ -112,9 +112,9 @@ public class EntityRopeCoil extends EntityThrowable {
     private void addRemainingToInventory(int remaining) {
         if(remaining > 0) {
             ItemStack stack = new ItemStack(ItemRegistry.getInstance().itemRope, remaining);
-            if(!getThrower().inventory.addItemStackToInventory(stack)) {
+            if(getThrower() != null && !getThrower().inventory.addItemStackToInventory(stack)) {
                 EntityItem item = new EntityItem(this.getEntityWorld(), this.posX, this.posY, this.posZ, stack);
-                this.getEntityWorld().spawnEntityInWorld(item);
+                this.getEntityWorld().spawnEntity(item);
             }
         }
         this.setDead();
