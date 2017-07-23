@@ -54,7 +54,7 @@ public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWit
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
         int layer = slot == EntityEquipmentSlot.LEGS ? 2 : 1;
-        return Reference.MOD_ID +":textures/models/armor/ninjaGear_layer_" + layer +".png";
+        return Reference.MOD_ID +":textures/models/armor/ninjagear_layer_" + layer +".png";
     }
 
     @Override

@@ -25,7 +25,7 @@ public class RenderBlockRope extends RenderBlockBase<BlockRope> implements IBloc
 
     public RenderBlockRope(BlockRope rope) {
         super(rope, true);
-        this.texture = new ResourceLocation(Reference.MOD_ID, "blocks/" + this.getBlock().getInternalName());
+        this.texture = new ResourceLocation(Reference.MOD_ID, "blocks/" + this.getBlock().getInternalName().toLowerCase());
     }
 
     @Override
