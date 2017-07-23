@@ -29,19 +29,19 @@ public class NinjaAuraHandler {
 
     private boolean shouldRemoveEffect(EntityPlayer player) {
         ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        if (helmet == null || !(helmet.getItem() instanceof ItemNinjaArmor)) {
+        if (!(helmet.getItem() instanceof ItemNinjaArmor)) {
             return true;
         }
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-        if (chest == null || !(chest.getItem() instanceof ItemNinjaArmor)) {
+        if (!(chest.getItem() instanceof ItemNinjaArmor)) {
             return true;
         }
         ItemStack leggings = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-        if (leggings == null || !(leggings.getItem() instanceof ItemNinjaArmor)) {
+        if (!(leggings.getItem() instanceof ItemNinjaArmor)) {
             return true;
         }
         ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-        return boots == null || !(boots.getItem() instanceof ItemNinjaArmor);
+        return !(boots.getItem() instanceof ItemNinjaArmor);
     }
 
     private boolean shouldBeHidden(EntityPlayer player) {
@@ -56,11 +56,15 @@ public class NinjaAuraHandler {
         }
         ItemStack mainHand = player.getHeldItem(EnumHand.MAIN_HAND);
         ItemStack offHand = player.getHeldItem(EnumHand.OFF_HAND);
-        if(mainHand != null && (!(mainHand.getItem() instanceof IHiddenItem) || ((IHiddenItem) mainHand.getItem()).shouldRevealPlayerWhenEquipped(player, mainHand))) {
-            return false;
+        if(!mainHand.isEmpty()) {
+            if(!(mainHand.getItem() instanceof IHiddenItem) || ((IHiddenItem) mainHand.getItem()).shouldRevealPlayerWhenEquipped(player, mainHand)) {
+                return false;
+            }
         }
-        if(offHand != null && (!(offHand.getItem() instanceof IHiddenItem) || ((IHiddenItem) offHand.getItem()).shouldRevealPlayerWhenEquipped(player, offHand))) {
-            return false;
+        if(!offHand.isEmpty()) {
+            if(!(offHand.getItem() instanceof IHiddenItem) || ((IHiddenItem) offHand.getItem()).shouldRevealPlayerWhenEquipped(player, offHand)) {
+                return false;
+            }
         }
         int light;
         int light_block = player.getEntityWorld().getLightFor(EnumSkyBlock.BLOCK, player.getPosition());
