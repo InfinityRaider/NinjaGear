@@ -1,59 +1,55 @@
 package com.infinityraider.ninjagear.item;
 
-import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.entity.EntitySmokeBomb;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumAction;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IRecipeRegister, IItemWithModel {
+public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithModel {
     public ItemSmokeBomb() {
-        super("smokebomb");
-        this.setCreativeTab(ItemRegistry.CREATIVE_TAB);
+        super("smokebomb", new Properties().group(ItemRegistry.CREATIVE_TAB));
     }
 
     public int getMaxItemUseDuration(ItemStack stack) {
         return 60;
     }
 
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW;
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.BOW;
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entity, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
         if(!world.isRemote) {
             float max = (float) this.getMaxItemUseDuration(stack);
             EntitySmokeBomb entitySmokeBomb = new EntitySmokeBomb(world, entity, 4*(max - timeLeft)/max);
-            world.spawnEntity(entitySmokeBomb);
-            if(entity instanceof EntityPlayer && !((EntityPlayer) entity).capabilities.isCreativeMode) {
-                EntityPlayer player = (EntityPlayer) entity;
+            world.addEntity(entitySmokeBomb);
+            if(entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
+                PlayerEntity player = (PlayerEntity) entity;
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
             }
         }
@@ -61,41 +57,21 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IRecipeRegis
 
     @Override
     @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         player.setActiveHand(hand);
-        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-    }
-
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("deprecation")
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
+        return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
     }
 
     @Override
-    public boolean shouldRevealPlayerWhenEquipped(EntityPlayer entity, ItemStack stack) {
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
+    }
+
+    @Override
+    public boolean shouldRevealPlayerWhenEquipped(PlayerEntity entity, ItemStack stack) {
         return false;
-    }
-
-    @Override
-    public void registerRecipes() {
-        this.getRecipes().forEach(GameRegistry::addRecipe);
-    }
-
-    public List<IRecipe> getRecipes() {
-        List<IRecipe> list = new ArrayList<>();
-        list.add(new ShapelessOreRecipe(new ItemStack(this, 8),
-                Items.FIRE_CHARGE,
-                "dyeBlack",
-                Items.PAPER,
-                "dyeBlack"));
-        return list;
-    }
-
-    @Override
-    public List<String> getOreTags() {
-        return Collections.emptyList();
     }
 
     @Override

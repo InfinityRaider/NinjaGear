@@ -1,40 +1,38 @@
 package com.infinityraider.ninjagear.entity;
 
+import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.block.BlockRope;
-import com.infinityraider.ninjagear.handler.ConfigurationHandler;
 import com.infinityraider.ninjagear.registry.BlockRegistry;
+import com.infinityraider.ninjagear.registry.EntityRegistry;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import com.infinityraider.ninjagear.render.entity.RenderEntityRopeCoil;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityRopeCoil extends EntityThrowable {
-    @SuppressWarnings("unused")
-    public EntityRopeCoil(World world) {
-        super(world);
-    }
-
-    public EntityRopeCoil(World world, EntityPlayer thrower) {
-        super(world, thrower);
-        Vec3d vec = thrower.getLookVec();
-        this.setThrowableHeading(vec.xCoord, vec.yCoord, vec.zCoord, 2F, 0.2F);
+public class EntityRopeCoil extends ThrowableEntity {
+    public EntityRopeCoil(World world, PlayerEntity thrower) {
+        super(EntityRegistry.getInstance().entityRopeCoil, thrower, world);
+        Vector3d vec = thrower.getLookVec();
+        this.shoot(vec.getX(), vec.getY(), vec.getY(), 2F, 0.2F);
     }
 
     @Override
-    public EntityPlayer getThrower() {
-        return (EntityPlayer) super.getThrower();
+    public PlayerEntity func_234616_v_() {  //func_234616_v_ ----> getThrower
+        return (PlayerEntity) super.func_234616_v_();
     }
 
     @Override
@@ -44,41 +42,40 @@ public class EntityRopeCoil extends EntityThrowable {
 
     @Override
     protected void onImpact(RayTraceResult impact) {
-        if (impact.entityHit != null) {
-            return;
+        Vector3d hitVec = impact.getHitVec();
+        if(impact instanceof EntityRayTraceResult) {
+            this.dropAsItem(hitVec.getX(), hitVec.getY(), hitVec.getZ());
         }
-        World world = this.getEntityWorld();
-        if (!world.isRemote) {
-            BlockPos pos = this.getBlockPosFromImpact(impact);
-            IBlockState state = this.getEntityWorld().getBlockState(pos);
-            BlockRope rope = (BlockRope) BlockRegistry.getInstance().blockRope;
-            if(state.getBlock() instanceof BlockRope) {
-                this.addRemainingToInventory(this.extendRope(world, pos, ConfigurationHandler.getInstance().ropeCoilLength));
-            } else if (rope.canPlaceBlockAt(world, pos)) {
-                this.addRemainingToInventory(this.placeRope(world, pos, ConfigurationHandler.getInstance().ropeCoilLength));
-            } else {
-                this.dropAsItem(impact.hitVec.xCoord, impact.hitVec.yCoord, impact.hitVec.zCoord);
+        if(impact instanceof BlockRayTraceResult) {
+            World world = this.getEntityWorld();
+            if (!world.isRemote) {
+                BlockPos pos = this.getBlockPosFromImpact((BlockRayTraceResult) impact);
+                BlockState state = this.getEntityWorld().getBlockState(pos);
+                BlockRope rope = (BlockRope) BlockRegistry.getInstance().blockRope;
+                if (state.getBlock() instanceof BlockRope) {
+                    this.addRemainingToInventory(this.extendRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
+                } else if (rope.canPlaceBlockAt(world, pos)) {
+                    this.addRemainingToInventory(this.placeRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
+                } else {
+                    this.dropAsItem(hitVec.getX(), hitVec.getY(), hitVec.getZ());
+                }
             }
         }
     }
 
     public void dropAsItem(double x, double y, double z) {
-        EntityItem item = new EntityItem(getEntityWorld(), x, y, z,
+        ItemEntity item = new ItemEntity(getEntityWorld(), x, y, z,
                 new ItemStack(ItemRegistry.getInstance().itemRopeCoil));
-        getEntityWorld().spawnEntity(item);
+        getEntityWorld().addEntity(item);
         this.setDead();
     }
 
-    private BlockPos getBlockPosFromImpact(RayTraceResult impact) {
-        if(impact.entityHit != null) {
-            return impact.entityHit.getPosition();
-        } else {
-            IBlockState state = this.getEntityWorld().getBlockState(impact.getBlockPos());
-            if(state.getBlock() instanceof BlockRope) {
-                return impact.getBlockPos();
-            }
-            return impact.getBlockPos().offset(impact.sideHit);
+    private BlockPos getBlockPosFromImpact(BlockRayTraceResult impact) {
+        BlockState state = this.getEntityWorld().getBlockState(impact.getPos());
+        if (state.getBlock() instanceof BlockRope) {
+            return impact.getPos();
         }
+        return impact.getPos().offset(impact.getFace());
     }
 
     private int placeRope(World world, BlockPos pos, int ropeCount) {
@@ -112,12 +109,17 @@ public class EntityRopeCoil extends EntityThrowable {
     private void addRemainingToInventory(int remaining) {
         if(remaining > 0) {
             ItemStack stack = new ItemStack(ItemRegistry.getInstance().itemRope, remaining);
-            if(getThrower() != null && !getThrower().inventory.addItemStackToInventory(stack)) {
-                EntityItem item = new EntityItem(this.getEntityWorld(), this.posX, this.posY, this.posZ, stack);
-                this.getEntityWorld().spawnEntity(item);
+            if(func_234616_v_() != null && !func_234616_v_().inventory.addItemStackToInventory(stack)) {
+                ItemEntity item = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), stack);
+                this.getEntityWorld().addEntity(item);
             }
         }
         this.setDead();
+    }
+
+    @Override
+    protected void registerData() {
+
     }
 
     public static class RenderFactory implements IRenderFactory<EntityRopeCoil> {
@@ -130,8 +132,8 @@ public class EntityRopeCoil extends EntityThrowable {
         private RenderFactory() {}
 
         @Override
-        @SideOnly(Side.CLIENT)
-        public Render<? super EntityRopeCoil> createRenderFor(RenderManager manager) {
+        @OnlyIn(Dist.CLIENT)
+        public EntityRenderer<? super EntityRopeCoil> createRenderFor(EntityRendererManager manager) {
             return new RenderEntityRopeCoil(manager);
         }
     }

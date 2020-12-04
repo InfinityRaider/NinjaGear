@@ -3,7 +3,7 @@ package com.infinityraider.ninjagear.reference;
 public interface Reference {
 	
 	String MOD_NAME = /*^${mod.name}^*/ "NinjaGear";
-	String MOD_ID = /*^${mod.id}^*/ "ninjagear";
+	String MOD_ID = /*^${mod.id}^*/ "ninja_gear";
 	String AUTHOR = /*^${mod.author}^*/ "Captain Nemo";
 
 	String VER_MAJOR = /*^${mod.version_major}^*/ "0";

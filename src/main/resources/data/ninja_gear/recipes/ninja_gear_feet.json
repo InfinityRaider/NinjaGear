@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "dpd",
+    "lsl",
+    "lsl"
+  ],
+  "key":
+  {
+    "d":
+    {
+      "tag": "forge:dyes/black"
+    },
+    "p":
+    {
+      "item": "minecraft:leather_leggings"
+    },
+    "s":
+    {
+      "item": "mincecraft:string"
+    },
+    "l":
+    {
+      "item": "mincecraft:leather"
+    }
+  },
+  "result":
+  {
+    "item": "ninja_gear:ninja_gear_legs",
+    "count": 1
+  }
+}

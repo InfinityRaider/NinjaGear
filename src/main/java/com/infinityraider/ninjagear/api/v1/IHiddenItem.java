@@ -1,6 +1,6 @@
 package com.infinityraider.ninjagear.api.v1;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -13,5 +13,5 @@ public interface IHiddenItem {
      * @param stack stack holding the item
      * @return true to reveal the player
      */
-    boolean shouldRevealPlayerWhenEquipped(EntityPlayer entity, ItemStack stack);
+    boolean shouldRevealPlayerWhenEquipped(PlayerEntity entity, ItemStack stack);
 }

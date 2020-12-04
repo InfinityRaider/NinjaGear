@@ -1,20 +1,24 @@
 package com.infinityraider.ninjagear.handler;
 
-import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.reference.Reference;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class TooltipHandler {
     private static final TooltipHandler INSTANCE = new TooltipHandler();
+
+    private static final ITextComponent EMPTY_STRING = new StringTextComponent("");
 
     public static TooltipHandler getInstance() {
         return INSTANCE;
@@ -30,14 +34,14 @@ public class TooltipHandler {
             return;
         }
         if(stack.getItem() instanceof IHiddenItem) {
-            addTooltipForHiddenItem(event.getToolTip(), (IHiddenItem) stack.getItem(), stack, event.getEntityPlayer());
+            addTooltipForHiddenItem(event.getToolTip(), (IHiddenItem) stack.getItem(), stack, event.getPlayer());
         }
     }
 
-    private void addTooltipForHiddenItem(List<String> tooltip, IHiddenItem item, ItemStack stack, EntityPlayer player) {
+    private void addTooltipForHiddenItem(List<ITextComponent> tooltip, IHiddenItem item, ItemStack stack, PlayerEntity player) {
         if(!item.shouldRevealPlayerWhenEquipped(player, stack)) {
-            tooltip.add("");
-            tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:hiddenItem_L1"));
+            tooltip.add(EMPTY_STRING);
+            tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:hiddenItem_L1"));
         }
     }
 }

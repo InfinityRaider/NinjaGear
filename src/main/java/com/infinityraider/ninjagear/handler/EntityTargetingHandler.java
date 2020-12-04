@@ -1,12 +1,12 @@
 package com.infinityraider.ninjagear.handler;
 
 import com.infinityraider.ninjagear.api.v1.IEntityTrueSight;
-import com.infinityraider.ninjagear.registry.PotionRegistry;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import com.infinityraider.ninjagear.registry.EffectRegistry;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class EntityTargetingHandler {
     private static final EntityTargetingHandler INSTANCE = new EntityTargetingHandler();
@@ -20,16 +20,21 @@ public class EntityTargetingHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onEntityTargetingEvent(LivingSetAttackTargetEvent event) {
-        EntityLivingBase target = event.getTarget();
-        EntityLivingBase attacker = event.getEntityLiving();
-        if(target == null || attacker == null || !(target instanceof EntityPlayer)) {
+        LivingEntity target = event.getTarget();
+        LivingEntity attacker = event.getEntityLiving();
+        if(target == null || attacker == null || !(target instanceof PlayerEntity)) {
             return;
         }
-        if(target.isPotionActive(PotionRegistry.getInstance().potionNinjaHidden)) {
-            if(attacker instanceof IEntityTrueSight && ((IEntityTrueSight) attacker).canSeeTarget((EntityPlayer) target)) {
+        if(target.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden)) {
+            if(attacker instanceof IEntityTrueSight && ((IEntityTrueSight) attacker).canSeeTarget((PlayerEntity) target)) {
                 return;
             }
-            ((EntityLiving) attacker).setAttackTarget(null);
+            if (attacker instanceof MobEntity) {
+                MobEntity mob = (MobEntity) attacker;
+                mob.setAggroed(false);
+                mob.setAttackTarget(null);
+            }
+            attacker.setRevengeTarget(null);
         }
     }
 }

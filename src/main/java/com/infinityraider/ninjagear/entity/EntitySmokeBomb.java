@@ -1,39 +1,33 @@
 package com.infinityraider.ninjagear.entity;
 
-import com.infinityraider.ninjagear.handler.ConfigurationHandler;
-import com.infinityraider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.NinjaGear;
+import com.infinityraider.ninjagear.block.BlockSmoke;
+import com.infinityraider.ninjagear.registry.EffectRegistry;
+import com.infinityraider.ninjagear.registry.EntityRegistry;
 import com.infinityraider.ninjagear.render.entity.RenderEntitySmokeBomb;
-import com.infinityraider.ninjagear.registry.BlockRegistry;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.math.*;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
-public class EntitySmokeBomb extends EntityThrowable {
-    @SuppressWarnings("unused")
-    public EntitySmokeBomb(World world) {
-        super(world);
-    }
-
-    public EntitySmokeBomb(World world, EntityLivingBase thrower, float velocity) {
-        super(world, thrower);
-        Vec3d vec = thrower.getLookVec();
-        this.setThrowableHeading(vec.xCoord, vec.yCoord, vec.zCoord, velocity, 0.2F);
+public class EntitySmokeBomb extends ThrowableEntity {
+    public EntitySmokeBomb(World world, LivingEntity thrower, float velocity) {
+        super(EntityRegistry.getInstance().entitySmokeBomb, thrower, world);
+        Vector3d vec = thrower.getLookVec();
+        this.shoot(vec.getX(), vec.getY(), vec.getZ(), velocity, 0.2F);
     }
 
     @Override
@@ -51,25 +45,33 @@ public class EntitySmokeBomb extends EntityThrowable {
     }
 
     private BlockPos getBlockPosFromImpact(RayTraceResult impact) {
-        if(impact.entityHit != null) {
-            return impact.entityHit.getPosition();
-        } else {
-            return impact.getBlockPos().offset(impact.sideHit);
+        if(impact instanceof EntityRayTraceResult) {
+            EntityRayTraceResult entityImpact = (EntityRayTraceResult) impact;
+            Entity hit = entityImpact.getEntity();
+            if (hit != null) {
+                return hit.getPosition();
+            }
+        } else if(impact instanceof BlockRayTraceResult) {
+            BlockRayTraceResult blockImpact = (BlockRayTraceResult) impact;
+            return blockImpact.getPos().offset(blockImpact.getFace());
         }
+        return new BlockPos(impact.getHitVec());
     }
 
     private void clearRevealedStatus(World world, BlockPos pos) {
-        world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(-4, -4, -4), pos.add(4, 4, 4))).stream().filter(entity -> entity != null && (entity instanceof EntityLivingBase)).forEach(entity -> {
-            EntityLivingBase living = (EntityLivingBase) entity;
-            if (living.isPotionActive(PotionRegistry.getInstance().potionNinjaRevealed)) {
-                living.removePotionEffect(PotionRegistry.getInstance().potionNinjaRevealed);
-            }
-        });
+        world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(-4, -4, -4), pos.add(4, 4, 4))).stream()
+                .filter(entity -> entity != null && (entity instanceof LivingEntity))
+                .forEach(entity -> {
+                    LivingEntity living = (LivingEntity) entity;
+                    if (living.isPotionActive(EffectRegistry.getInstance().potionNinjaRevealed)) {
+                        living.removePotionEffect(EffectRegistry.getInstance().potionNinjaRevealed);
+                    }
+                });
     }
 
     @SuppressWarnings("deprecation")
     private void createSmokeCloud(World world, BlockPos pos) {
-        int r = ConfigurationHandler.getInstance().smokeCloudRadius;
+        int r = NinjaGear.instance.getConfig().getSmokeRadius();
         for(int x = -r; x <= r; x++) {
             for(int y = -r; y <= r; y++) {
                 for(int z = -r; z <= r; z++) {
@@ -78,12 +80,12 @@ public class EntitySmokeBomb extends EntityThrowable {
                         continue;
                     }
                     BlockPos posAt = pos.add(x, y, z);
-                    IBlockState state = world.getBlockState(posAt);
+                    BlockState state = world.getBlockState(posAt);
                     if(state.getMaterial() == Material.AIR) {
                         if(world.isRemote) {
-                            this.spawnSmokeParticle(posAt);
+                            this.spawnSmokeParticle(world, posAt);
                         } else {
-                            world.setBlockState(posAt, BlockRegistry.getInstance().blockSmoke.getStateFromMeta(getDarknessValue(radius, world.rand)), 3);
+                            world.setBlockState(posAt, BlockSmoke.getBlockStateForDarkness(this.getDarknessValue(radius, world.rand)), 3);
                         }
                     }
                 }
@@ -107,17 +109,17 @@ public class EntitySmokeBomb extends EntityThrowable {
         return 3 + rand.nextInt(2);
     }
 
-    @SideOnly(Side.CLIENT)
-    private void spawnSmokeParticle(BlockPos pos) {
-        if (ConfigurationHandler.getInstance().disableSmokeParticles) {
+    @OnlyIn(Dist.CLIENT)
+    private void spawnSmokeParticle(World world, BlockPos pos) {
+        if (NinjaGear.instance.getConfig().disableSmoke()) {
             return;
         }
-        Minecraft.getMinecraft().renderGlobal.spawnParticle(
-                EnumParticleTypes.SMOKE_LARGE.getParticleID(), true,
-                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5D,
-                0, 0, 0,
-                50
-        );
+        world.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5D, 0, 0, 0);
+    }
+
+    @Override
+    protected void registerData() {
+
     }
 
     public static class RenderFactory implements IRenderFactory<EntitySmokeBomb> {
@@ -130,8 +132,8 @@ public class EntitySmokeBomb extends EntityThrowable {
         private RenderFactory() {}
 
         @Override
-        @SideOnly(Side.CLIENT)
-        public Render<? super EntitySmokeBomb> createRenderFor(RenderManager manager) {
+        @OnlyIn(Dist.CLIENT)
+        public EntityRenderer<? super EntitySmokeBomb> createRenderFor(EntityRendererManager manager) {
             return new RenderEntitySmokeBomb(manager);
         }
     }

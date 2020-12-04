@@ -1,19 +1,19 @@
 package com.infinityraider.ninjagear.handler;
 
-import com.infinityraider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.registry.EffectRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderPlayerHandler {
     private static final RenderPlayerHandler INSTANCE = new RenderPlayerHandler();
 
@@ -27,13 +27,13 @@ public class RenderPlayerHandler {
         this.invisibilityMap = new HashMap<>();
     }
 
-    public void setPlayerInvisibilityStatus(EntityPlayer player, boolean invisible) {
+    public void setPlayerInvisibilityStatus(PlayerEntity player, boolean invisible) {
         invisibilityMap.put(player.getUniqueID(), invisible);
     }
 
-    public boolean isInvisible(EntityPlayer player) {
-        if(player == Minecraft.getMinecraft().player) {
-            return player.isPotionActive(PotionRegistry.getInstance().potionNinjaHidden);
+    public boolean isInvisible(PlayerEntity player) {
+        if(player == Minecraft.getInstance().player) {
+            return player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden);
         }
         return invisibilityMap.containsKey(player.getUniqueID()) && invisibilityMap.get(player.getUniqueID());
     }
@@ -41,18 +41,8 @@ public class RenderPlayerHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onRenderLivingEvent(RenderLivingEvent.Pre event) {
-        EntityLivingBase entity = event.getEntity();
-        if((entity instanceof EntityPlayer) && isInvisible((EntityPlayer) entity)) {
-            event.setCanceled(true);
-            event.setResult(Event.Result.DENY);
-        }
-    }
-
-    @SubscribeEvent
-    @SuppressWarnings("unused")
-    public void onRenderLivingSpecialsEvent(RenderLivingEvent.Specials.Pre event) {
-        EntityLivingBase entity = event.getEntity();
-        if ((entity instanceof EntityPlayer) && isInvisible((EntityPlayer) entity)) {
+        LivingEntity entity = event.getEntity();
+        if((entity instanceof PlayerEntity) && isInvisible((PlayerEntity) entity)) {
             event.setCanceled(true);
             event.setResult(Event.Result.DENY);
         }

@@ -1,45 +1,34 @@
 package com.infinityraider.ninjagear.item;
 
-import com.infinityraider.infinitylib.utility.TranslationHelper;
 import com.infinityraider.ninjagear.reference.Reference;
-import com.infinityraider.ninjagear.registry.PotionRegistry;
+import com.infinityraider.ninjagear.registry.EffectRegistry;
 import com.infinityraider.infinitylib.item.IInfinityItem;
-import com.infinityraider.infinitylib.item.IItemWithModel;
-import com.infinityraider.infinitylib.utility.IRecipeRegister;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.Tuple;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.*;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWithModel, IRecipeRegister {
-    private static ArmorMaterial ninjaCloth;
-
+public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
     private final String internalName;
 
-    public ItemNinjaArmor(String name, int renderIndex, EntityEquipmentSlot equipmentSlot) {
-        super(getMaterial(), renderIndex, equipmentSlot);
+    public ItemNinjaArmor(String name, EquipmentSlotType equipmentSlot) {
+        super(MATERIAL_NINJA_CLOTH, equipmentSlot, new Properties().group(ItemRegistry.CREATIVE_TAB));
         this.internalName = name;
-        this.setCreativeTab(ItemRegistry.CREATIVE_TAB);
     }
 
     public String getInternalName() {
@@ -47,67 +36,49 @@ public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWit
     }
 
     @Override
-    public List<String> getOreTags() {
-        return Collections.emptyList();
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
+        int layer = slot == EquipmentSlotType.LEGS ? 2 : 1;
+        return Reference.MOD_ID +":textures/models/armor/ninja_gear_layer_" + layer +".png";
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-        int layer = slot == EntityEquipmentSlot.LEGS ? 2 : 1;
-        return Reference.MOD_ID +":textures/models/armor/ninjagear_layer_" + layer +".png";
-    }
-
-    @Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
-        if(this.armorType != EntityEquipmentSlot.CHEST) {
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean isSelected) {
+        if (!(entity instanceof PlayerEntity)) {
             return;
         }
-        if(!world.isRemote) {
-            if (!player.isPotionActive(PotionRegistry.getInstance().potionNinjaAura)) {
-                ItemStack helmet = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-                if (helmet == null) {
+        PlayerEntity player = (PlayerEntity) entity;
+        if (slot != 36) {
+            return;
+        }
+        if (!world.isRemote) {
+            if (!player.isPotionActive(EffectRegistry.getInstance().potionNinjaAura)) {
+                ItemStack helmet = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
+                if (!(helmet.getItem() instanceof ItemNinjaArmor)) {
                     return;
                 }
-                ItemStack leggings = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-                if (leggings == null) {
+                ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
+                if (!(chest.getItem() instanceof ItemNinjaArmor)) {
                     return;
                 }
-                ItemStack boots = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-                if (boots == null) {
+                ItemStack leggings = player.getItemStackFromSlot(EquipmentSlotType.LEGS);
+                if (!(leggings.getItem() instanceof ItemNinjaArmor)) {
                     return;
                 }
-                if ((helmet.getItem() instanceof ItemNinjaArmor) && (leggings.getItem() instanceof ItemNinjaArmor) && (boots.getItem() instanceof ItemNinjaArmor)) {
-
-                    PotionEffect effect = new PotionEffect(PotionRegistry.getInstance().potionNinjaAura, Integer.MAX_VALUE, 0, false, false);
-                    player.addPotionEffect(effect);
-
+                ItemStack boots = player.getItemStackFromSlot(EquipmentSlotType.FEET);
+                if (!(boots.getItem() instanceof ItemNinjaArmor)) {
+                    return;
                 }
+                EffectInstance effect = new EffectInstance(EffectRegistry.getInstance().potionNinjaAura, Integer.MAX_VALUE, 0, false, false);
+                player.addPotionEffect(effect);
             }
         }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(TranslationHelper.translateToLocal(Reference.MOD_ID + ".tooltip:ninjaGear_L1"));
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-        List<Tuple<Integer, ModelResourceLocation>> list = new ArrayList<>();
-        list.add(new Tuple<>(0, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + internalName, "inventory")));
-        return list;
-    }
-
-    public static ArmorMaterial getMaterial() {
-        if(ninjaCloth == null) {
-            ninjaCloth = EnumHelper.addArmorMaterial("ninjaCloth", "ninja_cloth", 15, new int[]{2, 3, 4, 2}, 12, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F);
-            if(ninjaCloth != null) {
-                ninjaCloth.repairMaterial = new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE);
-            }
-        }
-        return ninjaCloth == null ? ArmorMaterial.LEATHER : ninjaCloth;
+    @OnlyIn(Dist.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninjaGear_L1"));
     }
 
     @Override
@@ -115,43 +86,48 @@ public class ItemNinjaArmor extends ItemArmor implements IInfinityItem, IItemWit
         return true;
     }
 
-    @Override
-    public void registerRecipes() {
-        this.getRecipes().forEach(GameRegistry::addRecipe);
-    }
-
-    public List<IRecipe> getRecipes() {
-        List<IRecipe> list = new ArrayList<>();
-        switch(this.armorType) {
-            case HEAD:
-                list.add(new ShapedOreRecipe(this, "dhd", "sls",
-                        'd', "dyeBlack",
-                        'h', Items.LEATHER_HELMET,
-                        's', "string",
-                        'l', "leather"));
-                break;
-            case CHEST:
-                list.add(new ShapedOreRecipe(this, "dsd", "lcl", "lsl",
-                        'd', "dyeBlack",
-                        'c', Items.LEATHER_CHESTPLATE,
-                        's', "string",
-                        'l', "leather"));
-                break;
-            case LEGS:
-                list.add(new ShapedOreRecipe(this, "dpd", "lsl", "lsl",
-                        'd', "dyeBlack",
-                        'p', Items.LEATHER_LEGGINGS,
-                        's', "string",
-                        'l', "leather"));
-                break;
-            case FEET:
-                list.add(new ShapedOreRecipe(this, "s s", "dbd", "lll",
-                        'd', "dyeBlack",
-                        'b', Items.LEATHER_BOOTS,
-                        's', "string",
-                        'l', "leather"));
-                break;
+    public static final int[] ARMOR_VALUES = new int[]{2, 3, 4, 2};
+    public static final Ingredient REPAIR_MATERIAL = Ingredient.fromTag(ItemTags.WOOL);
+    public static final IArmorMaterial MATERIAL_NINJA_CLOTH = new IArmorMaterial() {
+        @Override
+        public int getDurability(EquipmentSlotType slot) {
+            return ArmorMaterial.LEATHER.getDurability(slot);
         }
-        return list;
-    }
+
+        @Override
+        public int getDamageReductionAmount(EquipmentSlotType slot) {
+            return ARMOR_VALUES[slot.getIndex()];
+        }
+
+        @Override
+        public int getEnchantability() {
+            return 12;
+        }
+
+        @Override
+        public SoundEvent getSoundEvent() {
+            return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+        }
+
+        @Override
+        public Ingredient getRepairMaterial() {
+            return REPAIR_MATERIAL;
+        }
+
+        @Override
+        @OnlyIn(Dist.CLIENT)
+        public String getName() {
+            return "ninja_cloth";
+        }
+
+        @Override
+        public float getToughness() {
+            return 1.0F;
+        }
+
+        @Override
+        public float getKnockbackResistance() {
+            return 0.1F;
+        }
+    };
 }

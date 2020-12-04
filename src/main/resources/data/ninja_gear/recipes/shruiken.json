@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    " s ",
+    "sis",
+    " h "
+  ],
+  "key":
+  {
+    "i":
+    {
+      "infinity:fallback":
+      {
+        "tag": "forge:ingots/steel",
+        "fallback":
+        {
+            "tag":"forge:ingots/iron"
+        }
+      }
+    },
+    "h":
+    {
+      "tag": "forge:rods/wooden"
+    },
+    "s":
+    {
+      "item": "minecraft:iron_sword"
+    }
+  },
+  "result":
+  {
+    "item": "ninja_gear:katana",
+    "count": 1
+  }
+}

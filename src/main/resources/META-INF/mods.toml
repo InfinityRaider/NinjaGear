@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[35,)"
+license="license.txt"
+issueTrackerURL="https://github.com/InfinityRaider/NinjaGear/issues/"
+
+[[mods]] #mandatory
+modId="ninja_gear"
+version="1.16.4-2.0.0"
+displayName="Ninja Gear"
+updateJSONURL="https://www.curseforge.com/minecraft/mc-mods/ninjagear/files"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/ninjagear"
+logoFile="logo.png"
+authors="InfinityRaider"
+description='''
+Become a ninja, sneak around in the darkness, scale walls and explore new forms of combat.
+'''
+
+[[dependencies.examplemod]]
+    modId="forge"
+    mandatory=true
+    versionRange="[35,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.examplemod]]
+    modId="infinitylib"
+    mandatory=true
+    versionRange="[2.0.0,)"
+    ordering="AFTER"
+    side="BOTH"

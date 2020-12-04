@@ -1,16 +1,16 @@
 package com.infinityraider.ninjagear.proxy;
 
 import com.infinityraider.infinitylib.proxy.base.IServerProxyBase;
-import com.infinityraider.ninjagear.registry.PotionRegistry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import com.infinityraider.ninjagear.config.Config;
+import com.infinityraider.ninjagear.registry.EffectRegistry;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SuppressWarnings("unused")
-@SideOnly(Side.SERVER)
-public class ServerProxy implements IProxy, IServerProxyBase {
+@OnlyIn(Dist.DEDICATED_SERVER)
+public class ServerProxy implements IProxy, IServerProxyBase<Config> {
     @Override
-    public boolean isPlayerHidden(EntityPlayer player) {
-        return player.isPotionActive(PotionRegistry.getInstance().potionNinjaHidden);
+    public boolean isPlayerHidden(PlayerEntity player) {
+        return player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden);
     }
 }

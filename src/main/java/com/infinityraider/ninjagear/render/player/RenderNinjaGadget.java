@@ -1,25 +1,29 @@
 package com.infinityraider.ninjagear.render.player;
 
-import com.infinityraider.infinitylib.render.RenderUtilBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.handler.RenderPlayerHandler;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3f;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
 
-@SideOnly(Side.CLIENT)
-public class RenderNinjaGadget extends RenderUtilBase {
+import static net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY;
+
+@OnlyIn(Dist.CLIENT)
+public class RenderNinjaGadget {
     private static final RenderNinjaGadget INSTANCE = new RenderNinjaGadget();
 
     public static RenderNinjaGadget getInstance() {
@@ -49,7 +53,7 @@ public class RenderNinjaGadget extends RenderUtilBase {
         };
     }
 
-    public void updateRenderMask(EntityPlayer player, boolean[] renderMask) {
+    public void updateRenderMask(PlayerEntity player, boolean[] renderMask) {
         if(player == null) {
             return;
         }
@@ -68,153 +72,175 @@ public class RenderNinjaGadget extends RenderUtilBase {
         return true;
     }
 
+    private static final Quaternion SNEAK_ROTATION = new Quaternion(new Vector3f(0, 0, -0.8F), 30, true);
+
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onRenderPlayerEvent(RenderPlayerEvent.Pre event) {
-        EntityPlayer player = event.getEntityPlayer();
-        if(player == null) {
-            return;
-        }
-        if(RenderPlayerHandler.getInstance().isInvisible(player)) {
-            return;
-        }
-        if(!renderMap.containsKey(player.getUniqueID())) {
-            return;
-        }
+        if(!NinjaGear.instance.getConfig().renderGadgets()) {
+            MatrixStack transforms = event.getMatrixStack();
+            PlayerEntity player = event.getPlayer();
+            if (player == null) {
+                return;
+            }
+            if (RenderPlayerHandler.getInstance().isInvisible(player)) {
+                return;
+            }
+            if (!renderMap.containsKey(player.getUniqueID())) {
+                return;
+            }
 
-        boolean[] renderMask = renderMap.get(player.getUniqueID());
-        float f = event.getPartialRenderTick();
+            boolean[] renderMask = renderMap.get(player.getUniqueID());
+            float f = event.getPartialRenderTick();
 
-        GlStateManager.pushMatrix();
+            transforms.push();
 
-        if(player != NinjaGear.proxy.getClientPlayer()) {
-            EntityPlayer local = NinjaGear.proxy.getClientPlayer();
-            double dx = player.prevPosX + (player.posX - player.prevPosX)*f - (local.prevPosX + (local.posX - local.prevPosX)*f);
-            double dy = player.prevPosY + (player.posY - player.prevPosY)*f - (local.prevPosY + (local.posY - local.prevPosY)*f);
-            double dz = player.prevPosZ + (player.posX - player.prevPosX)*f - (local.prevPosZ + (local.posZ - local.prevPosZ)*f);
-            GlStateManager.translate(dx, dy, dz);
-        }
+            if (player != NinjaGear.instance.getClientPlayer()) {
+                PlayerEntity local = NinjaGear.instance.getClientPlayer();
+                double dx = player.prevPosX + (player.getPosX() - player.prevPosX) * f - (local.prevPosX + (local.getPosX() - local.prevPosX) * f);
+                double dy = player.prevPosY + (player.getPosY() - player.prevPosY) * f - (local.prevPosY + (local.getPosY() - local.prevPosY) * f);
+                double dz = player.prevPosZ + (player.getPosZ() - player.prevPosZ) * f - (local.prevPosZ + (local.getPosZ() - local.prevPosZ) * f);
+                transforms.translate(dx, dy, dz);
+            }
 
-        float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset)*f;
-        GlStateManager.rotate(-yaw, 0, 1, 0);
+            float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * f;
+            transforms.rotate(new Quaternion(new Vector3f(0, -1, 0), -yaw, true));
 
-        if(player.isSneaking()) {
-            GlStateManager.translate(0, - 0.375, 0);
-            GlStateManager.rotate(30, 1, 0, 0);
-            GlStateManager.translate(0, 0, -0.8);
-        }
+            if (player.isSneaking()) {
+                transforms.translate(0, -0.375, 0);
+                transforms.rotate(SNEAK_ROTATION);
+                transforms.translate(0, 0, -0.8);
+            }
 
-        for(int i = 0; i < renderMask.length; i++) {
-            if(renderMask[i]) {
-                switch(i) {
-                    case ID_KATANA: this.renderKatana(i); break;
-                    case ID_SAI_RIGHT: this.renderSaiRight(i); break;
-                    case ID_SAI_LEFT: this.renderSaiLeft(i); break;
-                    case ID_SHURIKEN: this.renderShuriken(i); break;
-                    case ID_SMOKE_BOMB: this.renderSmokeBomb(i); break;
-                    case ID_ROPE_COIL: this.renderRopeCoil(i); break;
+            for (int i = 0; i < renderMask.length; i++) {
+                if (renderMask[i]) {
+                    switch (i) {
+                        case ID_KATANA:
+                            this.renderKatana(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                            break;
+                        case ID_SAI_RIGHT:
+                            this.renderSaiRight(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                            break;
+                        case ID_SAI_LEFT:
+                            this.renderSaiLeft(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                            break;
+                        case ID_SHURIKEN:
+                            this.renderShuriken(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                            break;
+                        case ID_SMOKE_BOMB:
+                            this.renderSmokeBomb(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                            break;
+                        case ID_ROPE_COIL:
+                            this.renderRopeCoil(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                            break;
+                    }
                 }
             }
+
+            transforms.pop();
         }
-
-        GlStateManager.popMatrix();
     }
 
-    private void renderKatana(int id) {
-        RenderItem renderer = Minecraft.getMinecraft().getRenderItem();
+    private static final Quaternion KATANA_ROTATION = new Quaternion(new Vector3f(1, 0, 0), 180, true);
 
-        GlStateManager.pushMatrix();
+    private void renderKatana(ItemStack stack, int light, MatrixStack transforms, IRenderTypeBuffer buffer) {
+        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
-        GlStateManager.translate(0, 0, -0.2);
-        GlStateManager.translate(0, 1.125, 0);
-        GlStateManager.rotate(180, 1, 0, 0);
-        GlStateManager.scale(0.8, 0.8, 1);
+        transforms.push();
 
-        renderer.renderItem(this.itemsToRender[id], ItemCameraTransforms.TransformType.NONE);
+        transforms.translate(0, 0.125, -0.2);
+        transforms.rotate(KATANA_ROTATION);
+        transforms.scale(0.8F, 0.8F, 1);
 
-        GlStateManager.popMatrix();
+        renderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, light, NO_OVERLAY, transforms, buffer);
+
+        transforms.pop();
     }
 
-    private void renderSaiLeft(int id) {
-        RenderItem renderer = Minecraft.getMinecraft().getRenderItem();
+    private static final Quaternion SAI_ROTATION_1 = new Quaternion(new Vector3f(1, 0, 0), 180, true);
+    private static final Quaternion SAI_ROTATION_2 = new Quaternion(new Vector3f(0, 1, 0), -90, true);
 
-        GlStateManager.pushMatrix();
+    private void renderSaiLeft(ItemStack stack, int light, MatrixStack transforms, IRenderTypeBuffer buffer) {
+        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
-        GlStateManager.translate(0, 0, -0.1);
-        GlStateManager.translate(0, 0.625, 0);
-        GlStateManager.rotate(180, 1, 0, 0);
-        GlStateManager.translate(0.275, 0, 0);
-        GlStateManager.rotate(-90, 0, 1, 0);
-        GlStateManager.scale(0.5, 0.5, 1);
+        transforms.push();
 
-        renderer.renderItem(this.itemsToRender[id], ItemCameraTransforms.TransformType.NONE);
+        transforms.translate(0, 0.625, -0.1);
+        transforms.rotate(SAI_ROTATION_1);
+        transforms.translate(0.275, 0, 0);
+        transforms.rotate(SAI_ROTATION_2);
+        transforms.scale(0.5F, 0.5F, 1);
 
-        GlStateManager.popMatrix();
+        renderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, light, NO_OVERLAY, transforms, buffer);
+
+        transforms.pop();
     }
 
-    private void renderSaiRight(int id) {
-        RenderItem renderer = Minecraft.getMinecraft().getRenderItem();
+    private void renderSaiRight(ItemStack stack, int light, MatrixStack transforms, IRenderTypeBuffer buffer) {
+        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
-        GlStateManager.pushMatrix();
+        transforms.push();
 
-        GlStateManager.translate(0, 0, -0.1);
-        GlStateManager.translate(0, 0.625, 0);
-        GlStateManager.rotate(180, 1, 0, 0);
-        GlStateManager.translate(-0.275, 0, 0);
-        GlStateManager.rotate(-90, 0, 1, 0);
-        GlStateManager.scale(0.5, 0.5, 1);
+        transforms.translate(0, 0.625, -0.1);
+        transforms.rotate(SAI_ROTATION_1);
+        transforms.translate(-0.275, 0, 0);
+        transforms.rotate(SAI_ROTATION_2);
+        transforms.scale(0.5F, 0.5F, 1);
 
-        renderer.renderItem(this.itemsToRender[id], ItemCameraTransforms.TransformType.NONE);
+        renderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, light, NO_OVERLAY, transforms, buffer);
 
-        GlStateManager.popMatrix();
+        transforms.pop();
     }
 
-    private void renderShuriken(int id) {
-        RenderItem renderer = Minecraft.getMinecraft().getRenderItem();
+    private void renderShuriken(ItemStack stack, int light, MatrixStack transforms, IRenderTypeBuffer buffer) {
+        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
-        GlStateManager.pushMatrix();
+        transforms.push();
 
-        GlStateManager.translate(0, 0, 0.2);
-        GlStateManager.translate(0, 0.75, 0);
-        GlStateManager.translate(-0.15, 0, 0);
-        GlStateManager.scale(0.2, 0.2, 0.5);
+        transforms.translate(-0.15, 0.75, 0.2);
+        transforms.scale(0.2F, 0.2F, 0.5F);
 
-        renderer.renderItem(this.itemsToRender[id], ItemCameraTransforms.TransformType.NONE);
+        renderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, light, NO_OVERLAY, transforms, buffer);
 
-        GlStateManager.popMatrix();
+        transforms.pop();
     }
 
-    private void renderSmokeBomb(int id) {
-        RenderItem renderer = Minecraft.getMinecraft().getRenderItem();
 
-        GlStateManager.pushMatrix();
+    private static final Quaternion SMOKE_BOMB_ROTATION = new Quaternion(new Vector3f(0, 1, 0), 180, true);
 
-        GlStateManager.translate(0, 0, -0.2);
-        GlStateManager.translate(0, 0.75, 0);
-        GlStateManager.rotate(180, 0, 1, 0);
-        GlStateManager.translate(0.125, 0, 0);
-        GlStateManager.scale(0.3, 0.3, 1);
+    private void renderSmokeBomb(ItemStack stack, int light, MatrixStack transforms, IRenderTypeBuffer buffer) {
+        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
-        renderer.renderItem(this.itemsToRender[id], ItemCameraTransforms.TransformType.NONE);
+        transforms.push();
 
-        GlStateManager.popMatrix();
+        transforms.translate(0, 0.75, -0.2);
+        transforms.rotate(SMOKE_BOMB_ROTATION);
+        transforms.translate(0.125, 0, 0);
+        transforms.scale(0.3F, 0.3F, 1);
+
+        renderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, light, NO_OVERLAY, transforms, buffer);
+
+        transforms.pop();
     }
 
-    private void renderRopeCoil(int id) {
-        RenderItem renderer = Minecraft.getMinecraft().getRenderItem();
+    private static final Quaternion ROPE_COIL_ROTATION_1 = new Quaternion(new Vector3f(1, 0, 0), 180, true);
+    private static final Quaternion ROPE_COIL_ROTATION_2 = new Quaternion(new Vector3f(0, 1, 0), -90, true);
+    private static final Quaternion ROPE_COIL_ROTATION_3 = new Quaternion(new Vector3f(0, 0, 1), -90, true);
 
-        GlStateManager.pushMatrix();
+    private void renderRopeCoil(ItemStack stack, int light, MatrixStack transforms, IRenderTypeBuffer buffer) {
+        ItemRenderer renderer = Minecraft.getInstance().getItemRenderer();
 
-        GlStateManager.translate(0, 0, -0.15);
-        GlStateManager.translate(0, 1.25, 0);
-        GlStateManager.rotate(180, 1, 0, 0);
-        GlStateManager.translate(0.3, 0, 0);
-        GlStateManager.rotate(-90, 0, 1, 0);
-        GlStateManager.rotate(-90, 0, 0, 1);
-        GlStateManager.scale(0.8, 0.8, 1);
+        transforms.push();
 
-        renderer.renderItem(this.itemsToRender[id], ItemCameraTransforms.TransformType.NONE);
+        transforms.translate(0, 1.25, -0.15);
+        transforms.rotate(ROPE_COIL_ROTATION_1);
+        transforms.translate(0.3, 0, 0);
+        transforms.rotate(ROPE_COIL_ROTATION_2);
+        transforms.rotate(ROPE_COIL_ROTATION_3);
+        transforms.scale(0.8F, 0.8F, 1);
 
-        GlStateManager.popMatrix();
+        renderer.renderItem(stack, ItemCameraTransforms.TransformType.NONE, light, NO_OVERLAY, transforms, buffer);
+
+        transforms.pop();
     }
 }

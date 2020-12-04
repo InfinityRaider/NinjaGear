@@ -5,21 +5,22 @@ import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 
 /**
  * Every client checks for changes in items equipped in the inventory.
  * If a change is detected, a message is sent to the server which sends the change to all other clients.
  * This is necessary because a client is unaware of the inventory of another client.
  */
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class NinjaGadgetHandler {
     private static final NinjaGadgetHandler INSTANCE = new NinjaGadgetHandler();
 
@@ -34,13 +35,13 @@ public class NinjaGadgetHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onPlayerTick(TickEvent event) {
-        if(event.side == Side.CLIENT && event.phase == TickEvent.Phase.END) {
-            EntityPlayer player = NinjaGear.proxy.getClientPlayer();
+        if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END) {
+            PlayerEntity player = NinjaGear.instance.getClientPlayer();
             if(player == null) {
                 return;
             }
             //count relevant items in player's inventory
-            ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+            ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
             if(chest != null && chest.getItem() instanceof ItemNinjaArmor) {
                 for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
                     if(i == player.inventory.currentItem) {
@@ -109,23 +110,23 @@ public class NinjaGadgetHandler {
         public static boolean[] getRenderMask() {
             return new boolean[]{
                     KATANA.prevCount > 0,
-                    shouldRenderSai(Minecraft.getMinecraft().player, SAI.prevCount, false),
-                    shouldRenderSai(Minecraft.getMinecraft().player, SAI.prevCount, true),
+                    shouldRenderSai(Minecraft.getInstance().player, SAI.prevCount, false),
+                    shouldRenderSai(Minecraft.getInstance().player, SAI.prevCount, true),
                     SHURIKEN.prevCount > 0,
                     SMOKE_BOMB.prevCount > 0,
                     ROPE_COIL.prevCount > 0
             };
         }
 
-        private static boolean shouldRenderSai(EntityPlayer player, int itemCount, boolean left) {
+        private static boolean shouldRenderSai(PlayerEntity player, int itemCount, boolean left) {
             if(itemCount <= 0) {
                 return false;
             }
             if(itemCount >= 2) {
                 return true;
             }
-            ItemStack main = player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-            ItemStack off = player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+            ItemStack main = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
+            ItemStack off = player.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
             boolean hasRight = main != null && main.getItem() == SAI.getItem();
             boolean hasLeft = off != null && off.getItem() == SAI.getItem();
             if(hasLeft) {

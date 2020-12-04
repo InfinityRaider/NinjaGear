@@ -1,24 +1,27 @@
 package com.infinityraider.ninjagear.proxy;
 
+import com.infinityraider.ninjagear.config.Config;
 import com.infinityraider.ninjagear.render.player.RenderNinjaGadget;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import com.infinityraider.ninjagear.handler.*;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ForgeConfigSpec;
 
-@SuppressWarnings("unused")
-@SideOnly(Side.CLIENT)
-public class ClientProxy implements IProxy, IClientProxyBase {
+import java.util.function.Function;
+
+@OnlyIn(Dist.CLIENT)
+public class ClientProxy implements IProxy, IClientProxyBase<Config> {
+
     @Override
-    public void initConfiguration(FMLPreInitializationEvent event) {
-        IProxy.super.initConfiguration(event);
-        ConfigurationHandler.getInstance().initClientConfigs(event);
+    @SuppressWarnings("Unchecked")
+    public Function<ForgeConfigSpec.Builder, Config> getConfigConstructor() {
+        return Config.Client::new;
     }
 
     @Override
-    public boolean isPlayerHidden(EntityPlayer player) {
+    public boolean isPlayerHidden(PlayerEntity player) {
         return RenderPlayerHandler.getInstance().isInvisible(player);
     }
 
@@ -27,9 +30,7 @@ public class ClientProxy implements IProxy, IClientProxyBase {
         IProxy.super.registerEventHandlers();
         this.registerEventHandler(RenderPlayerHandler.getInstance());
         this.registerEventHandler(TooltipHandler.getInstance());
-        if(ConfigurationHandler.getInstance().renderGadgets) {
-            this.registerEventHandler(RenderNinjaGadget.getInstance());
-        }
+        this.registerEventHandler(RenderNinjaGadget.getInstance());
         this.registerEventHandler(NinjaGadgetHandler.getInstance());
     }
 }

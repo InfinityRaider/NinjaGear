@@ -1,46 +1,43 @@
 package com.infinityraider.ninjagear.entity;
 
-import com.infinityraider.ninjagear.handler.ConfigurationHandler;
+import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.reference.Names;
+import com.infinityraider.ninjagear.registry.EntityRegistry;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import com.infinityraider.ninjagear.render.entity.RenderEntityShuriken;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.item.ItemEntity;
+import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityShuriken extends EntityThrowable implements IEntityAdditionalSpawnData {
+public class EntityShuriken extends ThrowableEntity implements IEntityAdditionalSpawnData {
     private float crit;
     private int timer;
-    private Vec3d direction;
+    private Vector3d direction;
 
-    @SuppressWarnings("unused")
-    public EntityShuriken(World world) {
-        super(world);
-    }
-
-    public EntityShuriken(World world, EntityLivingBase thrower, boolean crit) {
-        super(world, thrower);
+    public EntityShuriken(World world, LivingEntity thrower, boolean crit) {
+        super(EntityRegistry.getInstance().entityShuriken, thrower, world);
         this.direction = thrower.getLookVec();
-        this.setThrowableHeading(direction.xCoord, direction.yCoord, direction.zCoord, 4F, 0.2F);
-        this.crit = crit ? ConfigurationHandler.getInstance().critMultiplier : 1;
+        this.shoot(direction.getX(), direction.getY(), direction.getZ(), 4F, 0.2F);
+        this.crit = crit ? NinjaGear.instance.getConfig().getCitMultiplier() : 1;
         this.timer = 0;
     }
 
-    public Vec3d getDirection() {
+    public Vector3d getDirection() {
         return direction;
     }
 
@@ -50,69 +47,78 @@ public class EntityShuriken extends EntityThrowable implements IEntityAdditional
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
+    protected void registerData() {
+
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
         if(!this.getEntityWorld().isRemote) {
             timer = timer + 1;
             if(timer > 5000) {
-                this.dropAsItem(this.posX, this.posY, this.posZ);
+                this.dropAsItem(this.getPosX(), this.getPosY(), this.getPosZ());
             }
         }
     }
 
     @Override
     protected void onImpact(RayTraceResult impact) {
-        Entity hit = impact.entityHit;
-        if(hit == this.getThrower()) {
-            return;
-        }
-        if(hit != null) {
-            DamageSource damage = DamageSource.causeThrownDamage(this.getThrower(), this);
-            if(!hit.isEntityInvulnerable(damage)) {
-                float crit = this.crit;
-                hit.attackEntityFrom(damage, 3.0F + ConfigurationHandler.getInstance().shurikenDamage*crit);
+        if (impact instanceof EntityRayTraceResult) {
+            Entity hit = ((EntityRayTraceResult) impact).getEntity();
+            if (hit == this.func_234616_v_()) {     //func_234616_v_ ----> getThrower
+                return;
+            }
+            if (hit != null) {
+                DamageSource damage = DamageSource.causeThrownDamage(this.func_234616_v_(), this);
+                if (!hit.isInvulnerableTo(damage)) {
+                    float crit = this.crit;
+                    hit.attackEntityFrom(damage, 3.0F + NinjaGear.instance.getConfig().getShurikenDamage() * crit);
+                }
             }
         }
         World world = this.getEntityWorld();
-        if(!world.isRemote && impact.hitVec != null) {
-            this.dropAsItem(impact.hitVec.xCoord, impact.hitVec.yCoord, impact.hitVec.zCoord);
+        Vector3d hitVec = impact.getHitVec();
+        if(!world.isRemote && hitVec != null) {
+            this.dropAsItem(hitVec.getX(), hitVec.getY(), hitVec.getZ());
         }
     }
 
     public void dropAsItem(double x, double y, double z) {
-        EntityItem item = new EntityItem(getEntityWorld(), x, y, z,
+        ItemEntity item = new ItemEntity(getEntityWorld(), x, y, z,
                 new ItemStack(ItemRegistry.getInstance().itemShuriken));
-        getEntityWorld().spawnEntity(item);
+        this.getEntityWorld().addEntity(item);
         this.setDead();
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tag) {
-        super.writeEntityToNBT(tag);
-        tag.setFloat(Names.NBT.CRIT, this.crit);
-        tag.setDouble(Names.NBT.X, this.direction.xCoord);
-        tag.setDouble(Names.NBT.Y, this.direction.yCoord);
-        tag.setDouble(Names.NBT.Z, this.direction.zCoord);
+    public void writeAdditional(CompoundNBT tag) {
+        super.writeAdditional(tag);
+        tag.putFloat(Names.NBT.CRIT, this.crit);
+        tag.putDouble(Names.NBT.X, this.direction.getX());
+        tag.putDouble(Names.NBT.Y, this.direction.getY());
+        tag.putDouble(Names.NBT.Z, this.direction.getZ());
     }
 
-    public void readEntityFromNBT(NBTTagCompound tag) {
-        super.readEntityFromNBT(tag);
+    @Override
+    public void readAdditional(CompoundNBT tag) {
+        super.readAdditional(tag);
         this.crit = tag.getFloat(Names.NBT.CRIT);
-        this.direction = new Vec3d(tag.getDouble(Names.NBT.X), tag.getDouble(Names.NBT.Y), tag.getDouble(Names.NBT.Z));
+        this.direction = new Vector3d(tag.getDouble(Names.NBT.X), tag.getDouble(Names.NBT.Y), tag.getDouble(Names.NBT.Z));
     }
 
     @Override
-    public void writeSpawnData(ByteBuf buffer) {
+    public void writeSpawnData(PacketBuffer buffer) {
         buffer.writeFloat(this.crit);
-        buffer.writeDouble(this.direction.xCoord);
-        buffer.writeDouble(this.direction.yCoord);
-        buffer.writeDouble(this.direction.zCoord);
+        buffer.writeDouble(this.direction.getX());
+        buffer.writeDouble(this.direction.getY());
+        buffer.writeDouble(this.direction.getZ());
     }
 
     @Override
-    public void readSpawnData(ByteBuf buffer) {
+    public void readSpawnData(PacketBuffer buffer) {
         this.crit = buffer.readFloat();
-        this.direction =new Vec3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+        this.direction =new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
     }
 
 
@@ -124,8 +130,8 @@ public class EntityShuriken extends EntityThrowable implements IEntityAdditional
         }
 
         @Override
-        @SideOnly(Side.CLIENT)
-        public Render<? super EntityShuriken> createRenderFor(RenderManager manager) {
+        @OnlyIn(Dist.CLIENT)
+        public EntityRenderer<? super EntityShuriken> createRenderFor(EntityRendererManager manager) {
             return new RenderEntityShuriken(manager);
         }
     }
