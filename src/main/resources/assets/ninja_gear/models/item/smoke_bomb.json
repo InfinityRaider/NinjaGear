@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "ninjagear:items/smokebomb"
+    "layer0": "ninja_gear:items/smoke_bomb"
   }
 }

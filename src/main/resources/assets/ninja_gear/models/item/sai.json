@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "ninjagear:items/sai"
+    "layer0": "ninja_gear:items/sai"
   }
 }

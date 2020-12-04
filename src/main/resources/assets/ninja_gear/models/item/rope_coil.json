@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "ninjagear:items/ropecoil"
+    "layer0": "ninja_gear:items/rope_coil"
   }
 }

@@ -1,7 +1,7 @@
 {
-    "parent": "ninjagear:item/base",
+    "parent": "ninja_gear:item/base",
     "textures": {
-        "layer0": "ninjagear:items/ninjagear_head",
-        "layer1": "ninjagear:items/ninjagear_head_overlay"
+        "layer0": "ninja_gear:items/ninja_gear_head",
+        "layer1": "ninja_gear:items/ninja_gear_head_overlay"
     }
 }

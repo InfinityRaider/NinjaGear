@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    " i ",
-    "gsg",
-    "wiw"
+    " s ",
+    "sis",
+    " h "
   ],
   "key":
   {
@@ -19,22 +19,18 @@
         }
       }
     },
-    "g":
+    "h":
     {
-      "tag": "forge:ingots/gold"
+      "tag": "forge:rods/wooden"
     },
     "s":
     {
       "item": "minecraft:iron_sword"
-    },
-    "w":
-    {
-      "tag": "mincecraft:wool"
     }
   },
   "result":
   {
-    "item": "ninja_gear:katana",
+    "item": "ninja_gear:sai",
     "count": 1
   }
 }

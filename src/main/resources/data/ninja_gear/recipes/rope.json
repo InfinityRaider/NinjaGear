@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern":
+  [
+    "s  ",
+    "sss",
+    "  s"
+  ],
+  "key":
+  {
+    "s":
+    {
+      "item": "minecraft:string"
+    }
+  },
+  "result":
+  {
+    "item": "ninja_gear:rope",
+    "count": 5
+  }
+}

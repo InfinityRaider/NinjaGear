@@ -2,9 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    " s ",
-    "sis",
-    " h "
+    " b ",
+    "bib",
+    " b "
   ],
   "key":
   {
@@ -19,18 +19,14 @@
         }
       }
     },
-    "h":
+    "b":
     {
-      "tag": "forge:rods/wooden"
-    },
-    "s":
-    {
-      "item": "minecraft:iron_sword"
+      "item": "minecraft:iron_bars"
     }
   },
   "result":
   {
-    "item": "ninja_gear:katana",
-    "count": 1
+    "item": "ninja_gear:shuriken",
+    "count": 8
   }
 }

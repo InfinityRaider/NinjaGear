@@ -2,8 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "pattern":
   [
-    "dhd",
-    "sls"
+    "dpd",
+    "lsl",
+    "lsl"
   ],
   "key":
   {
@@ -11,9 +12,9 @@
     {
       "tag": "forge:dyes/black"
     },
-    "h":
+    "p":
     {
-      "item": "minecraft:leather_helmet"
+      "item": "minecraft:leather_leggings"
     },
     "s":
     {
@@ -26,7 +27,7 @@
   },
   "result":
   {
-    "item": "ninja_gear:ninja_gear_head",
+    "item": "ninja_gear:ninja_gear_legs",
     "count": 1
   }
 }

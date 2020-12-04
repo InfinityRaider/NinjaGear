@@ -1,7 +1,7 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "ninjagear:items/shuriken"
+    "layer0": "ninja_gear:items/shuriken"
   },
   "display": {
     "thirdperson_righthand": {
