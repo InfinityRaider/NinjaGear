@@ -49,7 +49,7 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
 
         //smoke bomb
         public final ForgeConfigSpec.IntValue smokeCloudRadius;
-        public final ForgeConfigSpec.IntValue smokeCloudDispersionFactor;
+        public final ForgeConfigSpec.IntValue smokeCloudDispersionRate;
 
         //rope
         public final ForgeConfigSpec.IntValue ropeCoilLength;
@@ -86,9 +86,9 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
             this.smokeCloudRadius = builder
                     .comment("The radius of the smoke cloud created by smoke bombs")
                     .defineInRange("smoke cloud radius", 4, 2, 5);
-            this.smokeCloudDispersionFactor = builder
-                    .comment("Smoke cloud dispersion factor, the lower this is, the faster smoke clouds will disperse and disappear")
-                    .defineInRange("smoke cloud dispersion", 5, 1, 20);
+            this.smokeCloudDispersionRate = builder
+                    .comment("Smoke cloud dispersion rate, the higher this is, the faster smoke clouds will disperse and disappear")
+                    .defineInRange("smoke cloud dispersion", 3, 1, 10);
             builder.pop();
 
             builder.push("Rope");
@@ -140,7 +140,7 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
 
         @Override
         public int getSmokeDispersion() {
-            return this.smokeCloudDispersionFactor.get();
+            return this.smokeCloudDispersionRate.get();
         }
 
         @Override
