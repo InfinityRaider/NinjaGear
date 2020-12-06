@@ -2,6 +2,7 @@ Changelog
 ---------
 2.0.0
 - CHANGE: ported to 1.16.4
+- ADDED: Ropes can now be waterlogged
 
 1.12.0
 - CHANGE: ported to 1.11.2

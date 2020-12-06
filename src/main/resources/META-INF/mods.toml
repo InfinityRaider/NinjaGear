@@ -3,7 +3,7 @@ loaderVersion="[35,)"
 license="license.txt"
 issueTrackerURL="https://github.com/InfinityRaider/NinjaGear/issues/"
 
-[[mods]] #mandatory
+[[mods]]
 modId="ninja_gear"
 version="1.16.4-2.0.0"
 displayName="Ninja Gear"
@@ -19,7 +19,7 @@ Become a ninja, sneak around in the darkness, scale walls and explore new forms 
     modId="forge"
     mandatory=true
     versionRange="[35,)"
-    ordering="NONE"
+    ordering="AFTER"
     side="BOTH"
 
 [[dependencies.examplemod]]
