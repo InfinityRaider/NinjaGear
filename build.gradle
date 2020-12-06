@@ -5,6 +5,9 @@ buildscript {
         maven { url = 'https://files.minecraftforge.net/maven' }
         jcenter()
         mavenCentral()
+        flatDir{
+            dirs 'lib'
+        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
@@ -24,10 +27,32 @@ archivesBaseName = config.id
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "${config.version_java}"
 
+// Add Infinitylib to the source sets
+/*
+sourceSets {
+    infinitylib {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+
+        java {
+            srcDir "lib/InfinityLib/src/main/java"
+        }
+        resources {
+            srcDir "lib/InfinityLib/src/main/resources"
+        }
+    }
+}
+
+// Make InfinityLib's configurations extend this one's (so it recognizes Minecraft and Forge as dependencies)
+configurations {
+    infinitylibCompile.extendsFrom(compile)
+    infinitylibCompileOnly.extendsFrom(compileOnly)
+    infinitylibRuntimeOnly.extendsFrom(runtimeOnly)
+}
+ */
 
 minecraft {
  mappings channel: "${config.mapping_channel}", version: "${config.mapping_version}"
-
     runs {
         client {
             workingDirectory project.file('run')
@@ -36,8 +61,11 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             mods {
-                infinitylib {
+                ninja_gear {
                     source sourceSets.main
+                }
+                infinitylib {
+                    source project(":lib/InfinityLib").sourceSets.main
                 }
             }
         }
@@ -49,19 +77,28 @@ minecraft {
             // Recommended logging level for the console
             property 'forge.logging.console.level', 'debug'
             mods {
-                infinitylib {
+                ninja_gear {
                     source sourceSets.main
+                }
+                infinitylib {
+                    source project(":lib/InfinityLib").sourceSets.main
                 }
             }
         }
     }
 }
 
+repositories {
+    maven {
+        //for JEI
+        url "https://dvs1.progwml6.com/files/maven"
+    }
+}
+
 dependencies {
-	minecraft "net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
-	
-    compile project(':lib/InfinityLib')
-	
+    minecraft "net.minecraftforge:forge:${config.version_minecraft}-${config.version_forge}"
+
+    compile project(":lib/InfinityLib")
 
     compileOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58:api")
     runtimeOnly fg.deobf("mezz.jei:jei-1.16.4:7.6.0.58")
@@ -69,7 +106,7 @@ dependencies {
 
 processResources
 {
-    // replace stuff in mcmod.info, nothing else
+    // make sure to include mods.toml from the main mod
     from(sourceSets.main.resources.srcDirs) {
         include 'META-INF/mods.toml'
 
@@ -77,12 +114,25 @@ processResources
         expand 'version': project.version
     }
 
-    // copy everything else, thats not the mods.toml
+    // from the main mod, copy everything else, thats not the mods.toml
     from(sourceSets.main.resources.srcDirs) {
         exclude 'META-INF/mods.toml', '**/psd/**'
     }
-}
+    /*
+    // make sure to include mods.toml from infinitylib
+    from(sourceSets.infinitylib.resources.srcDirs) {
+        include 'META-INF/mods.toml'
 
+        // replace version and mcversion
+        expand 'version': project.version
+    }
+    */
+
+    // from InfinityLib, copy everything else, thats not the mods.toml
+    //from(sourceSets.infinitylib.resources.srcDirs) {
+        //exclude 'META-INF/mods.toml', '**/psd/**'
+    //}
+}
 
 def parseConfig(File config) {
     config.withReader {
