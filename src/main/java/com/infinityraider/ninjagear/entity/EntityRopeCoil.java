@@ -51,10 +51,10 @@ public class EntityRopeCoil extends ThrowableEntity {
             if (!world.isRemote) {
                 BlockPos pos = this.getBlockPosFromImpact((BlockRayTraceResult) impact);
                 BlockState state = this.getEntityWorld().getBlockState(pos);
-                BlockRope rope = (BlockRope) BlockRegistry.getInstance().blockRope;
+                BlockState rope = BlockRegistry.getInstance().blockRope.getDefaultState();
                 if (state.getBlock() instanceof BlockRope) {
                     this.addRemainingToInventory(this.extendRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
-                } else if (rope.canPlaceBlockAt(world, pos)) {
+                } else if (rope.isValidPosition(world, pos)) {
                     this.addRemainingToInventory(this.placeRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
                 } else {
                     this.dropAsItem(hitVec.getX(), hitVec.getY(), hitVec.getZ());
@@ -79,12 +79,12 @@ public class EntityRopeCoil extends ThrowableEntity {
     }
 
     private int placeRope(World world, BlockPos pos, int ropeCount) {
-        BlockRope rope = (BlockRope) BlockRegistry.getInstance().blockRope;
-        world.setBlockState(pos, rope.getDefaultState(), 3);
+        BlockState rope = BlockRegistry.getInstance().blockRope.getDefaultState();
+        world.setBlockState(pos, rope, 3);
         ropeCount = ropeCount - 1;
         if(ropeCount > 0) {
             BlockPos down = pos.down();
-            if(rope.canPlaceBlockAt(world, down)) {
+            if(rope.isValidPosition(world, down)) {
                 return this.placeRope(world, down, ropeCount);
             } else {
                 return ropeCount;
