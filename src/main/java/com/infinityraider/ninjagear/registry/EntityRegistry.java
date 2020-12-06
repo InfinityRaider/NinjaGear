@@ -5,7 +5,7 @@ import com.infinityraider.ninjagear.entity.EntityRopeCoil;
 import com.infinityraider.ninjagear.entity.EntityShuriken;
 import com.infinityraider.ninjagear.entity.EntitySmokeBomb;
 import com.infinityraider.ninjagear.reference.Constants;
-import com.infinityraider.ninjagear.reference.Objects;
+import com.infinityraider.ninjagear.reference.Names;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.EntityType;
@@ -18,7 +18,7 @@ public class EntityRegistry {
     }
 
     private EntityRegistry() {
-        this.entitySmokeBomb = EntityTypeBase.entityTypeBuilder(Objects.SMOKE_BOMB, EntitySmokeBomb.class, EntityClassification.MISC,
+        this.entitySmokeBomb = EntityTypeBase.entityTypeBuilder(Names.Items.SMOKE_BOMB, EntitySmokeBomb.class, EntityClassification.MISC,
                 EntitySize.fixed(Constants.UNIT, Constants.UNIT))
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
@@ -26,7 +26,7 @@ public class EntityRegistry {
                 .setRenderFactory(EntitySmokeBomb.RenderFactory.getInstance())
                 .build();
 
-        this.entityShuriken = EntityTypeBase.entityTypeBuilder(Objects.SHURIKEN, EntityShuriken.class, EntityClassification.MISC,
+        this.entityShuriken = EntityTypeBase.entityTypeBuilder(Names.Items.SHURIKEN, EntityShuriken.class, EntityClassification.MISC,
                 EntitySize.fixed(Constants.UNIT, Constants.UNIT))
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
@@ -34,7 +34,7 @@ public class EntityRegistry {
                 .setRenderFactory(EntityShuriken.RenderFactory.getInstance())
                 .build();
 
-        this.entityRopeCoil = EntityTypeBase.entityTypeBuilder(Objects.ROPE_COIL, EntityRopeCoil.class, EntityClassification.MISC,
+        this.entityRopeCoil = EntityTypeBase.entityTypeBuilder(Names.Items.ROPE_COIL, EntityRopeCoil.class, EntityClassification.MISC,
                 EntitySize.fixed(Constants.UNIT, Constants.UNIT))
                 .setTrackingRange(32)
                 .setUpdateInterval(1)

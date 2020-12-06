@@ -4,6 +4,7 @@ import com.infinityraider.ninjagear.api.v1.IRopeAttachable;
 import com.infinityraider.ninjagear.item.ItemRope;
 import com.infinityraider.ninjagear.reference.Constants;
 import com.infinityraider.infinitylib.block.BlockBase;
+import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
@@ -42,7 +43,7 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
     private final VoxelShape shape;
 
     public BlockRope() {
-        super("ropeBlock", Properties.create(Material.WOOL));
+        super(Names.Items.ROPE, Properties.create(Material.WOOL));
         float u = Constants.UNIT;
         this.shape = Block.makeCuboidShape(7.5, 0, 7.5, 8.5, 1, 8.5);
         this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, Boolean.FALSE));

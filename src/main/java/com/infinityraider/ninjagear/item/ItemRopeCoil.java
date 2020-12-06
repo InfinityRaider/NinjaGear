@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.item;
 
 import com.infinityraider.ninjagear.entity.EntityRopeCoil;
-import com.infinityraider.ninjagear.reference.Objects;
+import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
@@ -24,12 +24,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ItemRopeCoil extends ItemBase implements IHiddenItem, IItemWithModel {
     public ItemRopeCoil() {
-        super(Objects.ROPE_COIL, new Properties().group(ItemRegistry.CREATIVE_TAB));
+        super(Names.Items.ROPE_COIL, new Properties().group(ItemRegistry.CREATIVE_TAB));
     }
 
     @Override

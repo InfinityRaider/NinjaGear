@@ -39,7 +39,7 @@ public class ItemShuriken extends ItemBase implements IHiddenItem, IItemWithMode
     @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         if(!world.isRemote) {
-            boolean crit = player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden);
+            boolean crit = player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden);
             EntityShuriken shuriken = new EntityShuriken(world, player, crit);
             world.addEntity(shuriken);
             if (!player.isCreative()) {

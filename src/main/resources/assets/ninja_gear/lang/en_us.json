@@ -1,8 +1,6 @@
 {
-//Creative tabs
 "itemGroup.ninja_gear.creative_tab": "Ninja Gear",
 
-//Items
 "item.ninja_gear:ninja_gear_head": "Ninja Gear Mask",
 "item.ninja_gear:ninja_gear_chest": "Ninja Gear Vest",
 "item.ninja_gear:ninja_gear_legs": "Ninja Gear Trousers",
@@ -14,21 +12,19 @@
 "item.ninja_gear:rope_coil": "Rope Coil",
 "item.ninja_gear:rope": "Ninja Rope",
 
-//Blocks
 "tile.ninja_gear:rope": "Ninja Rope",
 "tile.ninja_gear:smoke": "Smoke Bomb Smoke Cloud",
 
-//Effects
 "ninja_gear:effect.ninja_aura": "Ninja Sense",
 "ninja_gear:effect.ninja_revealed": "Revealed",
 "ninja_gear:effect.ninja_hidden": "Hidden",
 
-//Tooltips
 "ninja_gear.tooltip:ninja_gear_head_L1": "Head piece for the ninja gear set, wearing the full set will grant a set bonus",
 "ninja_gear.tooltip:ninja_gear_chest_L1": "Chest piece for the ninja gear set, wearing the full set will grant a set bonus",
 "ninja_gear.tooltip:ninja_gear_legs_L1": "Leg piece for the ninja gear set, wearing the full set will grant a set bonus",
 "ninja_gear.tooltip:ninja_gear_feet_L1": "Feet piece for the ninja gear set, wearing the full set will grant a set bonus",
-"ninja_gear.tooltip:ninja_gear_L1": "Ninja gear set bonus: makes you more agile, nimble and fast, allows hiding in the dark",
+"ninja_gear.tooltip:ninja_gear_L1": "Ninja gear set bonus: makes you more agile, nimble and fast, and allows you to hide in the dark",
+"ninja_gear.tooltip:ninja_gear_L2": "Can be applied to a different armor piece in an anvil to imbue it with the way of the ninja",
 
 "ninja_gear.tooltip:katana_L1": "The katana is the signature weapon of the ninja.",
 "ninja_gear.tooltip:katana_L2": "It is faster and deals more damage than conventional swords,",
@@ -57,5 +53,7 @@
 "ninja_gear.tooltip:rope_L4": "Shift+left click will break the entire rope.",
 "ninja_gear.tooltip:rope_L5": "16 or more ropes can be tied together into a rope coil by shift+clicking.",
 
-"ninja_gear.tooltip:hidden_item_L1": "This item will not reveal you when equipped."
+"ninja_gear.tooltip:hidden_item_L1": "This item will not reveal you when equipped.",
+
+"ninja_gear.tooltip:ninja_armor_L1": "This armor piece conforms with the way of the ninja"
 }

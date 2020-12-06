@@ -63,8 +63,8 @@ public class EntitySmokeBomb extends ThrowableEntity {
                 .filter(entity -> entity != null && (entity instanceof LivingEntity))
                 .forEach(entity -> {
                     LivingEntity living = (LivingEntity) entity;
-                    if (living.isPotionActive(EffectRegistry.getInstance().potionNinjaRevealed)) {
-                        living.removePotionEffect(EffectRegistry.getInstance().potionNinjaRevealed);
+                    if (living.isPotionActive(EffectRegistry.getInstance().effectNinjaRevealed)) {
+                        living.removePotionEffect(EffectRegistry.getInstance().effectNinjaRevealed);
                     }
                 });
     }

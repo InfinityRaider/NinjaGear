@@ -2,6 +2,7 @@ Changelog
 ---------
 2.0.0
 - CHANGE: ported to 1.16.4
+- ADDED: Ninja armor can now be applied to other armor pieces in an anvil, transferring its hiding capabilities
 - ADDED: Ropes can now be waterlogged
 
 1.12.0

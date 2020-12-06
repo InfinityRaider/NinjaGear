@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.item;
 
 import com.infinityraider.ninjagear.NinjaGear;
-import com.infinityraider.ninjagear.reference.Objects;
+import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.google.common.collect.Multimap;
@@ -37,7 +37,7 @@ public class ItemKatana extends ItemBase {
     private Ingredient repairItem;
 
     public ItemKatana() {
-        super(Objects.KATANA, new Properties()
+        super(Names.Items.KATANA, new Properties()
                 .maxDamage(1000)
                 .maxStackSize(1)
                 .group(ItemRegistry.CREATIVE_TAB)

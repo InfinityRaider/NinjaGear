@@ -25,7 +25,7 @@ public class EntityTargetingHandler {
         if(target == null || attacker == null || !(target instanceof PlayerEntity)) {
             return;
         }
-        if(target.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden)) {
+        if(target.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden)) {
             if(attacker instanceof IEntityTrueSight && ((IEntityTrueSight) attacker).canSeeTarget((PlayerEntity) target)) {
                 return;
             }

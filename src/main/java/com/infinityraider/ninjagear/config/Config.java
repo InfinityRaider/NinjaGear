@@ -22,6 +22,8 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
 
     public abstract int getHidingCooldown();
 
+    public abstract int getImbueCost();
+
     public abstract int getSmokeRadius();
 
     public abstract int getSmokeDispersion();
@@ -46,6 +48,7 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
         //invisibility
         public final ForgeConfigSpec.IntValue brightnessLimit;
         public final ForgeConfigSpec.IntValue hidingCoolDown;
+        public final ForgeConfigSpec.IntValue imbueCost;
 
         //smoke bomb
         public final ForgeConfigSpec.IntValue smokeCloudRadius;
@@ -80,6 +83,9 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
             this.hidingCoolDown = builder
                     .comment("The cooldown time in ticks before a ninja can hide again after being revealed.")
                     .defineInRange("hiding cooldown", 60, 0, 600);
+            this.imbueCost = builder
+                    .comment("The number of levels it costs to imbue an armor piece with ninja armor")
+                    .defineInRange("Imbue cost", 10, 0, 100);
             builder.pop();
 
             builder.push("Smoke Bomb");
@@ -131,6 +137,11 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
         @Override
         public int getHidingCooldown() {
             return this.hidingCoolDown.get();
+        }
+
+        @Override
+        public int getImbueCost() {
+            return this.imbueCost.get();
         }
 
         @Override

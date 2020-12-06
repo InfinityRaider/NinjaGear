@@ -1,6 +1,8 @@
 package com.infinityraider.ninjagear.proxy;
 
+import com.infinityraider.infinitylib.modules.synchronizedeffects.ModuleSynchronizedEffects;
 import com.infinityraider.infinitylib.proxy.base.IProxyBase;
+import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor;
 import com.infinityraider.ninjagear.config.Config;
 import com.infinityraider.ninjagear.handler.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,16 +17,21 @@ public interface IProxy extends IProxyBase<Config> {
     }
 
     @Override
-    default void registerCapabilities() {}
+    default void registerCapabilities() {
+        this.registerCapability(CapabilityNinjaArmor.getInstance());
+    }
 
     @Override
     default void registerEventHandlers() {
         this.registerEventHandler(EntityTargetingHandler.getInstance());
         this.registerEventHandler(NinjaAuraHandler.getInstance());
+        this.registerEventHandler(AnvilHandler.getInstance());
     }
 
     @Override
-    default void activateRequiredModules() {}
+    default void activateRequiredModules() {
+        ModuleSynchronizedEffects.getInstance().activate();
+    }
 
     /**
      * Checks if a player is hidden

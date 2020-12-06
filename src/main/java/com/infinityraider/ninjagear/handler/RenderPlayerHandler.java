@@ -33,7 +33,7 @@ public class RenderPlayerHandler {
 
     public boolean isInvisible(PlayerEntity player) {
         if(player == Minecraft.getInstance().player) {
-            return player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden);
+            return player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden);
         }
         return invisibilityMap.containsKey(player.getUniqueID()) && invisibilityMap.get(player.getUniqueID());
     }

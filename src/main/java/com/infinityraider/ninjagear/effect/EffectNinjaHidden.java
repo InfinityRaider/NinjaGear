@@ -1,6 +1,8 @@
 package com.infinityraider.ninjagear.effect;
 
 import com.infinityraider.infinitylib.effect.EffectBase;
+import com.infinityraider.infinitylib.modules.synchronizedeffects.ISynchronizedEffect;
+import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.AbstractGui;
@@ -14,11 +16,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.awt.*;
 
-public class EffectNinjaHidden extends EffectBase {
+public class EffectNinjaHidden extends EffectBase implements ISynchronizedEffect {
     private static final ResourceLocation TEXTURE =  new ResourceLocation(Reference.MOD_ID, "textures/gui/effect_hidden.png");
 
     public EffectNinjaHidden() {
-        super("ninja_hidden", EffectType.BENEFICIAL, new Color(0, 0, 0).getRGB());
+        super(Names.Effects.NINJA_HIDDEN, EffectType.BENEFICIAL, new Color(0, 0, 0).getRGB());
     }
 
     @Override

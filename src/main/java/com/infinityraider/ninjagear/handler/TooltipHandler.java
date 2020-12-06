@@ -1,6 +1,7 @@
 package com.infinityraider.ninjagear.handler;
 
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
+import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor;
 import com.infinityraider.ninjagear.reference.Reference;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -24,24 +25,32 @@ public class TooltipHandler {
         return INSTANCE;
     }
 
-    private TooltipHandler() {}
+    private TooltipHandler() {
+    }
 
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onTooltipEvent(ItemTooltipEvent event) {
         ItemStack stack = event.getItemStack();
-        if(stack == null) {
+        if (stack.isEmpty()) {
             return;
         }
-        if(stack.getItem() instanceof IHiddenItem) {
-            addTooltipForHiddenItem(event.getToolTip(), (IHiddenItem) stack.getItem(), stack, event.getPlayer());
+        if (stack.getItem() instanceof IHiddenItem) {
+            this.addTooltipForHiddenItem(event.getToolTip(), (IHiddenItem) stack.getItem(), stack, event.getPlayer());
+        }
+        if (CapabilityNinjaArmor.isNinjaArmor(stack)) {
+            this.addTooltipForNinjaArmor(event.getToolTip());
         }
     }
 
     private void addTooltipForHiddenItem(List<ITextComponent> tooltip, IHiddenItem item, ItemStack stack, PlayerEntity player) {
-        if(!item.shouldRevealPlayerWhenEquipped(player, stack)) {
+        if (!item.shouldRevealPlayerWhenEquipped(player, stack)) {
             tooltip.add(EMPTY_STRING);
             tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:hiddenItem_L1"));
         }
+    }
+
+    private void addTooltipForNinjaArmor(List<ITextComponent> tooltip) {
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_armor_L"));
     }
 }

@@ -1,9 +1,9 @@
 package com.infinityraider.ninjagear.handler;
 
 import com.infinityraider.ninjagear.NinjaGear;
+import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor;
 import com.infinityraider.ninjagear.network.MessageInvisibility;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
-import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.registry.EffectRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,31 +25,22 @@ public class NinjaAuraHandler {
     private NinjaAuraHandler() {}
 
     public void revealEntity(PlayerEntity player, int duration) {
-        player.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().potionNinjaRevealed, duration, 0, false, true));
+        player.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().effectNinjaRevealed, duration, 0, false, true));
     }
 
-    private boolean shouldRemoveEffect(PlayerEntity player) {
-        ItemStack helmet = player.getItemStackFromSlot(EquipmentSlotType.HEAD);
-        if (!(helmet.getItem() instanceof ItemNinjaArmor)) {
-            return true;
-        }
-        ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
-        if (!(chest.getItem() instanceof ItemNinjaArmor)) {
-            return true;
-        }
-        ItemStack leggings = player.getItemStackFromSlot(EquipmentSlotType.LEGS);
-        if (!(leggings.getItem() instanceof ItemNinjaArmor)) {
-            return true;
-        }
-        ItemStack boots = player.getItemStackFromSlot(EquipmentSlotType.FEET);
-        return !(boots.getItem() instanceof ItemNinjaArmor);
+    private boolean isWearingFullNinjaArmor(PlayerEntity player) {
+        return this.checkEquipment(player.getItemStackFromSlot(EquipmentSlotType.HEAD))
+                && this.checkEquipment(player.getItemStackFromSlot(EquipmentSlotType.CHEST))
+                && this.checkEquipment(player.getItemStackFromSlot(EquipmentSlotType.LEGS))
+                && this.checkEquipment(player.getItemStackFromSlot(EquipmentSlotType.FEET));
     }
 
-    private boolean shouldBeHidden(PlayerEntity player) {
-        if(!player.isPotionActive(EffectRegistry.getInstance().potionNinjaAura)) {
-            return false;
-        }
-        if(player.isPotionActive(EffectRegistry.getInstance().potionNinjaRevealed)) {
+    private boolean checkEquipment(ItemStack stack) {
+        return CapabilityNinjaArmor.isNinjaArmor(stack);
+    }
+
+    private boolean checkHidingRequirements(PlayerEntity player) {
+        if(player.isPotionActive(EffectRegistry.getInstance().effectNinjaRevealed)) {
             return false;
         }
         if(!player.isSneaking()) {
@@ -87,26 +78,25 @@ public class NinjaAuraHandler {
             return;
         }
         PlayerEntity player = (PlayerEntity) entity;
-        if(this.shouldRemoveEffect(player)) {
-            player.removePotionEffect(EffectRegistry.getInstance().potionNinjaAura);
-            if(player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden)) {
-                player.removePotionEffect(EffectRegistry.getInstance().potionNinjaHidden);
-            }
-            if(player.isPotionActive(EffectRegistry.getInstance().potionNinjaRevealed)) {
-                player.removePotionEffect(EffectRegistry.getInstance().potionNinjaRevealed);
-            }
-        } else {
-            boolean shouldBeHidden = this.shouldBeHidden(player);
-            boolean isHidden = player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden);
+        if(this.isWearingFullNinjaArmor(player)) {
+            boolean shouldBeHidden = this.checkHidingRequirements(player);
+            boolean isHidden = player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden);
             if(shouldBeHidden != isHidden) {
                 if(shouldBeHidden) {
-                    player.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().potionNinjaHidden, Integer.MAX_VALUE, 0, false, true));
+                    player.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().effectNinjaHidden, Integer.MAX_VALUE, 0, false, true));
                     new MessageInvisibility(player, true).sendToAll();
                 } else {
-                    player.removePotionEffect(EffectRegistry.getInstance().potionNinjaHidden);
+                    player.removePotionEffect(EffectRegistry.getInstance().effectNinjaHidden);
                     this.revealEntity(player, NinjaGear.instance.getConfig().getHidingCooldown());
                     new MessageInvisibility(player, false).sendToAll();
                 }
+            }
+        } else {
+            if(player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden)) {
+                player.removePotionEffect(EffectRegistry.getInstance().effectNinjaHidden);
+            }
+            if(player.isPotionActive(EffectRegistry.getInstance().effectNinjaRevealed)) {
+                player.removePotionEffect(EffectRegistry.getInstance().effectNinjaRevealed);
             }
         }
     }

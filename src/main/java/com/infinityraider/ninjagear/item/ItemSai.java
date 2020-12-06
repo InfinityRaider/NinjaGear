@@ -117,7 +117,7 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithModel {
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
         ItemStack offHand = player.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-        boolean crit = player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden);
+        boolean crit = player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden);
         if(offHand != null && offHand.getItem() == this) {
             player.getAttributeManager().reapplyModifiers(getAttributeModifiers(EquipmentSlotType.MAINHAND, stack, true, crit));
         } else {

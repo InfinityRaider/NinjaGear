@@ -11,6 +11,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ServerProxy implements IProxy, IServerProxyBase<Config> {
     @Override
     public boolean isPlayerHidden(PlayerEntity player) {
-        return player.isPotionActive(EffectRegistry.getInstance().potionNinjaHidden);
+        return player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden);
     }
 }

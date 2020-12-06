@@ -1,8 +1,6 @@
 package com.infinityraider.ninjagear.registry;
 
-import com.infinityraider.ninjagear.effect.EffectNinjaAura;
-import com.infinityraider.ninjagear.effect.EffectNinjaHidden;
-import com.infinityraider.ninjagear.effect.EffectNinjaRevealed;
+import com.infinityraider.ninjagear.effect.*;
 import net.minecraft.potion.Effect;
 
 public class EffectRegistry {
@@ -12,9 +10,8 @@ public class EffectRegistry {
         return INSTANCE;
     }
 
-    public Effect potionNinjaAura = new EffectNinjaAura();
-    public Effect potionNinjaHidden = new EffectNinjaHidden();
-    public Effect potionNinjaRevealed = new EffectNinjaRevealed();
+    public Effect effectNinjaHidden = new EffectNinjaHidden();
+    public Effect effectNinjaRevealed = new EffectNinjaRevealed();
 
     private EffectRegistry() {}
 }
