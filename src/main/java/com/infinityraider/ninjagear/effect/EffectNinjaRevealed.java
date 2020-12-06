@@ -28,12 +28,6 @@ public class EffectNinjaRevealed extends EffectBase {
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean hasStatusIcon() {
-        return false;
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
     public boolean shouldRenderHUD(EffectInstance effect) {
         return true;
     }
@@ -47,16 +41,12 @@ public class EffectNinjaRevealed extends EffectBase {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderInventoryEffect(EffectInstance effect, DisplayEffectsScreen<?> gui, MatrixStack mStack, int x, int y, float z) {
-        mc.getTextureManager().bindTexture(TEXTURE);
-        net.minecraft.client.renderer.GlStateManager.color(1, 1, 1, 1);
-        net.minecraft.client.gui.Gui.drawModalRectWithCustomSizedTexture(x + 6, y + 7, 0F, 0F, 18, 18, 18, 18);
+        this.drawInGui(mStack, x, y, gui, 18, 18, 1);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderHUDEffect(EffectInstance effect, AbstractGui gui, MatrixStack mStack, int x, int y, float z, float alpha) {
-        mc.getTextureManager().bindTexture(TEXTURE);
-        net.minecraft.client.renderer.GlStateManager.color(1, 1, 1, alpha);
-        net.minecraft.client.gui.Gui.drawModalRectWithCustomSizedTexture(x + 3, y + 3, 0F, 0F, 18, 18, 18, 18);
+        this.drawInGui(mStack, x, y, gui, 18, 18, alpha);
     }
 }
