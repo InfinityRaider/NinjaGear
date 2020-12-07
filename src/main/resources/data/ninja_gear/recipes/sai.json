@@ -10,12 +10,13 @@
   {
     "i":
     {
-      "infinity:fallback":
+      "type": "infinitylib:fallback",
+      "ingredient":
       {
         "tag": "forge:ingots/steel",
         "fallback":
         {
-            "tag":"forge:ingots/iron"
+          "tag":"forge:ingots/iron"
         }
       }
     },

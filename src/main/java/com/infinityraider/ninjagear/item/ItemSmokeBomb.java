@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
+import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
@@ -31,7 +32,7 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithModel {
     public ItemSmokeBomb() {
-        super("smokebomb", new Properties().group(ItemRegistry.CREATIVE_TAB));
+        super(Names.Items.SMOKE_BOMB, new Properties().group(ItemRegistry.CREATIVE_TAB));
     }
 
     public int getMaxItemUseDuration(ItemStack stack) {

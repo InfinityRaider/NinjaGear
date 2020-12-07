@@ -1,16 +1,12 @@
 package com.infinityraider.ninjagear.registry;
 
 import com.infinityraider.infinitylib.block.IInfinityBlock;
-import com.infinityraider.infinitylib.crafting.FallbackIngredient;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.ninjagear.item.*;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.util.ResourceLocation;
 
 public class ItemRegistry {
     public static final ItemGroup CREATIVE_TAB = new ItemGroup(Reference.MOD_ID.toLowerCase() + ".creative_tab") {
@@ -19,11 +15,6 @@ public class ItemRegistry {
             return new ItemStack(ItemRegistry.getInstance().itemShuriken);
         }
     };
-
-    public static final Ingredient REPAIR_ITEM_STEEL = new FallbackIngredient(
-            ItemTags.getCollection().getTagByID(new ResourceLocation("forge", "ingots/steel")),
-            Ingredient.fromTag(ItemTags.getCollection().getTagByID(new ResourceLocation("forge", "ingots/iron")))
-    );
 
     private static final ItemRegistry INSTANCE = new ItemRegistry();
 

@@ -22,7 +22,7 @@ public class MessageInvisibility extends MessageBase {
 
     @Override
     public NetworkDirection getMessageDirection() {
-        return NetworkDirection.PLAY_TO_SERVER;
+        return NetworkDirection.PLAY_TO_CLIENT;
     }
 
     @Override

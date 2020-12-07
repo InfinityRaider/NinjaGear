@@ -46,11 +46,11 @@ public class TooltipHandler {
     private void addTooltipForHiddenItem(List<ITextComponent> tooltip, IHiddenItem item, ItemStack stack, PlayerEntity player) {
         if (!item.shouldRevealPlayerWhenEquipped(player, stack)) {
             tooltip.add(EMPTY_STRING);
-            tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:hiddenItem_L1"));
+            tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:hidden_item_L1"));
         }
     }
 
     private void addTooltipForNinjaArmor(List<ITextComponent> tooltip) {
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_armor_L"));
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_armor_L1"));
     }
 }

@@ -1,5 +1,7 @@
 package com.infinityraider.ninjagear.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.infinityraider.infinitylib.crafting.FallbackIngredient;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
@@ -21,6 +23,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -34,14 +38,27 @@ import java.util.List;
 
 @MethodsReturnNonnullByDefault
 public class ItemKatana extends ItemBase {
-    private Ingredient repairItem;
+    private final Multimap<Attribute, AttributeModifier> attributeModifiers;
+    private final Multimap<Attribute, AttributeModifier> attributeModifiersIneffective;
 
     public ItemKatana() {
         super(Names.Items.KATANA, new Properties()
                 .maxDamage(1000)
-                .maxStackSize(1)
                 .group(ItemRegistry.CREATIVE_TAB)
         );
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        this.attributeModifiers = builder
+                .put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Katana Attack Damage Modifier",
+                        3.0 + NinjaGear.instance.getConfig().getKatanaDamage(), AttributeModifier.Operation.ADDITION))
+                .put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Katana Attack Speed Modifier",
+                        1, AttributeModifier.Operation.ADDITION)).build();
+        builder = ImmutableMultimap.builder();
+        this.attributeModifiersIneffective = builder
+                .put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Katana Attack Damage modifier",
+                        3.0, AttributeModifier.Operation.ADDITION))
+                .put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Katana Attack Speed Modifier",
+                        -2, AttributeModifier.Operation.ADDITION))
+                .build();
     }
 
     @Override
@@ -89,38 +106,30 @@ public class ItemKatana extends ItemBase {
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return ItemRegistry.REPAIR_ITEM_STEEL.test(repair);
+        return getRepairItem().test(repair);
     }
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        if(player.getItemStackFromSlot(EquipmentSlotType.OFFHAND) != null) {
-            player.getAttributeManager().reapplyModifiers(getAttributeModifiers(EquipmentSlotType.MAINHAND, stack, false));
+        ItemStack offhand = player.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
+        if(offhand != null && !offhand.isEmpty()) {
+            player.getAttributeManager().reapplyModifiers(this.attributeModifiers);
         } else {
-            player.getAttributeManager().reapplyModifiers(getAttributeModifiers(EquipmentSlotType.MAINHAND, stack, true));
+            player.getAttributeManager().reapplyModifiers(this.attributeModifiersIneffective);
         }
         return false;
-    }
-
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, boolean effective) {
-        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
-        if (slot == EquipmentSlotType.MAINHAND) {
-            multimap.put(Attributes.ATTACK_DAMAGE,
-                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier",
-                            3.0 + (effective ? NinjaGear.instance.getConfig().getKatanaDamage() : 0),
-                            AttributeModifier.Operation.ADDITION));
-            multimap.put(Attributes.ATTACK_SPEED,
-                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier",
-                            (effective ? 1 : -2),
-                            AttributeModifier.Operation.ADDITION));
-        }
-        return multimap;
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        return getAttributeModifiers(slot, stack, true);
+        if(slot == EquipmentSlotType.MAINHAND) {
+            return this.attributeModifiers;
+        } else if(slot == EquipmentSlotType.OFFHAND) {
+            return this.attributeModifiersIneffective;
+        } else {
+            return super.getAttributeModifiers(slot, stack);
+        }
     }
 
     @Override
@@ -129,5 +138,16 @@ public class ItemKatana extends ItemBase {
         tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L1"));
         tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L2"));
         tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:"+this.getInternalName() + "_L3"));
+    }
+
+    private static Ingredient repairItem;
+
+    public static Ingredient getRepairItem() {
+        if(repairItem == null) {
+            repairItem = new FallbackIngredient(
+                    ItemTags.getCollection().getTagByID(new ResourceLocation("forge", "ingots/steel")),
+                    Ingredient.fromTag(ItemTags.getCollection().getTagByID(new ResourceLocation("forge", "ingots/iron"))));
+        }
+        return repairItem;
     }
 }

@@ -60,6 +60,11 @@ public class NinjaGear extends InfinityMod<IProxy, Config> {
     }
 
     @Override
+    public Object getModEffectRegistry() {
+        return EffectRegistry.getInstance();
+    }
+
+    @Override
     public void registerMessages(INetworkWrapper wrapper) {
         wrapper.registerMessage(MessageInvisibility.class);
         wrapper.registerMessage(MessageUpdateGadgetRenderMaskClient.class);

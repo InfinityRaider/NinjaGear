@@ -18,11 +18,11 @@
     },
     "s":
     {
-      "item": "mincecraft:string"
+      "item": "minecraft:string"
     },
     "l":
     {
-      "item": "mincecraft:leather"
+      "item": "minecraft:leather"
     }
   },
   "result":

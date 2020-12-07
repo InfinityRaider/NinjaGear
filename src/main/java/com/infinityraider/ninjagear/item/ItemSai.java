@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.ninjagear.NinjaGear;
@@ -24,6 +25,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -40,13 +42,38 @@ import java.util.List;
 
 @MethodsReturnNonnullByDefault
 public class ItemSai extends ItemBase implements IHiddenItem, IItemWithModel {
+    private final Multimap<Attribute, AttributeModifier> attributeModifiers;
+    private final Multimap<Attribute, AttributeModifier> attributeModifiersCrit;
+    private final Multimap<Attribute, AttributeModifier> attributeModifiersIneffective;
 
     public ItemSai() {
         super("sai", new Properties()
                 .maxDamage(1000)
-                .maxStackSize(1)
                 .group(ItemRegistry.CREATIVE_TAB));
+        ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
+        this.attributeModifiers = builder
+                .put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Sai Attack Damage Modifier",
+                        3.0 + NinjaGear.instance.getConfig().getSaiDamage(), AttributeModifier.Operation.ADDITION))
+                .put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Sai Attack Speed Modifier",
+                        1, AttributeModifier.Operation.ADDITION))
+                .build();
+        builder = ImmutableMultimap.builder();
+        this.attributeModifiersCrit = builder
+                .put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Sai Attack Damage Modifier",
+                        3.0 +  NinjaGear.instance.getConfig().getCitMultiplier()*NinjaGear.instance.getConfig().getSaiDamage(),
+                        AttributeModifier.Operation.ADDITION))
+                .put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Sai Attack Speed Modifier",
+                        1, AttributeModifier.Operation.ADDITION))
+                .build();
+        builder = ImmutableMultimap.builder();
+        this.attributeModifiersIneffective = builder
+                .put(Attributes.ATTACK_DAMAGE, new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Sai Attack Damage Modifier",
+                        3.0, AttributeModifier.Operation.ADDITION))
+                .put(Attributes.ATTACK_SPEED, new AttributeModifier(ATTACK_SPEED_MODIFIER, "Sai Attack Speed Modifier",
+                        -2, AttributeModifier.Operation.ADDITION))
+                .build();
     }
+
     public UseAction getUseAction(ItemStack stack) {
         return UseAction.BLOCK;
     }
@@ -111,42 +138,32 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithModel {
 
     @Override
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return ItemRegistry.REPAIR_ITEM_STEEL.test(repair);
+        return getRepairItem().test(repair);
     }
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
         ItemStack offHand = player.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-        boolean crit = player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden);
         if(offHand != null && offHand.getItem() == this) {
-            player.getAttributeManager().reapplyModifiers(getAttributeModifiers(EquipmentSlotType.MAINHAND, stack, true, crit));
+            if(player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden)) {
+                player.getAttributeManager().reapplyModifiers(this.attributeModifiersCrit);
+            } else {
+                player.getAttributeManager().reapplyModifiers(this.attributeModifiers);
+            }
         } else {
-            player.getAttributeManager().reapplyModifiers(getAttributeModifiers(EquipmentSlotType.MAINHAND, stack, false, false));
+            player.getAttributeManager().reapplyModifiers(this.attributeModifiersIneffective);
         }
         return false;
-    }
-
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack, boolean effective, boolean crit) {
-        Multimap<Attribute, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
-        if (slot == EquipmentSlotType.MAINHAND) {
-            float multiplier = crit ? NinjaGear.instance.getConfig().getCitMultiplier() : 1;
-            float damage = (effective ? NinjaGear.instance.getConfig().getSaiDamage() : 0)*multiplier;
-            multimap.put(Attributes.ATTACK_DAMAGE,
-                    new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier",
-                            3.0 +  damage,
-                            AttributeModifier.Operation.ADDITION));
-            multimap.put(Attributes.ATTACK_SPEED,
-                    new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier",
-                            (effective ? 1 : -2),
-                            AttributeModifier.Operation.ADDITION));
-        }
-        return multimap;
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType slot, ItemStack stack) {
-        return  getAttributeModifiers(slot, stack, true, false);
+        if(slot == EquipmentSlotType.MAINHAND || slot == EquipmentSlotType.OFFHAND) {
+            return this.attributeModifiers;
+        } else {
+            return super.getAttributeModifiers(slot, stack);
+        }
     }
 
     @Override
@@ -168,5 +185,14 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithModel {
         List<Tuple<Integer, ModelResourceLocation>> list = new ArrayList<>();
         list.add(new Tuple<>(0, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + this.getInternalName(), "inventory")));
         return list;
+    }
+
+    private static Ingredient repairItem;
+
+    public static Ingredient getRepairItem() {
+        if(repairItem == null) {
+            repairItem = ItemKatana.getRepairItem();
+        }
+        return repairItem;
     }
 }

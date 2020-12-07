@@ -22,6 +22,8 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
+    private static Ingredient repairMaterial;
+
     private final String internalName;
 
     public ItemNinjaArmor(String name, EquipmentSlotType equipmentSlot) {
@@ -45,8 +47,8 @@ public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
         tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninjaGear_L1"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninjaGear_L2"));
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_gear_L1"));
+        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_gear_L2"));
     }
 
     @Override
@@ -54,8 +56,15 @@ public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
         return true;
     }
 
-    public static final int[] ARMOR_VALUES = new int[]{2, 3, 4, 2};
-    public static final Ingredient REPAIR_MATERIAL = Ingredient.fromTag(ItemTags.WOOL);
+    private static final int[] ARMOR_VALUES = new int[]{2, 3, 4, 2};
+
+    public static Ingredient getRepairMaterial() {
+        if(repairMaterial == null) {
+            repairMaterial = Ingredient.fromTag(ItemTags.WOOL);
+        }
+        return repairMaterial;
+    }
+
     public static final IArmorMaterial MATERIAL_NINJA_CLOTH = new IArmorMaterial() {
         @Override
         public int getDurability(EquipmentSlotType slot) {
@@ -79,7 +88,10 @@ public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
 
         @Override
         public Ingredient getRepairMaterial() {
-            return REPAIR_MATERIAL;
+            if(repairMaterial == null) {
+                repairMaterial = Ingredient.fromTag(ItemTags.WOOL);
+            }
+            return repairMaterial;
         }
 
         @Override

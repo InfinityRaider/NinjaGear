@@ -27,30 +27,6 @@ archivesBaseName = config.id
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = "${config.version_java}"
 
-// Add Infinitylib to the source sets
-/*
-sourceSets {
-    infinitylib {
-        compileClasspath += sourceSets.main.output
-        runtimeClasspath += sourceSets.main.output
-
-        java {
-            srcDir "lib/InfinityLib/src/main/java"
-        }
-        resources {
-            srcDir "lib/InfinityLib/src/main/resources"
-        }
-    }
-}
-
-// Make InfinityLib's configurations extend this one's (so it recognizes Minecraft and Forge as dependencies)
-configurations {
-    infinitylibCompile.extendsFrom(compile)
-    infinitylibCompileOnly.extendsFrom(compileOnly)
-    infinitylibRuntimeOnly.extendsFrom(runtimeOnly)
-}
- */
-
 minecraft {
  mappings channel: "${config.mapping_channel}", version: "${config.mapping_version}"
     runs {
@@ -65,6 +41,7 @@ minecraft {
                     source sourceSets.main
                 }
                 infinitylib {
+                    //This still grabs the sourceSets from NinjaGear, therefore one must manually correct it in runClient afterwards
                     source project(":lib/InfinityLib").sourceSets.main
                 }
             }
@@ -81,6 +58,7 @@ minecraft {
                     source sourceSets.main
                 }
                 infinitylib {
+                    //This still grabs the sourceSets from NinjaGear, therefore one must manually correct it in runServer afterwards
                     source project(":lib/InfinityLib").sourceSets.main
                 }
             }
