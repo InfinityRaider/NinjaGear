@@ -48,7 +48,7 @@ public class NinjaGadgetHandler {
                         continue;
                     }
                     ItemStack stack = player.inventory.getStackInSlot(i);
-                    if(stack == null) {
+                    if(stack == null || stack.isEmpty()) {
                         continue;
                     }
                     Gadgets gadget = Gadgets.getGadgetFromItem(stack.getItem());

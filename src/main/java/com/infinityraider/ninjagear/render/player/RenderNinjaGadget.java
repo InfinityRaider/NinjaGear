@@ -77,69 +77,70 @@ public class RenderNinjaGadget {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onRenderPlayerEvent(RenderPlayerEvent.Pre event) {
-        if(!NinjaGear.instance.getConfig().renderGadgets()) {
-            MatrixStack transforms = event.getMatrixStack();
-            PlayerEntity player = event.getPlayer();
-            if (player == null) {
-                return;
-            }
-            if (RenderPlayerHandler.getInstance().isInvisible(player)) {
-                return;
-            }
-            if (!renderMap.containsKey(player.getUniqueID())) {
-                return;
-            }
+        if (!NinjaGear.instance.getConfig().renderGadgets()) {
+            return;
+        }
+        MatrixStack transforms = event.getMatrixStack();
+        PlayerEntity player = event.getPlayer();
+        if (player == null) {
+            return;
+        }
+        if (RenderPlayerHandler.getInstance().isInvisible(player)) {
+            return;
+        }
+        if (!renderMap.containsKey(player.getUniqueID())) {
+            return;
+        }
 
-            boolean[] renderMask = renderMap.get(player.getUniqueID());
-            float f = event.getPartialRenderTick();
+        boolean[] renderMask = renderMap.get(player.getUniqueID());
+        float f = event.getPartialRenderTick();
 
-            transforms.push();
+        transforms.push();
 
-            if (player != NinjaGear.instance.getClientPlayer()) {
-                PlayerEntity local = NinjaGear.instance.getClientPlayer();
-                double dx = player.prevPosX + (player.getPosX() - player.prevPosX) * f - (local.prevPosX + (local.getPosX() - local.prevPosX) * f);
-                double dy = player.prevPosY + (player.getPosY() - player.prevPosY) * f - (local.prevPosY + (local.getPosY() - local.prevPosY) * f);
-                double dz = player.prevPosZ + (player.getPosZ() - player.prevPosZ) * f - (local.prevPosZ + (local.getPosZ() - local.prevPosZ) * f);
-                transforms.translate(dx, dy, dz);
-            }
+        if (player != NinjaGear.instance.getClientPlayer()) {
+            PlayerEntity local = NinjaGear.instance.getClientPlayer();
+            double dx = player.prevPosX + (player.getPosX() - player.prevPosX) * f - (local.prevPosX + (local.getPosX() - local.prevPosX) * f);
+            double dy = player.prevPosY + (player.getPosY() - player.prevPosY) * f - (local.prevPosY + (local.getPosY() - local.prevPosY) * f);
+            double dz = player.prevPosZ + (player.getPosZ() - player.prevPosZ) * f - (local.prevPosZ + (local.getPosZ() - local.prevPosZ) * f);
+            transforms.translate(dx, dy, dz);
+        }
 
-            float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * f;
-            transforms.rotate(new Quaternion(new Vector3f(0, -1, 0), -yaw, true));
+        float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * f;
+        transforms.rotate(new Quaternion(new Vector3f(0, 1, 0), -yaw, true));
 
-            if (player.isSneaking()) {
-                transforms.translate(0, -0.375, 0);
-                transforms.rotate(SNEAK_ROTATION);
-                transforms.translate(0, 0, -0.8);
-            }
+        if (player.isSneaking()) {
+            transforms.translate(0, -0.375, 0);
+            transforms.rotate(SNEAK_ROTATION);
+            transforms.translate(0, 0, -0.8);
+        }
 
-            for (int i = 0; i < renderMask.length; i++) {
-                if (renderMask[i]) {
-                    switch (i) {
-                        case ID_KATANA:
-                            this.renderKatana(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
-                            break;
-                        case ID_SAI_RIGHT:
-                            this.renderSaiRight(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
-                            break;
-                        case ID_SAI_LEFT:
-                            this.renderSaiLeft(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
-                            break;
-                        case ID_SHURIKEN:
-                            this.renderShuriken(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
-                            break;
-                        case ID_SMOKE_BOMB:
-                            this.renderSmokeBomb(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
-                            break;
-                        case ID_ROPE_COIL:
-                            this.renderRopeCoil(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
-                            break;
-                    }
+        for (int i = 0; i < renderMask.length; i++) {
+            if (renderMask[i]) {
+                switch (i) {
+                    case ID_KATANA:
+                        this.renderKatana(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                        break;
+                    case ID_SAI_RIGHT:
+                        this.renderSaiRight(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                        break;
+                    case ID_SAI_LEFT:
+                        this.renderSaiLeft(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                        break;
+                    case ID_SHURIKEN:
+                        this.renderShuriken(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                        break;
+                    case ID_SMOKE_BOMB:
+                        this.renderSmokeBomb(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                        break;
+                    case ID_ROPE_COIL:
+                        this.renderRopeCoil(this.itemsToRender[i], event.getLight(), transforms, event.getBuffers());
+                        break;
                 }
             }
-
-            transforms.pop();
         }
+        transforms.pop();
     }
+
 
     private static final Quaternion KATANA_ROTATION = new Quaternion(new Vector3f(1, 0, 0), 180, true);
 
@@ -148,7 +149,7 @@ public class RenderNinjaGadget {
 
         transforms.push();
 
-        transforms.translate(0, 0.125, -0.2);
+        transforms.translate(0, 1, -0.2);
         transforms.rotate(KATANA_ROTATION);
         transforms.scale(0.8F, 0.8F, 1);
 
@@ -204,7 +205,6 @@ public class RenderNinjaGadget {
 
         transforms.pop();
     }
-
 
     private static final Quaternion SMOKE_BOMB_ROTATION = new Quaternion(new Vector3f(0, 1, 0), 180, true);
 
