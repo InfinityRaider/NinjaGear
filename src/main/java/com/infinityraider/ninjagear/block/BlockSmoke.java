@@ -51,9 +51,9 @@ public class BlockSmoke extends BlockBase {
 
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        int age = state.get(PROPERTY_AGE);
-        if (age < 15) {
-            world.setBlockState(pos, this.getDefaultState().with(PROPERTY_AGE, age + 1 + random.nextInt(this.dispersionRate())), 6);
+        int age = state.get(PROPERTY_AGE) + random.nextInt(this.dispersionRate()) + 1;
+        if (age <= MAX_AGE) {
+            world.setBlockState(pos, this.getDefaultState().with(PROPERTY_AGE, age), 6);
         } else {
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
         }
