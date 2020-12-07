@@ -3,6 +3,7 @@ package com.infinityraider.ninjagear.block;
 import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.registry.BlockRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,6 +12,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.Property;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
@@ -35,6 +37,12 @@ public class BlockSmoke extends BlockBase {
                 .tickRandomly()
                 .doesNotBlockMovement().setAir().noDrops().notSolid().variableOpacity()
                 .setAllowsSpawn((a1, a2, a3, a4) -> false));
+        this.setDefaultState(this.stateContainer.getBaseState().with(PROPERTY_AGE, MAX_AGE));
+    }
+
+    @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(PROPERTY_AGE);
     }
 
     public int dispersionRate() {

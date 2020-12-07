@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.entity;
 
+import com.infinityraider.infinitylib.entity.EntityThrowableBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.block.BlockSmoke;
 import com.infinityraider.ninjagear.registry.EffectRegistry;
@@ -10,8 +11,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
@@ -23,7 +25,12 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
-public class EntitySmokeBomb extends ThrowableEntity {
+public class EntitySmokeBomb extends EntityThrowableBase {
+    //For client side spawning
+    private EntitySmokeBomb(EntityType<? extends EntitySmokeBomb> type, World world) {
+        super(type, world);
+    }
+
     public EntitySmokeBomb(World world, LivingEntity thrower, float velocity) {
         super(EntityRegistry.getInstance().entitySmokeBomb, thrower, world);
         Vector3d vec = thrower.getLookVec();
@@ -120,6 +127,31 @@ public class EntitySmokeBomb extends ThrowableEntity {
     @Override
     protected void registerData() {
 
+    }
+
+    @Override
+    public void writeCustomEntityData(CompoundNBT tag) {
+
+    }
+
+    @Override
+    public void readCustomEntityData(CompoundNBT tag) {
+
+    }
+
+    public static class SpawnFactory implements EntityType.IFactory<EntitySmokeBomb> {
+        private static final EntitySmokeBomb.SpawnFactory INSTANCE = new EntitySmokeBomb.SpawnFactory();
+
+        public static EntitySmokeBomb.SpawnFactory getInstance() {
+            return INSTANCE;
+        }
+
+        private SpawnFactory() {}
+
+        @Override
+        public EntitySmokeBomb create(EntityType<EntitySmokeBomb> type, World world) {
+            return new EntitySmokeBomb(type, world);
+        }
     }
 
     public static class RenderFactory implements IRenderFactory<EntitySmokeBomb> {

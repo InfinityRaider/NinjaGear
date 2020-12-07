@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.entity;
 
+import com.infinityraider.infinitylib.entity.EntityThrowableBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.registry.EntityRegistry;
@@ -8,12 +9,11 @@ import com.infinityraider.ninjagear.render.entity.RenderEntityShuriken;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -22,12 +22,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class EntityShuriken extends ThrowableEntity implements IEntityAdditionalSpawnData {
+public class EntityShuriken extends EntityThrowableBase {
     private float crit;
     private int timer;
     private Vector3d direction;
+
+    //For client side spawning
+    private EntityShuriken(EntityType<? extends EntityShuriken> type, World world) {
+        super(type, world);
+    }
 
     public EntityShuriken(World world, LivingEntity thrower, boolean crit) {
         super(EntityRegistry.getInstance().entityShuriken, thrower, world);
@@ -92,8 +96,7 @@ public class EntityShuriken extends ThrowableEntity implements IEntityAdditional
     }
 
     @Override
-    public void writeAdditional(CompoundNBT tag) {
-        super.writeAdditional(tag);
+    public void writeCustomEntityData(CompoundNBT tag) {
         tag.putFloat(Names.NBT.CRIT, this.crit);
         tag.putDouble(Names.NBT.X, this.direction.getX());
         tag.putDouble(Names.NBT.Y, this.direction.getY());
@@ -101,26 +104,25 @@ public class EntityShuriken extends ThrowableEntity implements IEntityAdditional
     }
 
     @Override
-    public void readAdditional(CompoundNBT tag) {
-        super.readAdditional(tag);
+    public void readCustomEntityData(CompoundNBT tag) {
         this.crit = tag.getFloat(Names.NBT.CRIT);
         this.direction = new Vector3d(tag.getDouble(Names.NBT.X), tag.getDouble(Names.NBT.Y), tag.getDouble(Names.NBT.Z));
     }
 
-    @Override
-    public void writeSpawnData(PacketBuffer buffer) {
-        buffer.writeFloat(this.crit);
-        buffer.writeDouble(this.direction.getX());
-        buffer.writeDouble(this.direction.getY());
-        buffer.writeDouble(this.direction.getZ());
-    }
+    public static class SpawnFactory implements EntityType.IFactory<EntityShuriken> {
+        private static final SpawnFactory INSTANCE = new SpawnFactory();
 
-    @Override
-    public void readSpawnData(PacketBuffer buffer) {
-        this.crit = buffer.readFloat();
-        this.direction =new Vector3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
-    }
+        public static SpawnFactory getInstance() {
+            return INSTANCE;
+        }
 
+        private SpawnFactory() {}
+
+        @Override
+        public EntityShuriken create(EntityType<EntityShuriken> type, World world) {
+            return new EntityShuriken(type, world);
+        }
+    }
 
     public static class RenderFactory implements IRenderFactory<EntityShuriken> {
         private static final RenderFactory INSTANCE = new RenderFactory();
@@ -128,6 +130,8 @@ public class EntityShuriken extends ThrowableEntity implements IEntityAdditional
         public static RenderFactory getInstance() {
             return INSTANCE;
         }
+
+        private RenderFactory() {}
 
         @Override
         @OnlyIn(Dist.CLIENT)

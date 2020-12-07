@@ -39,8 +39,14 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithMod
         return 60;
     }
 
+    @Override
     public UseAction getUseAction(ItemStack stack) {
         return UseAction.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 20;
     }
 
     @Override
@@ -60,7 +66,7 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithMod
     @ParametersAreNonnullByDefault
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         player.setActiveHand(hand);
-        return new ActionResult<>(ActionResultType.SUCCESS, player.getHeldItem(hand));
+        return new ActionResult<>(ActionResultType.CONSUME, player.getHeldItem(hand));
     }
 
     @Override

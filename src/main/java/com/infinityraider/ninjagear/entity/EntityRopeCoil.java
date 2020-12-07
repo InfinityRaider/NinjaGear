@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.entity;
 
+import com.infinityraider.infinitylib.entity.EntityThrowableBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.registry.BlockRegistry;
@@ -9,10 +10,11 @@ import com.infinityraider.ninjagear.render.entity.RenderEntityRopeCoil;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ThrowableEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
@@ -23,11 +25,16 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
-public class EntityRopeCoil extends ThrowableEntity {
+public class EntityRopeCoil extends EntityThrowableBase {
+    //For client side spawning
+    private EntityRopeCoil(EntityType<? extends EntityRopeCoil> type, World world) {
+        super(type, world);
+    }
+
     public EntityRopeCoil(World world, PlayerEntity thrower) {
         super(EntityRegistry.getInstance().entityRopeCoil, thrower, world);
         Vector3d vec = thrower.getLookVec();
-        this.shoot(vec.getX(), vec.getY(), vec.getY(), 2F, 0.2F);
+        this.shoot(vec.getX(), vec.getY(), vec.getZ(), 2F, 0.2F);
     }
 
     @Override
@@ -120,6 +127,31 @@ public class EntityRopeCoil extends ThrowableEntity {
     @Override
     protected void registerData() {
 
+    }
+
+    @Override
+    public void writeCustomEntityData(CompoundNBT tag) {
+
+    }
+
+    @Override
+    public void readCustomEntityData(CompoundNBT tag) {
+
+    }
+
+    public static class SpawnFactory implements EntityType.IFactory<EntityRopeCoil> {
+        private static final EntityRopeCoil.SpawnFactory INSTANCE = new EntityRopeCoil.SpawnFactory();
+
+        public static EntityRopeCoil.SpawnFactory getInstance() {
+            return INSTANCE;
+        }
+
+        private SpawnFactory() {}
+
+        @Override
+        public EntityRopeCoil create(EntityType<EntityRopeCoil> type, World world) {
+            return new EntityRopeCoil(type, world);
+        }
     }
 
     public static class RenderFactory implements IRenderFactory<EntityRopeCoil> {

@@ -54,6 +54,11 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
     }
 
     @Override
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(WATERLOGGED);
+    }
+
+    @Override
     @Deprecated
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if(!this.canRopeStay(world, pos)) {
@@ -186,11 +191,6 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
     @Override
     public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
         return true;
-    }
-
-    @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED);
     }
 
     public FluidState getFluidState(BlockState state) {

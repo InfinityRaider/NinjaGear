@@ -18,24 +18,27 @@ public class EntityRegistry {
     }
 
     private EntityRegistry() {
-        this.entitySmokeBomb = EntityTypeBase.entityTypeBuilder(Names.Items.SMOKE_BOMB, EntitySmokeBomb.class, EntityClassification.MISC,
-                EntitySize.fixed(Constants.UNIT, Constants.UNIT))
+        this.entitySmokeBomb = EntityTypeBase.entityTypeBuilder(Names.Items.SMOKE_BOMB, EntitySmokeBomb.class, EntitySmokeBomb.SpawnFactory.getInstance(),
+                EntityClassification.MISC, EntitySize.fixed(Constants.UNIT, Constants.UNIT))
+
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
                 .setVelocityUpdates(true)
                 .setRenderFactory(EntitySmokeBomb.RenderFactory.getInstance())
                 .build();
 
-        this.entityShuriken = EntityTypeBase.entityTypeBuilder(Names.Items.SHURIKEN, EntityShuriken.class, EntityClassification.MISC,
-                EntitySize.fixed(Constants.UNIT, Constants.UNIT))
+        this.entityShuriken = EntityTypeBase.entityTypeBuilder(Names.Items.SHURIKEN, EntityShuriken.class, EntityShuriken.SpawnFactory.getInstance(),
+                EntityClassification.MISC, EntitySize.fixed(Constants.UNIT, Constants.UNIT))
+
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
                 .setVelocityUpdates(true)
                 .setRenderFactory(EntityShuriken.RenderFactory.getInstance())
                 .build();
 
-        this.entityRopeCoil = EntityTypeBase.entityTypeBuilder(Names.Items.ROPE_COIL, EntityRopeCoil.class, EntityClassification.MISC,
-                EntitySize.fixed(Constants.UNIT, Constants.UNIT))
+        this.entityRopeCoil = EntityTypeBase.entityTypeBuilder(Names.Items.ROPE_COIL, EntityRopeCoil.class, EntityRopeCoil.SpawnFactory.getInstance(),
+                EntityClassification.MISC, EntitySize.fixed(Constants.UNIT, Constants.UNIT))
+
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
                 .setVelocityUpdates(true)
