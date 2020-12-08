@@ -5,6 +5,7 @@ import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -59,6 +60,13 @@ public class AnvilHandler {
         ItemStack output = input.copy();
         // Activate the ninja armor status on the capability
         output.getCapability(CapabilityNinjaArmor.CAPABILITY).ifPresent(cap -> cap.setNinjaArmor(true));
+        // Set the name
+        String inputName = event.getName();
+        if(inputName == null || inputName.isEmpty()) {
+            output.clearCustomName();
+        } else {
+            output.setDisplayName(new StringTextComponent(inputName));
+        }
         // Set the output
         event.setOutput(output);
         // Set the cost
