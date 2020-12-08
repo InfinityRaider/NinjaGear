@@ -72,7 +72,7 @@ public class RenderNinjaGadget {
         return true;
     }
 
-    private static final Quaternion SNEAK_ROTATION = new Quaternion(new Vector3f(0, 0, -0.8F), 30, true);
+    private static final Quaternion SNEAK_ROTATION = new Quaternion(new Quaternion(new Vector3f(0.8F, 0, 0), 35, true));
 
     @SubscribeEvent
     @SuppressWarnings("unused")
@@ -109,9 +109,9 @@ public class RenderNinjaGadget {
         transforms.rotate(new Quaternion(new Vector3f(0, 1, 0), -yaw, true));
 
         if (player.isSneaking()) {
-            transforms.translate(0, -0.375, 0);
+            transforms.translate(0, -0.375, 0.5);
             transforms.rotate(SNEAK_ROTATION);
-            transforms.translate(0, 0, -0.8);
+            transforms.translate(0, 0, -1.250);
         }
 
         for (int i = 0; i < renderMask.length; i++) {
