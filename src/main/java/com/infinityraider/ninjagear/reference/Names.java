@@ -12,9 +12,9 @@ public class Names {
     }
 
     public static final class Effects extends Names {
-        public static final String NINJA_AURA = "ninja_aura";
         public static final String NINJA_HIDDEN = "ninja_hidden";
         public static final String NINJA_REVEALED = "ninja_revealed";
+        public static final String NINJA_SMOKED = "ninja_smoked";
     }
 
     public static final class NBT extends Names {

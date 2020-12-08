@@ -41,7 +41,7 @@ public class APIimplv1 implements APIv1 {
     }
 
     @Override
-    public void revealPlayer(PlayerEntity player, int duration) {
-        NinjaAuraHandler.getInstance().revealEntity(player, duration);
+    public void revealPlayer(PlayerEntity player, int duration, boolean breakSmoke) {
+        NinjaAuraHandler.getInstance().revealEntity(player, duration, breakSmoke);
     }
 }

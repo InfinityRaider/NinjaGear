@@ -45,7 +45,7 @@ public class ItemShuriken extends ItemBase implements IHiddenItem, IItemWithMode
             if (!player.isCreative()) {
                 player.inventory.decrStackSize(player.inventory.currentItem, 1);
             }
-            NinjaAuraHandler.getInstance().revealEntity(player, NinjaGear.instance.getConfig().getHidingCooldown());
+            NinjaAuraHandler.getInstance().revealEntity(player, NinjaGear.instance.getConfig().getHidingCooldown(), true);
         }
         return new ActionResult<>(ActionResultType.CONSUME, player.getHeldItem(hand));
     }

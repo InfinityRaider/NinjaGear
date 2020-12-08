@@ -24,7 +24,15 @@ public class NinjaAuraHandler {
 
     private NinjaAuraHandler() {}
 
-    public void revealEntity(PlayerEntity player, int duration) {
+    public void revealEntity(PlayerEntity player, int duration, boolean breakSmoke) {
+        boolean smoked = player.isPotionActive(EffectRegistry.getInstance().effectNinjaSmoked);
+        if (smoked) {
+            if(breakSmoke) {
+                player.removeActivePotionEffect(EffectRegistry.getInstance().effectNinjaSmoked);
+            } else {
+                return;
+            }
+        }
         player.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().effectNinjaRevealed, duration, 0, false, true));
     }
 
@@ -40,7 +48,9 @@ public class NinjaAuraHandler {
     }
 
     private boolean checkHidingRequirements(PlayerEntity player) {
-        if(player.isPotionActive(EffectRegistry.getInstance().effectNinjaRevealed)) {
+        boolean revealed = player.isPotionActive(EffectRegistry.getInstance().effectNinjaRevealed);
+        boolean smoked = player.isPotionActive(EffectRegistry.getInstance().effectNinjaSmoked);
+        if(revealed && !smoked) {
             return false;
         }
         if(!player.isSneaking()) {
@@ -58,6 +68,9 @@ public class NinjaAuraHandler {
                 return false;
             }
         }
+        if (smoked) {
+            return true;
+        }
         int light;
         int light_block = player.getEntityWorld().getLightFor(LightType.BLOCK, player.getPosition());
         boolean day = player.getEntityWorld().isDaytime();
@@ -74,7 +87,7 @@ public class NinjaAuraHandler {
     @SuppressWarnings("unused")
     public void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if(entity == null || entity.getEntityWorld().isRemote || !(entity instanceof PlayerEntity)) {
+        if(entity == null /*|| entity.getEntityWorld().isRemote */|| !(entity instanceof PlayerEntity)) {
             return;
         }
         PlayerEntity player = (PlayerEntity) entity;
@@ -87,7 +100,7 @@ public class NinjaAuraHandler {
                     new MessageInvisibility(player, true).sendToAll();
                 } else {
                     player.removePotionEffect(EffectRegistry.getInstance().effectNinjaHidden);
-                    this.revealEntity(player, NinjaGear.instance.getConfig().getHidingCooldown());
+                    this.revealEntity(player, NinjaGear.instance.getConfig().getHidingCooldown(), true);
                     new MessageInvisibility(player, false).sendToAll();
                 }
             }

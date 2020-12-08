@@ -32,6 +32,7 @@ public interface APIv1 extends APIBase {
      * Only call this in the server thread. Calling this in the client thread will have no effect
      * @param player the player to reveal
      * @param duration the amount of ticks the player should be revealed
+     * @param breakSmoke if the player should be revealed even while smoke is active
      */
-    void revealPlayer(PlayerEntity player, int duration);
+    void revealPlayer(PlayerEntity player, int duration, boolean breakSmoke);
 }

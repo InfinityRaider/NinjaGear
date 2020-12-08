@@ -12,6 +12,7 @@ public class EffectRegistry {
 
     public Effect effectNinjaHidden = new EffectNinjaHidden();
     public Effect effectNinjaRevealed = new EffectNinjaRevealed();
+    public Effect effectNinjaSmoked = new EffectNinjaSmoked();
 
     private EffectRegistry() {}
 }

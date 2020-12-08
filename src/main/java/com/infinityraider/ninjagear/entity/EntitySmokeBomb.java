@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
@@ -47,7 +48,7 @@ public class EntitySmokeBomb extends EntityThrowableBase {
     protected void onImpact(RayTraceResult impact) {
         World world = this.getEntityWorld();
         BlockPos pos = this.getBlockPosFromImpact(impact);
-        this.clearRevealedStatus(world, pos);
+        this.applySmokeBuff(world, pos);
         this.createSmokeCloud(world, pos);
     }
 
@@ -65,7 +66,7 @@ public class EntitySmokeBomb extends EntityThrowableBase {
         return new BlockPos(impact.getHitVec());
     }
 
-    private void clearRevealedStatus(World world, BlockPos pos) {
+    private void applySmokeBuff(World world, BlockPos pos) {
         int r = NinjaGear.instance.getConfig().getSmokeRadius();
         world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(-r, -r, -r), pos.add(r, r, r))).stream()
                 .filter(entity -> entity != null && (entity instanceof LivingEntity))
@@ -73,6 +74,10 @@ public class EntitySmokeBomb extends EntityThrowableBase {
                     LivingEntity living = (LivingEntity) entity;
                     if (living.isPotionActive(EffectRegistry.getInstance().effectNinjaRevealed)) {
                         living.removePotionEffect(EffectRegistry.getInstance().effectNinjaRevealed);
+                    }
+                    int duration = NinjaGear.instance.getConfig().getSmokeBuffDuration();
+                    if(duration > 0) {
+                        living.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().effectNinjaSmoked, duration));
                     }
                 });
     }

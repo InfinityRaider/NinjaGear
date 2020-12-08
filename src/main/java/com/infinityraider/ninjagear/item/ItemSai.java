@@ -96,7 +96,7 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithModel {
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         if(attacker instanceof PlayerEntity) {
-            NinjaAuraHandler.getInstance().revealEntity((PlayerEntity) attacker, NinjaGear.instance.getConfig().getHidingCooldown());
+            NinjaAuraHandler.getInstance().revealEntity((PlayerEntity) attacker, NinjaGear.instance.getConfig().getHidingCooldown(), true);
         }
         stack.damageItem(1, attacker, (entity) -> {
             entity.sendBreakAnimation(EquipmentSlotType.MAINHAND);
