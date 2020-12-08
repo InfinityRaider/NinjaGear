@@ -97,7 +97,7 @@ public class EntitySmokeBomb extends EntityThrowableBase {
                     if(state.getMaterial() == Material.AIR) {
                         if(world.isRemote) {
                             this.spawnSmokeParticle(world, posAt);
-                        } else {
+                        } else if(NinjaGear.instance.getConfig().placeSmokeBlocks()){
                             world.setBlockState(posAt, BlockSmoke.getBlockStateForDarkness(this.getDarknessValue(radius, world.rand)), 3);
                         }
                     }

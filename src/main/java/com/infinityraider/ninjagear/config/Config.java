@@ -28,6 +28,8 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
 
     public abstract int getSmokeBuffDuration();
 
+    public abstract boolean placeSmokeBlocks();
+
     public abstract int getSmokeDispersion();
 
     public abstract int getRopeCoilLength();
@@ -55,6 +57,7 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
         //smoke bomb
         public final ForgeConfigSpec.IntValue smokeCloudRadius;
         public final ForgeConfigSpec.IntValue smokeBuffDuration;
+        public final ForgeConfigSpec.BooleanValue placeSmokeBlocks;
         public final ForgeConfigSpec.IntValue smokeCloudDispersionRate;
 
         //rope
@@ -96,8 +99,11 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
                     .comment("The radius of the smoke cloud created by smoke bombs")
                     .defineInRange("smoke cloud radius", 4, 2, 5);
             this.smokeBuffDuration = builder
-                    .comment("Defines how many ticks a ninja can stay hidden after using a smoke bomb")
+                    .comment("Defines how many ticks a ninja can stay hidden after using a smoke bomb (0 means no buff is applied)")
                     .defineInRange("smoke buff duration", 400, 0, 60000);
+            this.placeSmokeBlocks = builder
+                    .comment("Set to false to disable placement of Smoke blocks after throwing a smoke bomb (these create patches of darkness)")
+                    .define("place smoke blocks", true);
             this.smokeCloudDispersionRate = builder
                     .comment("Smoke cloud dispersion rate, the higher this is, the faster smoke clouds will disperse and disappear")
                     .defineInRange("smoke cloud dispersion", 3, 1, 10);
@@ -158,6 +164,11 @@ public abstract class Config implements ConfigurationHandler.SidedModConfig {
         @Override
         public int getSmokeBuffDuration() {
             return this.smokeBuffDuration.get();
+        }
+
+        @Override
+        public boolean placeSmokeBlocks() {
+            return this.placeSmokeBlocks.get();
         }
 
         @Override
