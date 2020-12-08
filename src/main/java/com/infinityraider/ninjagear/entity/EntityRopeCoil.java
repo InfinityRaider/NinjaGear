@@ -60,7 +60,8 @@ public class EntityRopeCoil extends EntityThrowableBase {
                 BlockState state = this.getEntityWorld().getBlockState(pos);
                 BlockState rope = BlockRegistry.getInstance().blockRope.getDefaultState();
                 if (state.getBlock() instanceof BlockRope) {
-                    this.addRemainingToInventory(this.extendRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
+                    BlockRope ropeBlock = (BlockRope) state.getBlock();
+                    this.addRemainingToInventory(ropeBlock.extendRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
                 } else if (rope.isValidPosition(world, pos)) {
                     this.addRemainingToInventory(this.placeRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
                 } else {
@@ -86,31 +87,10 @@ public class EntityRopeCoil extends EntityThrowableBase {
     }
 
     private int placeRope(World world, BlockPos pos, int ropeCount) {
-        BlockState rope = BlockRegistry.getInstance().blockRope.getDefaultState();
+        BlockRope ropeBlock = (BlockRope) BlockRegistry.getInstance().blockRope;
+        BlockState rope = ropeBlock.getStateForPlacement(world, pos);
         world.setBlockState(pos, rope, 3);
-        ropeCount = ropeCount - 1;
-        if(ropeCount > 0) {
-            BlockPos down = pos.down();
-            if(rope.isValidPosition(world, down)) {
-                return this.placeRope(world, down, ropeCount);
-            } else {
-                return ropeCount;
-            }
-        } else {
-            return 0;
-        }
-    }
-
-    private int extendRope(World world, BlockPos pos, int ropeCount) {
-        BlockRope rope = (BlockRope) BlockRegistry.getInstance().blockRope;
-        boolean flag = true;
-        while(flag && ropeCount > 0) {
-            flag = rope.extendRope(world, pos);
-            if(flag) {
-                ropeCount = ropeCount - 1;
-            }
-        }
-        return ropeCount;
+        return ropeBlock.extendRope(world, pos, ropeCount - 1);
     }
 
     private void addRemainingToInventory(int remaining) {

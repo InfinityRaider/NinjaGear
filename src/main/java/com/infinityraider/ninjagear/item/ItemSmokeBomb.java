@@ -31,12 +31,13 @@ import java.util.List;
 
 @MethodsReturnNonnullByDefault
 public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithModel {
+    private static final int MIN_CHARGE = 20;
     public ItemSmokeBomb() {
         super(Names.Items.SMOKE_BOMB, new Properties().group(ItemRegistry.CREATIVE_TAB));
     }
 
     public int getMaxItemUseDuration(ItemStack stack) {
-        return 60;
+        return Integer.MAX_VALUE;
     }
 
     @Override

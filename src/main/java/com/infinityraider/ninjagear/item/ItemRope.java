@@ -55,7 +55,7 @@ public class ItemRope extends BlockItemBase implements IItemWithModel, IHiddenIt
         Block block = state.getBlock();
         PlayerEntity player = context.getPlayer();
         Direction face = context.getFace();
-        Hand hand = context.getHand();
+        ItemStack stack = context.getItem();
         BlockItemUseContext blockContext = new BlockItemUseContext(context);
         if(block instanceof BlockRope) {
             return ActionResultType.PASS;
@@ -63,10 +63,9 @@ public class ItemRope extends BlockItemBase implements IItemWithModel, IHiddenIt
         if (!block.isReplaceable(state, blockContext)) {
             pos = pos.offset(context.getFace());
         }
-        ItemStack stack = player.getHeldItem(hand);
-        if (stack.getCount() != 0 && player.canPlayerEdit(pos, face, stack) &&blockContext.canPlace()) {
+        if (stack.getCount() != 0 && player.canPlayerEdit(pos, face, stack) && blockContext.canPlace()) {
             BlockState newState = this.block.getStateForPlacement(blockContext);
-            if (newState.isValidPosition(world, pos) && placeBlockAt(stack, player, world, pos, newState)) {
+            if (newState != null && newState.isValidPosition(world, pos) && placeBlockAt(stack, player, world, pos, newState)) {
                 SoundType soundtype = this.block.getSoundType(state, world, pos, player);
                 world.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                 stack.setCount(stack.getCount() - 1);

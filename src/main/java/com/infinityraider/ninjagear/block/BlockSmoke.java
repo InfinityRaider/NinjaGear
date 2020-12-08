@@ -36,7 +36,8 @@ public class BlockSmoke extends BlockBase {
         super("smoke", Properties.create(Material.AIR)
                 .tickRandomly()
                 .doesNotBlockMovement().setAir().noDrops().notSolid().variableOpacity()
-                .setAllowsSpawn((a1, a2, a3, a4) -> false));
+                .setAllowsSpawn((a1, a2, a3, a4) -> false)
+                .setBlocksVision((a1, a2, a3) -> true));
         this.setDefaultState(this.stateContainer.getBaseState().with(PROPERTY_AGE, MAX_AGE));
     }
 
