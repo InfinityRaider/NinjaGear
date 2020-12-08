@@ -66,7 +66,8 @@ public class EntitySmokeBomb extends EntityThrowableBase {
     }
 
     private void clearRevealedStatus(World world, BlockPos pos) {
-        world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(-4, -4, -4), pos.add(4, 4, 4))).stream()
+        int r = NinjaGear.instance.getConfig().getSmokeRadius();
+        world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(-r, -r, -r), pos.add(r, r, r))).stream()
                 .filter(entity -> entity != null && (entity instanceof LivingEntity))
                 .forEach(entity -> {
                     LivingEntity living = (LivingEntity) entity;
