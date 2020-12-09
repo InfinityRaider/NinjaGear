@@ -87,7 +87,7 @@ public class NinjaAuraHandler {
     @SuppressWarnings("unused")
     public void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if(entity == null /*|| entity.getEntityWorld().isRemote */|| !(entity instanceof PlayerEntity)) {
+        if(entity == null || !(entity instanceof PlayerEntity)) {
             return;
         }
         PlayerEntity player = (PlayerEntity) entity;
@@ -97,11 +97,15 @@ public class NinjaAuraHandler {
             if(shouldBeHidden != isHidden) {
                 if(shouldBeHidden) {
                     player.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().effectNinjaHidden, Integer.MAX_VALUE, 0, false, true));
-                    new MessageInvisibility(player, true).sendToAll();
+                    if(!entity.getEntityWorld().isRemote) {
+                        new MessageInvisibility(player, true).sendToAll();
+                    }
                 } else {
                     player.removePotionEffect(EffectRegistry.getInstance().effectNinjaHidden);
                     this.revealEntity(player, NinjaGear.instance.getConfig().getHidingCooldown(), true);
-                    new MessageInvisibility(player, false).sendToAll();
+                    if(!entity.getEntityWorld().isRemote) {
+                        new MessageInvisibility(player, false).sendToAll();
+                    }
                 }
             }
         } else {

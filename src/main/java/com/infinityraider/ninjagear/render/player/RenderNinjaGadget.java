@@ -97,14 +97,6 @@ public class RenderNinjaGadget {
 
         transforms.push();
 
-        if (player != NinjaGear.instance.getClientPlayer()) {
-            PlayerEntity local = NinjaGear.instance.getClientPlayer();
-            double dx = player.prevPosX + (player.getPosX() - player.prevPosX) * f - (local.prevPosX + (local.getPosX() - local.prevPosX) * f);
-            double dy = player.prevPosY + (player.getPosY() - player.prevPosY) * f - (local.prevPosY + (local.getPosY() - local.prevPosY) * f);
-            double dz = player.prevPosZ + (player.getPosZ() - player.prevPosZ) * f - (local.prevPosZ + (local.getPosZ() - local.prevPosZ) * f);
-            transforms.translate(dx, dy, dz);
-        }
-
         float yaw = player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * f;
         transforms.rotate(new Quaternion(new Vector3f(0, 1, 0), -yaw, true));
 
