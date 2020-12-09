@@ -15,14 +15,14 @@ description='''
 Become a ninja, sneak around in the darkness, scale walls and explore new forms of combat.
 '''
 
-[[dependencies.examplemod]]
+[[dependencies.ninja_gear]]
     modId="forge"
     mandatory=true
     versionRange="[35,)"
     ordering="AFTER"
     side="BOTH"
 
-[[dependencies.examplemod]]
+[[dependencies.ninja_gear]]
     modId="infinitylib"
     mandatory=true
     versionRange="[2.0.0,)"
