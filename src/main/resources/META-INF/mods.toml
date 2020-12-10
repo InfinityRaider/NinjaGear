@@ -25,6 +25,6 @@ Become a ninja, sneak around in the darkness, scale walls and explore new forms 
 [[dependencies.ninja_gear]]
     modId="infinitylib"
     mandatory=true
-    versionRange="[2.0.0,)"
+    versionRange="[1.16.4-2.0.0,)"
     ordering="AFTER"
     side="BOTH"
