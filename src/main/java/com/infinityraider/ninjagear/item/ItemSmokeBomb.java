@@ -2,13 +2,11 @@ package com.infinityraider.ninjagear.item;
 
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
-import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.entity.EntitySmokeBomb;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +15,6 @@ import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
@@ -26,11 +23,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithModel {
+public class ItemSmokeBomb extends ItemBase implements IHiddenItem {
     private static final int MIN_CHARGE = 20;
     public ItemSmokeBomb() {
         super(Names.Items.SMOKE_BOMB, new Properties().group(ItemRegistry.CREATIVE_TAB));
@@ -80,12 +76,5 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem, IItemWithMod
     @Override
     public boolean shouldRevealPlayerWhenEquipped(PlayerEntity entity, ItemStack stack) {
         return false;
-    }
-
-    @Override
-    public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-        List<Tuple<Integer, ModelResourceLocation>> list = new ArrayList<>();
-        list.add(new Tuple<>(0, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + this.getInternalName(), "inventory")));
-        return list;
     }
 }

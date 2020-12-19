@@ -4,7 +4,6 @@ import com.infinityraider.infinitylib.block.IInfinityBlock;
 import com.infinityraider.infinitylib.item.BlockItemBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.reference.Reference;
-import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.registry.BlockRegistry;
@@ -13,7 +12,6 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,11 +28,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class ItemRope extends BlockItemBase implements IItemWithModel, IHiddenItem {
+public class ItemRope extends BlockItemBase implements IHiddenItem {
     private final BlockRope block;
 
     public ItemRope(IInfinityBlock block) {
@@ -125,12 +122,5 @@ public class ItemRope extends BlockItemBase implements IItemWithModel, IHiddenIt
     @Override
     public boolean shouldRevealPlayerWhenEquipped(PlayerEntity entity, ItemStack stack) {
         return false;
-    }
-
-    @Override
-    public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-        List<Tuple<Integer, ModelResourceLocation>> list = new ArrayList<>();
-        list.add(new Tuple<>(0, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + this.getInternalName(), "inventory")));
-        return list;
     }
 }

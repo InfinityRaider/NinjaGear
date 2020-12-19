@@ -1,5 +1,6 @@
 package com.infinityraider.ninjagear.block;
 
+import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.api.v1.IRopeAttachable;
 import com.infinityraider.ninjagear.item.ItemRope;
@@ -23,7 +24,6 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -44,13 +44,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttachable {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().waterloggable().build();
 
     private final VoxelShape shape;
 
     public BlockRope() {
         super(Names.Items.ROPE, Properties.create(Material.WOOL));
         this.shape = Block.makeCuboidShape(7.5, 0, 7.5, 8.5, 16, 8.5);
-        this.setDefaultState(this.stateContainer.getBaseState().with(WATERLOGGED, Boolean.FALSE));
     }
 
     public Item asItem() {
@@ -58,8 +58,8 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED);
+    protected InfPropertyConfiguration getPropertyConfiguration() {
+        return PROPERTIES;
     }
 
     @Override
@@ -228,10 +228,6 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
     @Override
     public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
         return true;
-    }
-
-    public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStillFluidState(false) : super.getFluidState(state);
     }
 
     @Override

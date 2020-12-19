@@ -1,7 +1,6 @@
 package com.infinityraider.ninjagear.item;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.infinityraider.infinitylib.item.IItemWithModel;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
@@ -14,7 +13,6 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -37,11 +34,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.ArrayList;
 import java.util.List;
 
 @MethodsReturnNonnullByDefault
-public class ItemSai extends ItemBase implements IHiddenItem, IItemWithModel {
+public class ItemSai extends ItemBase implements IHiddenItem {
     private final Multimap<Attribute, AttributeModifier> attributeModifiers;
     private final Multimap<Attribute, AttributeModifier> attributeModifiersCrit;
     private final Multimap<Attribute, AttributeModifier> attributeModifiersIneffective;
@@ -178,13 +174,6 @@ public class ItemSai extends ItemBase implements IHiddenItem, IItemWithModel {
     @Override
     public boolean shouldRevealPlayerWhenEquipped(PlayerEntity entity, ItemStack stack) {
         return false;
-    }
-
-    @Override
-    public List<Tuple<Integer, ModelResourceLocation>> getModelDefinitions() {
-        List<Tuple<Integer, ModelResourceLocation>> list = new ArrayList<>();
-        list.add(new Tuple<>(0, new ModelResourceLocation(Reference.MOD_ID.toLowerCase() + ":" + this.getInternalName(), "inventory")));
-        return list;
     }
 
     private static Ingredient repairItem;
