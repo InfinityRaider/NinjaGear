@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.0.1
+- CHANGE: update to 1.16.5
+
 2.0.0
 - CHANGE: ported to 1.16.4
 - ADDED: Ninja armor can now be applied to other armor pieces in an anvil, transferring its hiding capabilities

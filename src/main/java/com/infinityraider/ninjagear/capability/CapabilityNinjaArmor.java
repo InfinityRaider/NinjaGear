@@ -1,6 +1,6 @@
 package com.infinityraider.ninjagear.capability;
 
-import com.infinityraider.infinitylib.capability.ICapabilityImplementation;
+import com.infinityraider.infinitylib.capability.IInfCapabilityImplementation;
 import com.infinityraider.infinitylib.utility.ISerializable;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.reference.Names;
@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 
-public class CapabilityNinjaArmor implements ICapabilityImplementation<ItemStack, CapabilityNinjaArmor.Impl> {
+public class CapabilityNinjaArmor implements IInfCapabilityImplementation<ItemStack, CapabilityNinjaArmor.Impl> {
     private static final CapabilityNinjaArmor INSTANCE = new CapabilityNinjaArmor();
 
     public static CapabilityNinjaArmor getInstance() {

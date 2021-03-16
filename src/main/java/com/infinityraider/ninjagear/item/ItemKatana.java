@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.item;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.infinityraider.infinitylib.crafting.FallbackIngredient;
+import com.infinityraider.infinitylib.crafting.fallback.FallbackIngredient;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
