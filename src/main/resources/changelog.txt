@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.0.2
+- CHANGE: update for Forge 36.1.0 and InfinityLib
+
 2.0.1
 - CHANGE: update to 1.16.5
 
