@@ -112,7 +112,7 @@ public class ItemKatana extends ItemBase {
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
         ItemStack offhand = player.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-        if(offhand != null && !offhand.isEmpty()) {
+        if(offhand.isEmpty()) {
             player.getAttributeManager().reapplyModifiers(this.attributeModifiers);
         } else {
             player.getAttributeManager().reapplyModifiers(this.attributeModifiersIneffective);
