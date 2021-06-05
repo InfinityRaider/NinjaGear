@@ -183,7 +183,7 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
 
     public void breakRope(World world, BlockPos pos, BlockState state, boolean propagateUp, boolean doDrops) {
         if (propagateUp) {
-            this.propagateRopeBreak(world, pos, true, doDrops);
+            this.propagateRopeBreak(state, world, pos, true, doDrops);
         } else {
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             if(doDrops) {
@@ -192,18 +192,16 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
         }
     }
 
-
-
-    private void propagateRopeBreak(World world, BlockPos pos, boolean up, boolean doDrops) {
+    private void propagateRopeBreak(BlockState state, World world, BlockPos pos, boolean up, boolean doDrops) {
         if(!world.isRemote) {
             BlockPos posAt = pos.add(0, up ? 1 : -1, 0);
-            BlockState state = world.getBlockState(posAt);
+            BlockState stateAt = world.getBlockState(posAt);
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             if(doDrops) {
                 spawnDrops(state, world, pos);
             }
             if (state.getBlock() instanceof BlockRope) {
-                ((BlockRope) state.getBlock()).propagateRopeBreak(world, posAt, up, doDrops);
+                ((BlockRope) state.getBlock()).propagateRopeBreak(stateAt, world, posAt, up, doDrops);
             }
         }
     }

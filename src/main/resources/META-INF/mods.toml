@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/InfinityRaider/NinjaGear/issues/"
 
 [[mods]]
 modId="ninja_gear"
-version="1.16.5-2.0.2"
+version="1.16.5-2.0.3"
 displayName="Ninja Gear"
 updateJSONURL="https://www.curseforge.com/minecraft/mc-mods/ninjagear/files"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/ninjagear"

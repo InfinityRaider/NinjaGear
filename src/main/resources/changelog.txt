@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.0.3
+- FIXED: Breaking an entire rope upwards dropping the block above the rope instead of the rope
+
 2.0.2
 - CHANGE: update for Forge 36.1.0 and InfinityLib
 
