@@ -6,6 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.living.ZombieEvent;
+import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class EntityTargetingHandler {
@@ -34,7 +37,18 @@ public class EntityTargetingHandler {
                 mob.setAggroed(false);
                 mob.setAttackTarget(null);
             }
-            attacker.setRevengeTarget(null);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    @SuppressWarnings("unused")
+    public void onSummonAidEvent(ZombieEvent.SummonAidEvent event) {
+        LivingEntity attacker = event.getAttacker();
+        if(attacker instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) attacker;
+            if(player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden)) {
+                event.setResult(Event.Result.DENY);
+            }
         }
     }
 }

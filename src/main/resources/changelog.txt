@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.0.4
+ - FIXED: Server crash after attacking a zombie from invisibility
+
 2.0.3
 - FIXED: Breaking an entire rope upwards dropping the block above the rope instead of the rope
 - FIXED: Katana not dealing increased damage with an empty off-hand
