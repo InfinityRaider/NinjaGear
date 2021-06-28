@@ -7,6 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -21,7 +22,7 @@ public class RenderPlayerHandler {
         return INSTANCE;
     }
 
-    private HashMap<UUID, Boolean> invisibilityMap;
+    private final HashMap<UUID, Boolean> invisibilityMap;
 
     private RenderPlayerHandler() {
         this.invisibilityMap = new HashMap<>();
@@ -40,9 +41,19 @@ public class RenderPlayerHandler {
 
     @SubscribeEvent
     @SuppressWarnings("unused")
-    public void onRenderLivingEvent(RenderLivingEvent.Pre event) {
+    public void onRenderLivingEvent(RenderLivingEvent.Pre<?,?> event) {
         LivingEntity entity = event.getEntity();
         if((entity instanceof PlayerEntity) && isInvisible((PlayerEntity) entity)) {
+            event.setCanceled(true);
+            event.setResult(Event.Result.DENY);
+        }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unused")
+    public void onRenderLivingEvent(RenderPlayerEvent.Pre event) {
+        PlayerEntity entity = event.getPlayer();
+        if(isInvisible(entity)) {
             event.setCanceled(true);
             event.setResult(Event.Result.DENY);
         }

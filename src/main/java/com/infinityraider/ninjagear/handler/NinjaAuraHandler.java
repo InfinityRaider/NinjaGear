@@ -87,7 +87,7 @@ public class NinjaAuraHandler {
     @SuppressWarnings("unused")
     public void onLivingUpdateEvent(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
-        if(entity == null || !(entity instanceof PlayerEntity)) {
+        if(entity == null || !(entity instanceof PlayerEntity) || entity.getEntityWorld().isRemote()) {
             return;
         }
         PlayerEntity player = (PlayerEntity) entity;
