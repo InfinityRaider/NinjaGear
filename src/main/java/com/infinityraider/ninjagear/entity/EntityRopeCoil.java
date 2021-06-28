@@ -38,8 +38,8 @@ public class EntityRopeCoil extends EntityThrowableBase {
     }
 
     @Override
-    public PlayerEntity func_234616_v_() {  //func_234616_v_ ----> getThrower
-        return (PlayerEntity) super.func_234616_v_();
+    public PlayerEntity getShooter() {  //func_234616_v_ ----> getThrower
+        return (PlayerEntity) super.getShooter();
     }
 
     @Override
@@ -96,7 +96,7 @@ public class EntityRopeCoil extends EntityThrowableBase {
     private void addRemainingToInventory(int remaining) {
         if(remaining > 0) {
             ItemStack stack = new ItemStack(ItemRegistry.getInstance().itemRope, remaining);
-            if(func_234616_v_() != null && !func_234616_v_().inventory.addItemStackToInventory(stack)) {
+            if(getShooter() != null && !getShooter().inventory.addItemStackToInventory(stack)) {
                 ItemEntity item = new ItemEntity(this.getEntityWorld(), this.getPosX(), this.getPosY(), this.getPosZ(), stack);
                 this.getEntityWorld().addEntity(item);
             }

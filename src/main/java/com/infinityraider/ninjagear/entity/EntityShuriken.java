@@ -23,6 +23,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
+import javax.annotation.Nonnull;
+
 public class EntityShuriken extends EntityThrowableBase {
     private float crit;
     private int timer;
@@ -67,14 +69,14 @@ public class EntityShuriken extends EntityThrowableBase {
     }
 
     @Override
-    protected void onImpact(RayTraceResult impact) {
+    protected void onImpact(@Nonnull RayTraceResult impact) {
         if (impact instanceof EntityRayTraceResult) {
             Entity hit = ((EntityRayTraceResult) impact).getEntity();
-            if (hit == this.func_234616_v_()) {     //func_234616_v_ ----> getThrower
+            if (hit == this.getShooter()) {
                 return;
             }
             if (hit != null) {
-                DamageSource damage = DamageSource.causeThrownDamage(this.func_234616_v_(), this);
+                DamageSource damage = DamageSource.causeThrownDamage(hit, this);
                 if (!hit.isInvulnerableTo(damage)) {
                     float crit = this.crit;
                     hit.attackEntityFrom(damage, 3.0F + NinjaGear.instance.getConfig().getShurikenDamage() * crit);

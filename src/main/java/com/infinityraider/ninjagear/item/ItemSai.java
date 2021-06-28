@@ -76,7 +76,7 @@ public class ItemSai extends ItemBase implements IHiddenItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        if (state.isIn(Blocks.COBWEB)) {
+        if (state.matchesBlock(Blocks.COBWEB)) {
             return 15.0F;
         } else {
             Material material = state.getMaterial();
