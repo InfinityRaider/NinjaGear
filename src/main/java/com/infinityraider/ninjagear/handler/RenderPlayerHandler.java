@@ -2,8 +2,8 @@ package com.infinityraider.ninjagear.handler;
 
 import com.infinityraider.ninjagear.registry.EffectRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -28,22 +28,22 @@ public class RenderPlayerHandler {
         this.invisibilityMap = new HashMap<>();
     }
 
-    public void setPlayerInvisibilityStatus(PlayerEntity player, boolean invisible) {
-        invisibilityMap.put(player.getUniqueID(), invisible);
+    public void setPlayerInvisibilityStatus(Player player, boolean invisible) {
+        invisibilityMap.put(player.getUUID(), invisible);
     }
 
-    public boolean isInvisible(PlayerEntity player) {
+    public boolean isInvisible(Player player) {
         if(player == Minecraft.getInstance().player) {
-            return player.isPotionActive(EffectRegistry.getInstance().effectNinjaHidden);
+            return player.hasEffect(EffectRegistry.getInstance().effectNinjaHidden);
         }
-        return invisibilityMap.containsKey(player.getUniqueID()) && invisibilityMap.get(player.getUniqueID());
+        return invisibilityMap.containsKey(player.getUUID()) && invisibilityMap.get(player.getUUID());
     }
 
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onRenderLivingEvent(RenderLivingEvent.Pre<?,?> event) {
         LivingEntity entity = event.getEntity();
-        if((entity instanceof PlayerEntity) && isInvisible((PlayerEntity) entity)) {
+        if((entity instanceof Player) && isInvisible((Player) entity)) {
             event.setCanceled(true);
             event.setResult(Event.Result.DENY);
         }
@@ -52,7 +52,7 @@ public class RenderPlayerHandler {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void onRenderLivingEvent(RenderPlayerEvent.Pre event) {
-        PlayerEntity entity = event.getPlayer();
+        Player entity = event.getPlayer();
         if(isInvisible(entity)) {
             event.setCanceled(true);
             event.setResult(Event.Result.DENY);

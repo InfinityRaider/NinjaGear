@@ -2,19 +2,19 @@ package com.infinityraider.ninjagear.network;
 
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.ninjagear.render.player.RenderNinjaGadget;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public class MessageUpdateGadgetRenderMaskClient extends MessageBase {
     private boolean[] mask;
-    private PlayerEntity player;
+    private Player player;
 
     public MessageUpdateGadgetRenderMaskClient() {
         super();
     }
 
-    public MessageUpdateGadgetRenderMaskClient(PlayerEntity player, boolean[] mask) {
+    public MessageUpdateGadgetRenderMaskClient(Player player, boolean[] mask) {
         this();
         this.mask = mask;
         this.player = player;

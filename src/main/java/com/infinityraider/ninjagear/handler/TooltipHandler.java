@@ -3,11 +3,11 @@ package com.infinityraider.ninjagear.handler;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor;
 import com.infinityraider.ninjagear.reference.Reference;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -19,7 +19,7 @@ import java.util.List;
 public class TooltipHandler {
     private static final TooltipHandler INSTANCE = new TooltipHandler();
 
-    private static final ITextComponent EMPTY_STRING = new StringTextComponent("");
+    private static final TextComponent EMPTY_STRING = new TextComponent("");
 
     public static TooltipHandler getInstance() {
         return INSTANCE;
@@ -43,14 +43,14 @@ public class TooltipHandler {
         }
     }
 
-    private void addTooltipForHiddenItem(List<ITextComponent> tooltip, IHiddenItem item, ItemStack stack, PlayerEntity player) {
+    private void addTooltipForHiddenItem(List<Component> tooltip, IHiddenItem item, ItemStack stack, Player player) {
         if (!item.shouldRevealPlayerWhenEquipped(player, stack)) {
             tooltip.add(EMPTY_STRING);
-            tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:hidden_item_L1"));
+            tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:hidden_item_L1"));
         }
     }
 
-    private void addTooltipForNinjaArmor(List<ITextComponent> tooltip) {
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_armor_L1"));
+    private void addTooltipForNinjaArmor(List<Component> tooltip) {
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:ninja_armor_L1"));
     }
 }

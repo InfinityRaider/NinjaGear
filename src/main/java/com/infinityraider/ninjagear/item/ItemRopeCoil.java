@@ -6,15 +6,15 @@ import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -24,33 +24,33 @@ import java.util.List;
 
 public class ItemRopeCoil extends ItemBase implements IHiddenItem {
     public ItemRopeCoil() {
-        super(Names.Items.ROPE_COIL, new Properties().group(ItemRegistry.CREATIVE_TAB));
+        super(Names.Items.ROPE_COIL, new Properties().tab(ItemRegistry.CREATIVE_TAB));
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        if(!world.isRemote) {
-            EntityRopeCoil rope = new EntityRopeCoil(world, player);
-            world.addEntity(rope);
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        if(!world.isClientSide()) {
+            EntityRopeCoil rope = new EntityRopeCoil(player);
+            world.addFreshEntity(rope);
             if (!player.isCreative()) {
-                player.inventory.decrStackSize(player.inventory.currentItem, 1);
+                player.getInventory().removeItem(player.getInventory().selected, 1);
             }
         }
-        return new ActionResult<>(ActionResultType.CONSUME, player.getHeldItem(hand));
+        return new InteractionResultHolder<>(InteractionResult.CONSUME, player.getItemInHand(hand));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L3"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L4"));
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag advanced) {
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L3"));
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L4"));
     }
 
     @Override
-    public boolean shouldRevealPlayerWhenEquipped(PlayerEntity entity, ItemStack stack) {
+    public boolean shouldRevealPlayerWhenEquipped(Player entity, ItemStack stack) {
         return false;
     }
 }

@@ -4,7 +4,7 @@ import com.infinityraider.ninjagear.config.Config;
 import com.infinityraider.ninjagear.render.player.RenderNinjaGadget;
 import com.infinityraider.infinitylib.proxy.base.IClientProxyBase;
 import com.infinityraider.ninjagear.handler.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -21,7 +21,7 @@ public class ClientProxy implements IProxy, IClientProxyBase<Config> {
     }
 
     @Override
-    public boolean isPlayerHidden(PlayerEntity player) {
+    public boolean isPlayerHidden(Player player) {
         return RenderPlayerHandler.getInstance().isInvisible(player);
     }
 

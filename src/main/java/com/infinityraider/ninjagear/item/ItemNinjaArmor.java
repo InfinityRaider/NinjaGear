@@ -4,10 +4,16 @@ import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IInfinityItem;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -21,7 +27,7 @@ public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
     private final String internalName;
 
     public ItemNinjaArmor(String name, EquipmentSlot equipmentSlot) {
-        super(MATERIAL_NINJA_CLOTH, equipmentSlot, new Properties().group(ItemRegistry.CREATIVE_TAB));
+        super(MATERIAL_NINJA_CLOTH, equipmentSlot, new Properties().tab(ItemRegistry.CREATIVE_TAB));
         this.internalName = name;
     }
 
@@ -32,17 +38,17 @@ public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
-        int layer = slot == EquipmentSlotType.LEGS ? 2 : 1;
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        int layer = slot == EquipmentSlot.LEGS ? 2 : 1;
         return Reference.MOD_ID +":textures/models/armor/ninja_gear_layer_" + layer +".png";
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_gear_L1"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:ninja_gear_L2"));
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag advanced) {
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:ninja_gear_L1"));
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:ninja_gear_L2"));
     }
 
     @Override
@@ -54,36 +60,36 @@ public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
 
     public static Ingredient getRepairMaterial() {
         if(repairMaterial == null) {
-            repairMaterial = Ingredient.fromTag(ItemTags.WOOL);
+            repairMaterial = Ingredient.of(ItemTags.WOOL);
         }
         return repairMaterial;
     }
 
-    public static final IArmorMaterial MATERIAL_NINJA_CLOTH = new IArmorMaterial() {
+    public static final ArmorMaterial MATERIAL_NINJA_CLOTH = new ArmorMaterial() {
         @Override
-        public int getDurability(EquipmentSlotType slot) {
-            return ArmorMaterial.LEATHER.getDurability(slot);
+        public int getDurabilityForSlot(EquipmentSlot slot) {
+            return ArmorMaterials.LEATHER.getDurabilityForSlot(slot);
         }
 
         @Override
-        public int getDamageReductionAmount(EquipmentSlotType slot) {
+        public int getDefenseForSlot(EquipmentSlot slot) {
             return ARMOR_VALUES[slot.getIndex()];
         }
 
         @Override
-        public int getEnchantability() {
+        public int getEnchantmentValue() {
             return 12;
         }
 
         @Override
-        public SoundEvent getSoundEvent() {
-            return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+        public SoundEvent getEquipSound() {
+            return SoundEvents.ARMOR_EQUIP_LEATHER;
         }
 
         @Override
-        public Ingredient getRepairMaterial() {
+        public Ingredient getRepairIngredient() {
             if(repairMaterial == null) {
-                repairMaterial = Ingredient.fromTag(ItemTags.WOOL);
+                repairMaterial = Ingredient.of(ItemTags.WOOL);
             }
             return repairMaterial;
         }

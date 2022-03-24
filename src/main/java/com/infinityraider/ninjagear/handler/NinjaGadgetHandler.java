@@ -5,10 +5,10 @@ import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.TickEvent;
@@ -36,19 +36,19 @@ public class NinjaGadgetHandler {
     @SuppressWarnings("unused")
     public void onPlayerTick(TickEvent event) {
         if(event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.END) {
-            PlayerEntity player = NinjaGear.instance.getClientPlayer();
+            Player player = NinjaGear.instance.getClientPlayer();
             if(player == null) {
                 return;
             }
             //count relevant items in player's inventory
-            ItemStack chest = player.getItemStackFromSlot(EquipmentSlotType.CHEST);
-            if(chest != null && chest.getItem() instanceof ItemNinjaArmor) {
-                for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
-                    if(i == player.inventory.currentItem) {
+            ItemStack chest = player.getItemBySlot(EquipmentSlot.CHEST);
+            if(chest.getItem() instanceof ItemNinjaArmor) {
+                for(int i = 0; i < player.getInventory().items.size(); i++) {
+                    if(i == player.getInventory().selected) {
                         continue;
                     }
-                    ItemStack stack = player.inventory.getStackInSlot(i);
-                    if(stack == null || stack.isEmpty()) {
+                    ItemStack stack = player.getInventory().getItem(i);
+                    if(stack.isEmpty()) {
                         continue;
                     }
                     Gadgets gadget = Gadgets.getGadgetFromItem(stack.getItem());
@@ -118,17 +118,17 @@ public class NinjaGadgetHandler {
             };
         }
 
-        private static boolean shouldRenderSai(PlayerEntity player, int itemCount, boolean left) {
+        private static boolean shouldRenderSai(Player player, int itemCount, boolean left) {
             if(itemCount <= 0) {
                 return false;
             }
             if(itemCount >= 2) {
                 return true;
             }
-            ItemStack main = player.getItemStackFromSlot(EquipmentSlotType.MAINHAND);
-            ItemStack off = player.getItemStackFromSlot(EquipmentSlotType.OFFHAND);
-            boolean hasRight = main != null && main.getItem() == SAI.getItem();
-            boolean hasLeft = off != null && off.getItem() == SAI.getItem();
+            ItemStack main = player.getItemBySlot(EquipmentSlot.MAINHAND);
+            ItemStack off = player.getItemBySlot(EquipmentSlot.OFFHAND);
+            boolean hasRight = main.getItem() == SAI.getItem();
+            boolean hasLeft = off.getItem() == SAI.getItem();
             if(hasLeft) {
                 return !left;
             } else if(hasRight){

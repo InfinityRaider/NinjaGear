@@ -3,16 +3,16 @@ package com.infinityraider.ninjagear.handler;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class AnvilHandler {
     private static final AnvilHandler INSTANCE = new AnvilHandler();
 
-    public static final AnvilHandler getInstance() {
+    public static AnvilHandler getInstance() {
         return INSTANCE;
     }
 
@@ -45,7 +45,7 @@ public class AnvilHandler {
             // Do nothing if neither slot contains ninja armor
             return;
         }
-        if(((ArmorItem) left.getItem()).getEquipmentSlot() != ((ArmorItem) right.getItem()).getEquipmentSlot()) {
+        if(((ArmorItem) left.getItem()).getEquipmentSlot(left) != ((ArmorItem) right.getItem()).getEquipmentSlot(right)) {
             // Do nothing if the slots contain armor pieces for different body parts
             return;
         }
@@ -63,9 +63,9 @@ public class AnvilHandler {
         // Set the name
         String inputName = event.getName();
         if(inputName == null || inputName.isEmpty()) {
-            output.clearCustomName();
+            output.resetHoverName();
         } else {
-            output.setDisplayName(new StringTextComponent(inputName));
+            output.setHoverName(new TextComponent(inputName));
         }
         // Set the output
         event.setOutput(output);

@@ -2,19 +2,19 @@ package com.infinityraider.ninjagear.network;
 
 import com.infinityraider.infinitylib.network.MessageBase;
 import com.infinityraider.ninjagear.handler.RenderPlayerHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
 public class MessageInvisibility extends MessageBase {
-    private PlayerEntity player;
+    private Player player;
     private boolean invisible;
 
     public MessageInvisibility() {
         super();
     }
 
-    public MessageInvisibility(PlayerEntity player, boolean invisible) {
+    public MessageInvisibility(Player player, boolean invisible) {
         this();
         this.player = player;
         this.invisible = invisible;

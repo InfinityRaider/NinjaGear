@@ -6,18 +6,18 @@ import com.infinityraider.infinitylib.item.ItemBase;
 import com.infinityraider.ninjagear.api.v1.IHiddenItem;
 import com.infinityraider.ninjagear.entity.EntitySmokeBomb;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.UseAction;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,7 +29,7 @@ import java.util.List;
 public class ItemSmokeBomb extends ItemBase implements IHiddenItem {
     private static final int MIN_CHARGE = 20;
     public ItemSmokeBomb() {
-        super(Names.Items.SMOKE_BOMB, new Properties().group(ItemRegistry.CREATIVE_TAB));
+        super(Names.Items.SMOKE_BOMB, new Properties().tab(ItemRegistry.CREATIVE_TAB));
     }
 
     public int getMaxItemUseDuration(ItemStack stack) {
@@ -37,8 +37,8 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
-        return UseAction.BOW;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
     }
 
     @Override
@@ -47,34 +47,34 @@ public class ItemSmokeBomb extends ItemBase implements IHiddenItem {
     }
 
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
-        if(!world.isRemote) {
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+        if(!world.isClientSide()) {
             float max = (float) this.getMaxItemUseDuration(stack);
-            EntitySmokeBomb entitySmokeBomb = new EntitySmokeBomb(world, entity, 4*(max - timeLeft)/max);
-            world.addEntity(entitySmokeBomb);
-            if(entity instanceof PlayerEntity && !((PlayerEntity) entity).isCreative()) {
-                PlayerEntity player = (PlayerEntity) entity;
-                player.inventory.decrStackSize(player.inventory.currentItem, 1);
+            EntitySmokeBomb entitySmokeBomb = new EntitySmokeBomb(entity, 4*(max - timeLeft)/max);
+            world.addFreshEntity(entitySmokeBomb);
+            if(entity instanceof Player && !((Player) entity).isCreative()) {
+                Player player = (Player) entity;
+                player.getInventory().removeItem(player.getInventory().selected, 1);
             }
         }
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        player.setActiveHand(hand);
-        return new ActionResult<>(ActionResultType.CONSUME, player.getHeldItem(hand));
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        player.startUsingItem(hand);
+        return new InteractionResultHolder<>(InteractionResult.CONSUME, player.getItemInHand(hand));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
-        tooltip.add(new TranslationTextComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag advanced) {
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L1"));
+        tooltip.add(new TranslatableComponent(Reference.MOD_ID + ".tooltip:" + this.getInternalName() + "_L2"));
     }
 
     @Override
-    public boolean shouldRevealPlayerWhenEquipped(PlayerEntity entity, ItemStack stack) {
+    public boolean shouldRevealPlayerWhenEquipped(Player entity, ItemStack stack) {
         return false;
     }
 }
