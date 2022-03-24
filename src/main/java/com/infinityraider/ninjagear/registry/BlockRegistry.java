@@ -2,7 +2,7 @@ package com.infinityraider.ninjagear.registry;
 
 import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.block.BlockSmoke;
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 
 public class BlockRegistry {
     private static final BlockRegistry INSTANCE = new BlockRegistry();

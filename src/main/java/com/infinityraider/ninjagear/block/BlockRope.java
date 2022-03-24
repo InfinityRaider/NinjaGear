@@ -8,33 +8,33 @@ import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.ninjagear.item.ItemRopeCoil;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.IWaterLoggable;
-import net.minecraft.block.material.Material;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -42,15 +42,16 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @MethodsReturnNonnullByDefault
-public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttachable {
+@ParametersAreNonnullByDefault
+public class BlockRope extends BlockBase implements SimpleWaterloggedBlock, IRopeAttachable {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().waterloggable().build();
 
     private final VoxelShape shape;
 
     public BlockRope() {
-        super(Names.Items.ROPE, Properties.create(Material.WOOL));
-        this.shape = Block.makeCuboidShape(7.5, 0, 7.5, 8.5, 16, 8.5);
+        super(Names.Items.ROPE, Properties.of(Material.WOOL));
+        this.shape = Block.box(7.5, 0, 7.5, 8.5, 16, 8.5);
     }
 
     public Item asItem() {
@@ -64,20 +65,21 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
 
     @Override
     @Deprecated
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if(!this.canRopeStay(world, pos)) {
             this.breakRope(world, pos, state, false, true);
         }
+        super.neighborChanged(state, world, pos, block, fromPos, isMoving);
     }
 
-    public boolean canRopeStay(IWorldReader world, BlockPos pos) {
-        BlockPos up = pos.up();
+    public boolean canRopeStay(LevelReader world, BlockPos pos) {
+        BlockPos up = pos.above();
         BlockState state = world.getBlockState(up);
-        if(state.isSolidSide(world, up, Direction.DOWN)) {
+        if(state.isFaceSturdy(world, up, Direction.DOWN)) {
             return true;
         }
         FluidState fluid = world.getFluidState(pos);
-        if(fluid.getFluid() != Fluids.WATER && fluid.getFluid() != Fluids.EMPTY) {
+        if(fluid.getType() != Fluids.WATER && fluid.getType() != Fluids.EMPTY) {
             return false;
         }
         if(state.getBlock() instanceof IRopeAttachable) {
@@ -89,29 +91,29 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
 
     @Override
     @Deprecated
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
         BlockState current = world.getBlockState(pos);
         return current.getMaterial().isReplaceable() && this.canRopeStay(world, pos);
     }
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext context) {
-        return this.getStateForPlacement(context.getWorld(), context.getPos());
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return this.getStateForPlacement(context.getLevel(), context.getClickedPos());
     }
 
-    public BlockState getStateForPlacement(IWorldReader world, BlockPos pos) {
-        BlockState state = this.getDefaultState();
-        if (state.isValidPosition(world, pos)) {
+    public BlockState getStateForPlacement(Level world, BlockPos pos) {
+        BlockState state = this.defaultBlockState();
+        if (state.canSurvive(world, pos)) {
             FluidState fluid = world.getFluidState(pos);
-            return state.with(WATERLOGGED, fluid.getFluid() == Fluids.WATER);
+            return state.setValue(WATERLOGGED, fluid.getType() == Fluids.WATER);
         }
         return null;
     }
 
     @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
-        BlockPos up = pos.up();
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
+        BlockPos up = pos.above();
         BlockState stateUp = world.getBlockState(up);
         if(stateUp.getBlock() instanceof IRopeAttachable) {
             ((IRopeAttachable) stateUp.getBlock()).onRopeAttached(world, up, stateUp);
@@ -119,36 +121,36 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
-        ItemStack heldItem = player.getHeldItem(hand);
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        ItemStack heldItem = player.getItemInHand(hand);
         if(heldItem.isEmpty()) {
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
         }
-        if (!world.isRemote) {
+        if (!world.isClientSide()) {
             if (heldItem.getItem() instanceof ItemRope) {
                 if (this.extendRope(world, pos) && !player.isCreative()) {
-                    player.inventory.decrStackSize(player.inventory.currentItem, 1);
+                    player.getInventory().removeItem(player.getInventory().selected, 1);
                 }
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             } else if(heldItem.getItem() instanceof ItemRopeCoil) {
                 int remaining = this.extendRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength());
                 if(!player.isCreative()) {
-                    player.inventory.decrStackSize(player.inventory.currentItem, 1);
+                    player.getInventory().removeItem(player.getInventory().selected, 1);
                     if(remaining > 0) {
                         ItemStack stack = new ItemStack(ItemRegistry.getInstance().itemRope, remaining);
-                        if (player.inventory.addItemStackToInventory(stack)) {
-                            ItemEntity item = new ItemEntity(world, player.getPosX(), player.getPosY(), player.getPosZ(), stack);
-                            world.addEntity(item);
+                        if (player.getInventory().add(stack)) {
+                            ItemEntity item = new ItemEntity(world, player.getX(), player.getY(), player.getZ(), stack);
+                            world.addFreshEntity(item);
                         }
                     }
                 }
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             }
         }
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
-    public int extendRope(World world, BlockPos pos, int count) {
+    public int extendRope(Level world, BlockPos pos, int count) {
         boolean flag = true;
         while(flag && count > 0) {
             flag = this.extendRope(world, pos);
@@ -159,8 +161,8 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
         return count;
     }
 
-    public boolean extendRope(World world, BlockPos pos) {
-        BlockPos below = pos.down();
+    public boolean extendRope(Level world, BlockPos pos) {
+        BlockPos below = pos.below();
         BlockState state = world.getBlockState(below);
         if(state.getBlock() instanceof BlockRope) {
             return this.extendRope(world, below);
@@ -169,36 +171,36 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
         if(rope == null) {
             return false;
         }
-        if(rope.isValidPosition(world, below)) {
-            world.setBlockState(below, rope, 3);
+        if(rope.canSurvive(world, below)) {
+            world.setBlock(below, rope, 3);
             return true;
         }
         return false;
     }
 
     @Override
-    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        this.breakRope(world, pos, state, player.isSneaking(), !player.isCreative());
+    public void attack(BlockState state, Level world, BlockPos pos, Player player) {
+        this.breakRope(world, pos, state, player.isDiscrete(), !player.isCreative());
     }
 
-    public void breakRope(World world, BlockPos pos, BlockState state, boolean propagateUp, boolean doDrops) {
+    public void breakRope(Level world, BlockPos pos, BlockState state, boolean propagateUp, boolean doDrops) {
         if (propagateUp) {
             this.propagateRopeBreak(state, world, pos, true, doDrops);
         } else {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
             if(doDrops) {
-                spawnDrops(state, world, pos);
+                Block.dropResources(state, world, pos);
             }
         }
     }
 
-    private void propagateRopeBreak(BlockState state, World world, BlockPos pos, boolean up, boolean doDrops) {
-        if(!world.isRemote) {
-            BlockPos posAt = pos.add(0, up ? 1 : -1, 0);
+    private void propagateRopeBreak(BlockState state, Level world, BlockPos pos, boolean up, boolean doDrops) {
+        if(!world.isClientSide()) {
+            BlockPos posAt = pos.offset(0, up ? 1 : -1, 0);
             BlockState stateAt = world.getBlockState(posAt);
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
             if(doDrops) {
-                spawnDrops(state, world, pos);
+                Block.dropResources(state, world, pos);
             }
             if (state.getBlock() instanceof BlockRope) {
                 ((BlockRope) state.getBlock()).propagateRopeBreak(stateAt, world, posAt, up, doDrops);
@@ -208,37 +210,37 @@ public class BlockRope extends BlockBase implements IWaterLoggable, IRopeAttacha
 
     @Override
     @Deprecated
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
         return this.shape;
     }
 
     @Override
-    public boolean canSpawnInBlock() {
+    public boolean isPossibleToRespawnInThis() {
         return false;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
         return false;
     }
 
     @Override
-    public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) {
+    public boolean isLadder(BlockState state, LevelReader world, BlockPos pos, LivingEntity entity) {
         return true;
     }
 
     @Override
-    public boolean canAttachRope(IWorldReader world, BlockPos pos, BlockState state) {
+    public boolean canAttachRope(LevelReader world, BlockPos pos, BlockState state) {
         return true;
     }
 
     @Override
-    public void onRopeAttached(World world, BlockPos pos, BlockState state) {}
+    public void onRopeAttached(Level world, BlockPos pos, BlockState state) {}
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public RenderType getRenderType() {
-        return RenderType.getCutout();
+        return RenderType.cutout();
     }
 }

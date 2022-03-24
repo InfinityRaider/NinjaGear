@@ -3,17 +3,11 @@ package com.infinityraider.ninjagear.item;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.infinitylib.item.IInfinityItem;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.*;
-import net.minecraft.item.crafting.Ingredient;
+
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -26,7 +20,7 @@ public class ItemNinjaArmor extends ArmorItem implements IInfinityItem {
 
     private final String internalName;
 
-    public ItemNinjaArmor(String name, EquipmentSlotType equipmentSlot) {
+    public ItemNinjaArmor(String name, EquipmentSlot equipmentSlot) {
         super(MATERIAL_NINJA_CLOTH, equipmentSlot, new Properties().group(ItemRegistry.CREATIVE_TAB));
         this.internalName = name;
     }

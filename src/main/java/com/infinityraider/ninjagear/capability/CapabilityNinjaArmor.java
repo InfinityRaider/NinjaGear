@@ -1,18 +1,19 @@
 package com.infinityraider.ninjagear.capability;
 
 import com.infinityraider.infinitylib.capability.IInfSerializableCapabilityImplementation;
-import com.infinityraider.infinitylib.utility.ISerializable;
+import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor.Impl;
 import com.infinityraider.ninjagear.item.ItemNinjaArmor;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.reference.Reference;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
 
-public class CapabilityNinjaArmor implements IInfSerializableCapabilityImplementation<ItemStack, CapabilityNinjaArmor.Impl> {
+public class CapabilityNinjaArmor implements IInfSerializableCapabilityImplementation<ItemStack, Impl> {
     private static final CapabilityNinjaArmor INSTANCE = new CapabilityNinjaArmor();
 
     public static CapabilityNinjaArmor getInstance() {
@@ -25,8 +26,7 @@ public class CapabilityNinjaArmor implements IInfSerializableCapabilityImplement
         return stack.getCapability(CapabilityNinjaArmor.CAPABILITY).map(CapabilityNinjaArmor.Impl::isNinjaArmor).orElse(false);
     }
 
-    @CapabilityInject(value = Impl.class)
-    public static Capability<Impl> CAPABILITY = null;
+    public static Capability<Impl> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
 
     private CapabilityNinjaArmor() {}
 
@@ -60,7 +60,7 @@ public class CapabilityNinjaArmor implements IInfSerializableCapabilityImplement
         return Impl.class;
     }
 
-    public static class Impl implements ISerializable {
+    public static class Impl implements Serializable<Impl> {
         private boolean isNinjaArmor;
 
         private Impl(ItemStack stack) {
@@ -76,15 +76,20 @@ public class CapabilityNinjaArmor implements IInfSerializableCapabilityImplement
         }
 
         @Override
-        public void readFromNBT(CompoundNBT tag) {
-            this.isNinjaArmor = tag.contains(Names.NBT.NINJA_GEAR) && tag.getBoolean(Names.NBT.NINJA_GEAR);
+        public void copyDataFrom(Impl from) {
+            this.isNinjaArmor = from.isNinjaArmor();
         }
 
         @Override
-        public CompoundNBT writeToNBT() {
-            CompoundNBT tag = new CompoundNBT();
+        public CompoundTag serializeNBT() {
+            CompoundTag tag = new CompoundTag();
             tag.putBoolean(Names.NBT.NINJA_GEAR, this.isNinjaArmor);
             return tag;
+        }
+
+        @Override
+        public void deserializeNBT(CompoundTag tag) {
+            this.isNinjaArmor = tag.contains(Names.NBT.NINJA_GEAR) && tag.getBoolean(Names.NBT.NINJA_GEAR);
         }
     }
 }

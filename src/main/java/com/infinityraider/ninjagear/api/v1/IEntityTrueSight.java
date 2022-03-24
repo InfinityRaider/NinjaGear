@@ -1,6 +1,6 @@
 package com.infinityraider.ninjagear.api.v1;
 
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Implement in entities which can see hidden players
@@ -11,5 +11,5 @@ public interface IEntityTrueSight {
      * @param player the player being targeted by this entity
      * @return if this entity can see the player
      */
-    boolean canSeeTarget(PlayerEntity player);
+    boolean canSeeTarget(Player player);
 }

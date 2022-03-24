@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.Hand;
 import net.minecraft.world.LightType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -24,7 +25,7 @@ public class NinjaAuraHandler {
 
     private NinjaAuraHandler() {}
 
-    public void revealEntity(PlayerEntity player, int duration, boolean breakSmoke) {
+    public void revealEntity(Player player, int duration, boolean breakSmoke) {
         boolean smoked = player.isPotionActive(EffectRegistry.getInstance().effectNinjaSmoked);
         if (smoked) {
             if(breakSmoke) {

@@ -1,9 +1,9 @@
 package com.infinityraider.ninjagear.api.v1;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * Implement this interface in block classes which can have a rope attached to it.
@@ -18,7 +18,7 @@ public interface IRopeAttachable {
      * @param state block state for this block in the world
      * @return true if a rope can be attached to this block
      */
-    boolean canAttachRope(IWorldReader world, BlockPos pos, BlockState state);
+    boolean canAttachRope(LevelReader world, BlockPos pos, BlockState state);
 
     /**
      * This method is called when a rope is actually attached to the block,
@@ -27,5 +27,5 @@ public interface IRopeAttachable {
      * @param pos position of this block in the world
      * @param state block state for this block in the world
      */
-    void onRopeAttached(World world, BlockPos pos, BlockState state);
+    void onRopeAttached(Level world, BlockPos pos, BlockState state);
 }

@@ -6,7 +6,7 @@ import com.infinityraider.ninjagear.api.APIBase;
 import com.infinityraider.ninjagear.api.APIStatus;
 import com.infinityraider.ninjagear.api.v1.APIv1;
 import com.infinityraider.ninjagear.handler.NinjaAuraHandler;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 public class APIimplv1 implements APIv1 {
     private final int version;
@@ -36,12 +36,12 @@ public class APIimplv1 implements APIv1 {
         return version;
     }
     @Override
-    public boolean isPlayerHidden(PlayerEntity player) {
+    public boolean isPlayerHidden(Player player) {
         return NinjaGear.instance.proxy().isPlayerHidden(player);
     }
 
     @Override
-    public void revealPlayer(PlayerEntity player, int duration, boolean breakSmoke) {
+    public void revealPlayer(Player player, int duration, boolean breakSmoke) {
         NinjaAuraHandler.getInstance().revealEntity(player, duration, breakSmoke);
     }
 }

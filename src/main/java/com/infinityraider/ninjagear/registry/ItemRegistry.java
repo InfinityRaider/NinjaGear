@@ -3,15 +3,15 @@ package com.infinityraider.ninjagear.registry;
 import com.infinityraider.infinitylib.block.IInfinityBlock;
 import com.infinityraider.ninjagear.reference.Reference;
 import com.infinityraider.ninjagear.item.*;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemRegistry {
-    public static final ItemGroup CREATIVE_TAB = new ItemGroup(Reference.MOD_ID.toLowerCase() + ".creative_tab") {
+    public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(Reference.MOD_ID.toLowerCase() + ".creative_tab") {
         @Override
-        public ItemStack createIcon() {
+        public ItemStack makeIcon() {
             return new ItemStack(ItemRegistry.getInstance().itemShuriken);
         }
     };
@@ -23,10 +23,10 @@ public class ItemRegistry {
     }
 
     private ItemRegistry() {
-        itemNinjaArmorHead = new ItemNinjaArmor("ninja_gear_head", EquipmentSlotType.HEAD);
-        itemNinjaArmorChest = new ItemNinjaArmor("ninja_gear_chest", EquipmentSlotType.CHEST);
-        itemNinjaArmorLegs = new ItemNinjaArmor("ninja_gear_legs", EquipmentSlotType.LEGS);
-        itemNinjaArmorFeet = new ItemNinjaArmor("ninja_gear_feet", EquipmentSlotType.FEET);
+        itemNinjaArmorHead = new ItemNinjaArmor("ninja_gear_head", EquipmentSlot.HEAD);
+        itemNinjaArmorChest = new ItemNinjaArmor("ninja_gear_chest", EquipmentSlot.CHEST);
+        itemNinjaArmorLegs = new ItemNinjaArmor("ninja_gear_legs", EquipmentSlot.LEGS);
+        itemNinjaArmorFeet = new ItemNinjaArmor("ninja_gear_feet", EquipmentSlot.FEET);
         itemKatana = new ItemKatana();
         itemSai = new ItemSai();
         itemShuriken = new ItemShuriken();

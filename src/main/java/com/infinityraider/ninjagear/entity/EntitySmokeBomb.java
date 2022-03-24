@@ -1,89 +1,90 @@
 package com.infinityraider.ninjagear.entity;
 
 import com.infinityraider.infinitylib.entity.EntityThrowableBase;
+import com.infinityraider.infinitylib.entity.IEntityRenderSupplier;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.block.BlockSmoke;
 import com.infinityraider.ninjagear.registry.EffectRegistry;
 import com.infinityraider.ninjagear.registry.EntityRegistry;
 import com.infinityraider.ninjagear.render.entity.RenderEntitySmokeBomb;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.util.math.*;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class EntitySmokeBomb extends EntityThrowableBase {
     //For client side spawning
-    private EntitySmokeBomb(EntityType<? extends EntitySmokeBomb> type, World world) {
+    private EntitySmokeBomb(EntityType<? extends EntitySmokeBomb> type, Level world) {
         super(type, world);
     }
 
-    public EntitySmokeBomb(World world, LivingEntity thrower, float velocity) {
-        super(EntityRegistry.getInstance().entitySmokeBomb, thrower, world);
-        Vector3d vec = thrower.getLookVec();
-        this.shoot(vec.getX(), vec.getY(), vec.getZ(), velocity, 0.2F);
+    public EntitySmokeBomb(LivingEntity thrower, float velocity) {
+        super(EntityRegistry.getInstance().entitySmokeBomb, thrower);
+        Vec3 vec = thrower.getLookAngle();
+        this.shoot(vec.x(), vec.y(), vec.z(), velocity, 0.2F);
     }
 
     @Override
-    protected float getGravityVelocity() {
+    protected float getGravity() {
         return 0.1F;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    protected void onImpact(RayTraceResult impact) {
-        World world = this.getEntityWorld();
+    protected void onHit(HitResult impact) {
+        Level world = this.getLevel();
         BlockPos pos = this.getBlockPosFromImpact(impact);
         this.applySmokeBuff(world, pos);
         this.createSmokeCloud(world, pos);
     }
 
-    private BlockPos getBlockPosFromImpact(RayTraceResult impact) {
-        if(impact instanceof EntityRayTraceResult) {
-            EntityRayTraceResult entityImpact = (EntityRayTraceResult) impact;
+    private BlockPos getBlockPosFromImpact(HitResult impact) {
+        if(impact instanceof EntityHitResult) {
+            EntityHitResult entityImpact = (EntityHitResult) impact;
             Entity hit = entityImpact.getEntity();
             if (hit != null) {
-                return hit.getPosition();
+                return hit.blockPosition();
             }
-        } else if(impact instanceof BlockRayTraceResult) {
-            BlockRayTraceResult blockImpact = (BlockRayTraceResult) impact;
-            return blockImpact.getPos().offset(blockImpact.getFace());
+        } else if(impact instanceof BlockHitResult) {
+            BlockHitResult blockImpact = (BlockHitResult) impact;
+            return blockImpact.getBlockPos().relative(blockImpact.getDirection());
         }
-        return new BlockPos(impact.getHitVec());
+        return new BlockPos(impact.getLocation());
     }
 
-    private void applySmokeBuff(World world, BlockPos pos) {
+    private void applySmokeBuff(Level world, BlockPos pos) {
         int r = NinjaGear.instance.getConfig().getSmokeRadius();
-        world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.add(-r, -r, -r), pos.add(r, r, r))).stream()
+        world.getEntities(null, new AABB(pos.offset(-r, -r, -r), pos.offset(r, r, r))).stream()
                 .filter(entity -> entity != null && (entity instanceof LivingEntity))
                 .forEach(entity -> {
                     LivingEntity living = (LivingEntity) entity;
-                    if (living.isPotionActive(EffectRegistry.getInstance().effectNinjaRevealed)) {
-                        living.removePotionEffect(EffectRegistry.getInstance().effectNinjaRevealed);
+                    if (living.hasEffect(EffectRegistry.getInstance().effectNinjaRevealed)) {
+                        living.removeEffect(EffectRegistry.getInstance().effectNinjaRevealed);
                     }
                     int duration = NinjaGear.instance.getConfig().getSmokeBuffDuration();
                     if(duration > 0) {
-                        living.addPotionEffect(new EffectInstance(EffectRegistry.getInstance().effectNinjaSmoked, duration));
+                        living.addEffect(new MobEffectInstance(EffectRegistry.getInstance().effectNinjaSmoked, duration));
                     }
                 });
     }
 
     @SuppressWarnings("deprecation")
-    private void createSmokeCloud(World world, BlockPos pos) {
+    private void createSmokeCloud(Level world, BlockPos pos) {
         int r = NinjaGear.instance.getConfig().getSmokeRadius();
         for(int x = -r; x <= r; x++) {
             for(int y = -r; y <= r; y++) {
@@ -92,13 +93,13 @@ public class EntitySmokeBomb extends EntityThrowableBase {
                     if(radius > r*r) {
                         continue;
                     }
-                    BlockPos posAt = pos.add(x, y, z);
+                    BlockPos posAt = pos.offset(x, y, z);
                     BlockState state = world.getBlockState(posAt);
                     if(state.getMaterial() == Material.AIR) {
-                        if(world.isRemote) {
+                        if(world.isClientSide()) {
                             this.spawnSmokeParticle(world, posAt);
                         } else if(NinjaGear.instance.getConfig().placeSmokeBlocks()){
-                            world.setBlockState(posAt, BlockSmoke.getBlockStateForDarkness(this.getDarknessValue(radius, world.rand)), 3);
+                            world.setBlock(posAt, BlockSmoke.getBlockStateForDarkness(this.getDarknessValue(radius, world.getRandom())), 3);
                         }
                     }
                 }
@@ -123,7 +124,7 @@ public class EntitySmokeBomb extends EntityThrowableBase {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void spawnSmokeParticle(World world, BlockPos pos) {
+    private void spawnSmokeParticle(Level world, BlockPos pos) {
         if (NinjaGear.instance.getConfig().disableSmoke()) {
             return;
         }
@@ -131,21 +132,21 @@ public class EntitySmokeBomb extends EntityThrowableBase {
     }
 
     @Override
-    protected void registerData() {
+    public void writeCustomEntityData(CompoundTag tag) {
 
     }
 
     @Override
-    public void writeCustomEntityData(CompoundNBT tag) {
+    public void readCustomEntityData(CompoundTag tag) {
 
     }
 
     @Override
-    public void readCustomEntityData(CompoundNBT tag) {
+    protected void defineSynchedData() {
 
     }
 
-    public static class SpawnFactory implements EntityType.IFactory<EntitySmokeBomb> {
+    public static class SpawnFactory implements EntityType.EntityFactory<EntitySmokeBomb> {
         private static final EntitySmokeBomb.SpawnFactory INSTANCE = new EntitySmokeBomb.SpawnFactory();
 
         public static EntitySmokeBomb.SpawnFactory getInstance() {
@@ -155,12 +156,12 @@ public class EntitySmokeBomb extends EntityThrowableBase {
         private SpawnFactory() {}
 
         @Override
-        public EntitySmokeBomb create(EntityType<EntitySmokeBomb> type, World world) {
+        public EntitySmokeBomb create(EntityType<EntitySmokeBomb> type, Level world) {
             return new EntitySmokeBomb(type, world);
         }
     }
 
-    public static class RenderFactory implements IRenderFactory<EntitySmokeBomb> {
+    public static class RenderFactory implements IEntityRenderSupplier<EntitySmokeBomb> {
         private static final RenderFactory INSTANCE = new RenderFactory();
 
         public static RenderFactory getInstance() {
@@ -170,9 +171,8 @@ public class EntitySmokeBomb extends EntityThrowableBase {
         private RenderFactory() {}
 
         @Override
-        @OnlyIn(Dist.CLIENT)
-        public EntityRenderer<? super EntitySmokeBomb> createRenderFor(EntityRendererManager manager) {
-            return new RenderEntitySmokeBomb(manager);
+        public Supplier<EntityRendererProvider<EntitySmokeBomb>> supplyRenderer() {
+            return () -> RenderEntitySmokeBomb::new;
         }
     }
 }

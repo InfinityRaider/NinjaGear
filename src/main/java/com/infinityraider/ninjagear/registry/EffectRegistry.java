@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.registry;
 
-import com.infinityraider.ninjagear.effect.*;
-import net.minecraft.potion.Effect;
+import com.infinityraider.ninjagear.potion.*;
+import net.minecraft.world.effect.MobEffect;
 
 public class EffectRegistry {
     private static final EffectRegistry INSTANCE = new EffectRegistry();
@@ -10,9 +10,9 @@ public class EffectRegistry {
         return INSTANCE;
     }
 
-    public Effect effectNinjaHidden = new EffectNinjaHidden();
-    public Effect effectNinjaRevealed = new EffectNinjaRevealed();
-    public Effect effectNinjaSmoked = new EffectNinjaSmoked();
+    public MobEffect effectNinjaHidden = new PotionEffectNinjaHidden();
+    public MobEffect effectNinjaRevealed = new PotionEffectNinjaRevealed();
+    public MobEffect effectNinjaSmoked = new PotionEffectNinjaSmoked();
 
     private EffectRegistry() {}
 }

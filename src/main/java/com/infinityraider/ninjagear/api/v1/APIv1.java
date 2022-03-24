@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.api.v1;
 
 import com.infinityraider.ninjagear.api.APIBase;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * <h1>This is the NinjaGear API, version 1.</h1>
@@ -25,7 +25,7 @@ public interface APIv1 extends APIBase {
      * @param player the player to check
      * @return if the player is invisible
      */
-    boolean isPlayerHidden(PlayerEntity player);
+    boolean isPlayerHidden(Player player);
 
     /**
      * Reveals a player, a revealed player can not hide and if the player is hidden, the hiding status will be removed.
@@ -34,5 +34,5 @@ public interface APIv1 extends APIBase {
      * @param duration the amount of ticks the player should be revealed
      * @param breakSmoke if the player should be revealed even while smoke is active
      */
-    void revealPlayer(PlayerEntity player, int duration, boolean breakSmoke);
+    void revealPlayer(Player player, int duration, boolean breakSmoke);
 }

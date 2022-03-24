@@ -5,7 +5,7 @@ import com.infinityraider.infinitylib.proxy.base.IProxyBase;
 import com.infinityraider.ninjagear.capability.CapabilityNinjaArmor;
 import com.infinityraider.ninjagear.config.Config;
 import com.infinityraider.ninjagear.handler.*;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.function.Function;
@@ -38,5 +38,5 @@ public interface IProxy extends IProxyBase<Config> {
      * @param player player to check
      * @return if the player is hidden
      */
-    boolean isPlayerHidden(PlayerEntity player);
+    boolean isPlayerHidden(Player player);
 }

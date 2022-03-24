@@ -1,117 +1,115 @@
 package com.infinityraider.ninjagear.entity;
 
 import com.infinityraider.infinitylib.entity.EntityThrowableBase;
+import com.infinityraider.infinitylib.entity.IEntityRenderSupplier;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.registry.EntityRegistry;
 import com.infinityraider.ninjagear.registry.ItemRegistry;
 import com.infinityraider.ninjagear.render.entity.RenderEntityShuriken;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.EntityRayTraceResult;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 public class EntityShuriken extends EntityThrowableBase {
     private float crit;
     private int timer;
-    private Vector3d direction;
+    private Vec3 direction;
 
     //For client side spawning
-    private EntityShuriken(EntityType<? extends EntityShuriken> type, World world) {
+    private EntityShuriken(EntityType<? extends EntityShuriken> type, Level world) {
         super(type, world);
     }
 
-    public EntityShuriken(World world, LivingEntity thrower, boolean crit) {
-        super(EntityRegistry.getInstance().entityShuriken, thrower, world);
-        this.direction = thrower.getLookVec();
-        this.shoot(direction.getX(), direction.getY(), direction.getZ(), 4F, 0.2F);
+    public EntityShuriken(LivingEntity thrower, boolean crit) {
+        super(EntityRegistry.getInstance().entityShuriken, thrower);
+        this.direction = thrower.getLookAngle();
+        this.shoot(direction.x(), direction.y(), direction.z(), 4F, 0.2F);
         this.crit = crit ? NinjaGear.instance.getConfig().getCitMultiplier() : 1;
         this.timer = 0;
     }
 
-    public Vector3d getDirection() {
+    public Vec3 direction() {
         return direction;
     }
 
     @Override
-     protected float getGravityVelocity() {
+     protected float getGravity() {
         return 0.3F;
-    }
-
-    @Override
-    protected void registerData() {
-
     }
 
     @Override
     public void tick() {
         super.tick();
-        if(!this.getEntityWorld().isRemote) {
+        if(!this.getLevel().isClientSide()) {
             timer = timer + 1;
             if(timer > 5000) {
-                this.dropAsItem(this.getPosX(), this.getPosY(), this.getPosZ());
+                this.dropAsItem(this.getX(), this.getY(), this.getZ());
             }
         }
     }
 
     @Override
-    protected void onImpact(@Nonnull RayTraceResult impact) {
-        if (impact instanceof EntityRayTraceResult) {
-            Entity hit = ((EntityRayTraceResult) impact).getEntity();
-            if (hit == this.getShooter()) {
+    protected void onHit(@Nonnull HitResult impact) {
+        if (impact instanceof EntityHitResult) {
+            Entity hit = ((EntityHitResult) impact).getEntity();
+            if (hit == this.getOwner()) {
                 return;
             }
             if (hit != null) {
-                DamageSource damage = DamageSource.causeThrownDamage(hit, this);
+                DamageSource damage = DamageSource.thrown(hit, this);
                 if (!hit.isInvulnerableTo(damage)) {
                     float crit = this.crit;
-                    hit.attackEntityFrom(damage, 3.0F + NinjaGear.instance.getConfig().getShurikenDamage() * crit);
+                    hit.hurt(damage, 3.0F + NinjaGear.instance.getConfig().getShurikenDamage() * crit);
                 }
             }
         }
-        World world = this.getEntityWorld();
-        Vector3d hitVec = impact.getHitVec();
-        if(!world.isRemote && hitVec != null) {
-            this.dropAsItem(hitVec.getX(), hitVec.getY(), hitVec.getZ());
+        Level world = this.getLevel();
+        Vec3 hitVec = impact.getLocation();
+        if(!world.isClientSide() && hitVec != null) {
+            this.dropAsItem(hitVec.x(), hitVec.y(), hitVec.z());
         }
     }
 
     public void dropAsItem(double x, double y, double z) {
-        ItemEntity item = new ItemEntity(getEntityWorld(), x, y, z,
+        ItemEntity item = new ItemEntity(getLevel(), x, y, z,
                 new ItemStack(ItemRegistry.getInstance().itemShuriken));
-        this.getEntityWorld().addEntity(item);
-        this.setDead();
+        this.getLevel().addFreshEntity(item);
+        this.kill();
     }
 
     @Override
-    public void writeCustomEntityData(CompoundNBT tag) {
+    protected void defineSynchedData() {
+
+    }
+
+    @Override
+    public void writeCustomEntityData(CompoundTag tag) {
         tag.putFloat(Names.NBT.CRIT, this.crit);
-        tag.putDouble(Names.NBT.X, this.direction.getX());
-        tag.putDouble(Names.NBT.Y, this.direction.getY());
-        tag.putDouble(Names.NBT.Z, this.direction.getZ());
+        tag.putDouble(Names.NBT.X, this.direction.x());
+        tag.putDouble(Names.NBT.Y, this.direction.y());
+        tag.putDouble(Names.NBT.Z, this.direction.z());
     }
 
     @Override
-    public void readCustomEntityData(CompoundNBT tag) {
+    public void readCustomEntityData(CompoundTag tag) {
         this.crit = tag.getFloat(Names.NBT.CRIT);
-        this.direction = new Vector3d(tag.getDouble(Names.NBT.X), tag.getDouble(Names.NBT.Y), tag.getDouble(Names.NBT.Z));
+        this.direction = new Vec3(tag.getDouble(Names.NBT.X), tag.getDouble(Names.NBT.Y), tag.getDouble(Names.NBT.Z));
     }
 
-    public static class SpawnFactory implements EntityType.IFactory<EntityShuriken> {
+    public static class SpawnFactory implements EntityType.EntityFactory<EntityShuriken> {
         private static final SpawnFactory INSTANCE = new SpawnFactory();
 
         public static SpawnFactory getInstance() {
@@ -121,12 +119,12 @@ public class EntityShuriken extends EntityThrowableBase {
         private SpawnFactory() {}
 
         @Override
-        public EntityShuriken create(EntityType<EntityShuriken> type, World world) {
+        public EntityShuriken create(EntityType<EntityShuriken> type, Level world) {
             return new EntityShuriken(type, world);
         }
     }
 
-    public static class RenderFactory implements IRenderFactory<EntityShuriken> {
+    public static class RenderFactory implements IEntityRenderSupplier<EntityShuriken> {
         private static final RenderFactory INSTANCE = new RenderFactory();
 
         public static RenderFactory getInstance() {
@@ -136,9 +134,8 @@ public class EntityShuriken extends EntityThrowableBase {
         private RenderFactory() {}
 
         @Override
-        @OnlyIn(Dist.CLIENT)
-        public EntityRenderer<? super EntityShuriken> createRenderFor(EntityRendererManager manager) {
-            return new RenderEntityShuriken(manager);
+        public Supplier<EntityRendererProvider<EntityShuriken>> supplyRenderer() {
+            return () -> RenderEntityShuriken::new;
         }
     }
 }

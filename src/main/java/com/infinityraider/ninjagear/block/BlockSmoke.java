@@ -4,23 +4,28 @@ import com.infinityraider.infinitylib.block.BlockBase;
 import com.infinityraider.infinitylib.block.property.InfPropertyConfiguration;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.registry.BlockRegistry;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.Property;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
 public class BlockSmoke extends BlockBase {
     public static final int MAX_AGE = 15;
     public static final Property<Integer> PROPERTY_AGE = IntegerProperty.create("age", 0, MAX_AGE);
@@ -29,15 +34,18 @@ public class BlockSmoke extends BlockBase {
 
     public static BlockState getBlockStateForDarkness(int darkness) {
         BlockSmoke block = (BlockSmoke) BlockRegistry.getInstance().blockSmoke;
-        return block.getDefaultState().with(PROPERTY_AGE, darkness);
+        return block.defaultBlockState().setValue(PROPERTY_AGE, darkness);
     }
 
     public BlockSmoke() {
-        super("smoke", Properties.create(Material.AIR)
-                .tickRandomly()
-                .doesNotBlockMovement().setAir().noDrops().notSolid().variableOpacity()
-                .setAllowsSpawn((a1, a2, a3, a4) -> false)
-                .setBlocksVision((a1, a2, a3) -> true));
+        super("smoke", Properties.of(Material.AIR)
+                .randomTicks()
+                .noOcclusion()
+                .noCollission()
+                .air()
+                .noDrops()
+                .isValidSpawn((a1, a2, a3, a4) -> false)
+                .isViewBlocking((a1, a2, a3) -> true));
     }
 
     @Override
@@ -50,72 +58,73 @@ public class BlockSmoke extends BlockBase {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        int age = state.get(PROPERTY_AGE) + random.nextInt(this.dispersionRate()) + 1;
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random random) {
+        int age = state.getValue(PROPERTY_AGE) + random.nextInt(this.dispersionRate()) + 1;
         if (age <= MAX_AGE) {
-            world.setBlockState(pos, this.getDefaultState().with(PROPERTY_AGE, age), 6);
+            world.setBlock(pos, this.defaultBlockState().setValue(PROPERTY_AGE, age), 6);
         } else {
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         }
     }
 
     @Override
-    public boolean isTransparent(BlockState state) {
-        return true;
-    }
-
-    @Deprecated
-    public boolean isReplaceable(BlockState state, BlockItemUseContext useContext) {
-        return true;
-    }
-
-    @Deprecated
-    public boolean isReplaceable(BlockState state, Fluid fluid) {
+    public boolean useShapeForLightOcclusion(BlockState state) {
         return true;
     }
 
     @Override
     @Deprecated
-    public int getOpacity(BlockState state, IBlockReader world, BlockPos pos) {
-        return MAX_AGE - state.get(PROPERTY_AGE) + 1;
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
+        return true;
     }
 
     @Override
-    @ParametersAreNonnullByDefault
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos) {
+    @Deprecated
+    public boolean canBeReplaced(BlockState state, Fluid fluid) {
+        return true;
+    }
+
+    @Override
+    @Deprecated
+    public int getLightBlock(BlockState state, BlockGetter world, BlockPos pos) {
+        return MAX_AGE - state.getValue(PROPERTY_AGE) + 1;
+    }
+
+    @Override
+    public int getLightEmission(BlockState state, BlockGetter world, BlockPos pos) {
         return 0;
     }
 
     @Override
-    public boolean canSpawnInBlock() {
+    public boolean isPossibleToRespawnInThis() {
         return false;
     }
 
     @Override
-    public boolean isAir(BlockState state, IBlockReader world, BlockPos pos) {
-        return true;
+    public boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
+        return false;
     }
 
     @Override
     @Deprecated
-    public VoxelShape getRenderShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return VoxelShapes.empty();
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter worldIn, BlockPos pos) {
+        return Shapes.empty();
     }
 
     @Override
     @Deprecated
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader reader, BlockPos pos) {
-        return VoxelShapes.empty();
+    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter reader, BlockPos pos) {
+        return Shapes.empty();
     }
 
     @Override
     @Deprecated
-    public VoxelShape getRaytraceShape(BlockState state, IBlockReader worldIn, BlockPos pos) {
-        return VoxelShapes.empty();
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter worldIn, BlockPos pos) {
+        return Shapes.empty();
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.INVISIBLE;
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.INVISIBLE;
     }
 }
