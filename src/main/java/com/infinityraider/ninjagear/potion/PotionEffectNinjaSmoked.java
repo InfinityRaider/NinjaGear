@@ -16,8 +16,8 @@ public class PotionEffectNinjaSmoked extends PotionEffectBase implements ISynchr
 
     @Override
     public void applyEffectTick(LivingEntity entity, int amplification) {
-        if(entity.hasEffect(EffectRegistry.getInstance().effectNinjaRevealed)) {
-            entity.removeEffect(EffectRegistry.getInstance().effectNinjaRevealed);
+        if(entity.hasEffect(EffectRegistry.effectNinjaRevealed)) {
+            entity.removeEffect(EffectRegistry.effectNinjaRevealed);
         }
     }
 

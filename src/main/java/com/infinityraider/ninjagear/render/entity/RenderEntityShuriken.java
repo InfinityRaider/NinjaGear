@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class RenderEntityShuriken extends RenderEntityAsItem<EntityShuriken> {
 
     public RenderEntityShuriken(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new ItemStack(ItemRegistry.getInstance().itemShuriken));
+        super(renderManager, new ItemStack(ItemRegistry.itemShuriken));
     }
 
     @Override

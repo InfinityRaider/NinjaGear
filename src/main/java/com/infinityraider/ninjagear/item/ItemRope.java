@@ -40,7 +40,7 @@ public class ItemRope extends BlockItemBase implements IHiddenItem {
 
     public ItemRope(IInfinityBlock block) {
         super(block, new Properties().tab(ItemRegistry.CREATIVE_TAB));
-        this.block = (BlockRope) BlockRegistry.getInstance().blockRope;
+        this.block = (BlockRope) BlockRegistry.blockRope;
     }
 
     @Override
@@ -95,7 +95,7 @@ public class ItemRope extends BlockItemBase implements IHiddenItem {
     public void attemptToCreateRopeCoil(Player player) {
         ItemStack stack = player.getInventory().getSelected();
         if(stack.getItem() instanceof ItemRope && stack.getCount() >= NinjaGear.instance.getConfig().getRopeCoilLength()) {
-            ItemStack coil = new ItemStack(ItemRegistry.getInstance().itemRopeCoil, 1);
+            ItemStack coil = new ItemStack(ItemRegistry.itemRopeCoil, 1);
             if(player.getInventory().add(coil) && !player.isCreative()) {
                 player.getInventory().removeItem(player.getInventory().selected, NinjaGear.instance.getConfig().getRopeCoilLength());
             }

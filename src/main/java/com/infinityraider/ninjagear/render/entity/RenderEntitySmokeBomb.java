@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @MethodsReturnNonnullByDefault
 public class RenderEntitySmokeBomb extends RenderEntityAsItem<EntitySmokeBomb> {
     public RenderEntitySmokeBomb(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new ItemStack(ItemRegistry.getInstance().itemSmokeBomb));
+        super(renderManager, new ItemStack(ItemRegistry.itemSmokeBomb));
     }
 
     @Override

@@ -55,7 +55,7 @@ public class BlockRope extends BlockBase implements SimpleWaterloggedBlock, IRop
     }
 
     public Item asItem() {
-        return ItemRegistry.getInstance().itemRope;
+        return ItemRegistry.itemRope;
     }
 
     @Override
@@ -137,7 +137,7 @@ public class BlockRope extends BlockBase implements SimpleWaterloggedBlock, IRop
                 if(!player.isCreative()) {
                     player.getInventory().removeItem(player.getInventory().selected, 1);
                     if(remaining > 0) {
-                        ItemStack stack = new ItemStack(ItemRegistry.getInstance().itemRope, remaining);
+                        ItemStack stack = new ItemStack(ItemRegistry.itemRope, remaining);
                         if (player.getInventory().add(stack)) {
                             ItemEntity item = new ItemEntity(world, player.getX(), player.getY(), player.getZ(), stack);
                             world.addFreshEntity(item);

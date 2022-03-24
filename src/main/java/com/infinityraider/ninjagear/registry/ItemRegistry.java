@@ -8,41 +8,22 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-public class ItemRegistry {
+public final class ItemRegistry {
     public static final CreativeModeTab CREATIVE_TAB = new CreativeModeTab(Reference.MOD_ID.toLowerCase() + ".creative_tab") {
         @Override
         public ItemStack makeIcon() {
-            return new ItemStack(ItemRegistry.getInstance().itemShuriken);
+            return new ItemStack(ItemRegistry.itemShuriken);
         }
     };
 
-    private static final ItemRegistry INSTANCE = new ItemRegistry();
-
-    public static ItemRegistry getInstance() {
-        return INSTANCE;
-    }
-
-    private ItemRegistry() {
-        itemNinjaArmorHead = new ItemNinjaArmor("ninja_gear_head", EquipmentSlot.HEAD);
-        itemNinjaArmorChest = new ItemNinjaArmor("ninja_gear_chest", EquipmentSlot.CHEST);
-        itemNinjaArmorLegs = new ItemNinjaArmor("ninja_gear_legs", EquipmentSlot.LEGS);
-        itemNinjaArmorFeet = new ItemNinjaArmor("ninja_gear_feet", EquipmentSlot.FEET);
-        itemKatana = new ItemKatana();
-        itemSai = new ItemSai();
-        itemShuriken = new ItemShuriken();
-        itemSmokeBomb = new ItemSmokeBomb();
-        itemRopeCoil = new ItemRopeCoil();
-        itemRope = new ItemRope((IInfinityBlock) BlockRegistry.getInstance().blockRope);
-    }
-
-    public Item itemNinjaArmorHead;
-    public Item itemNinjaArmorChest;
-    public Item itemNinjaArmorLegs;
-    public Item itemNinjaArmorFeet;
-    public Item itemKatana;
-    public Item itemSai;
-    public Item itemShuriken;
-    public Item itemSmokeBomb;
-    public Item itemRopeCoil;
-    public Item itemRope;
+    public static final Item itemNinjaArmorHead = new ItemNinjaArmor("ninja_gear_head", EquipmentSlot.HEAD);
+    public static final Item itemNinjaArmorChest = new ItemNinjaArmor("ninja_gear_chest", EquipmentSlot.CHEST);
+    public static final Item itemNinjaArmorLegs = new ItemNinjaArmor("ninja_gear_legs", EquipmentSlot.LEGS);
+    public static final Item itemNinjaArmorFeet = new ItemNinjaArmor("ninja_gear_feet", EquipmentSlot.FEET);
+    public static final Item itemKatana = new ItemKatana();
+    public static final Item itemSai = new ItemSai();
+    public static final Item itemShuriken = new ItemShuriken();
+    public static final Item itemSmokeBomb = new ItemSmokeBomb();
+    public static final Item itemRopeCoil = new ItemRopeCoil();
+    public static final Item itemRope = new ItemRope((IInfinityBlock) BlockRegistry.blockRope);
 }

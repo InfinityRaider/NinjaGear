@@ -28,7 +28,7 @@ public class EntityTargetingHandler {
         if(target == null || attacker == null || !(target instanceof Player)) {
             return;
         }
-        if(target.hasEffect(EffectRegistry.getInstance().effectNinjaHidden)) {
+        if(target.hasEffect(EffectRegistry.effectNinjaHidden)) {
             if(attacker instanceof IEntityTrueSight && ((IEntityTrueSight) attacker).canSeeTarget((Player) target)) {
                 return;
             }
@@ -46,7 +46,7 @@ public class EntityTargetingHandler {
         LivingEntity attacker = event.getAttacker();
         if(attacker instanceof Player) {
             Player player = (Player) attacker;
-            if(player.hasEffect(EffectRegistry.getInstance().effectNinjaHidden)) {
+            if(player.hasEffect(EffectRegistry.effectNinjaHidden)) {
                 event.setResult(Event.Result.DENY);
             }
         }

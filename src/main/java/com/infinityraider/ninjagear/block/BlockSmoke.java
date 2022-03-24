@@ -33,7 +33,7 @@ public class BlockSmoke extends BlockBase {
     private static final InfPropertyConfiguration PROPERTIES = InfPropertyConfiguration.builder().add(PROPERTY_AGE, MAX_AGE).build();
 
     public static BlockState getBlockStateForDarkness(int darkness) {
-        BlockSmoke block = (BlockSmoke) BlockRegistry.getInstance().blockSmoke;
+        BlockSmoke block = (BlockSmoke) BlockRegistry.blockSmoke;
         return block.defaultBlockState().setValue(PROPERTY_AGE, darkness);
     }
 

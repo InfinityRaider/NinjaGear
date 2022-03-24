@@ -44,12 +44,12 @@ public class RenderNinjaGadget {
     private RenderNinjaGadget() {
         this.renderMap = new HashMap<>();
         this.itemsToRender = new ItemStack[] {
-                new ItemStack(ItemRegistry.getInstance().itemKatana),
-                new ItemStack(ItemRegistry.getInstance().itemSai),
-                new ItemStack(ItemRegistry.getInstance().itemSai),
-                new ItemStack(ItemRegistry.getInstance().itemShuriken),
-                new ItemStack(ItemRegistry.getInstance().itemSmokeBomb),
-                new ItemStack(ItemRegistry.getInstance().itemRopeCoil)
+                new ItemStack(ItemRegistry.itemKatana),
+                new ItemStack(ItemRegistry.itemSai),
+                new ItemStack(ItemRegistry.itemSai),
+                new ItemStack(ItemRegistry.itemShuriken),
+                new ItemStack(ItemRegistry.itemSmokeBomb),
+                new ItemStack(ItemRegistry.itemRopeCoil)
         };
     }
 

@@ -34,7 +34,7 @@ public class RenderPlayerHandler {
 
     public boolean isInvisible(Player player) {
         if(player == Minecraft.getInstance().player) {
-            return player.hasEffect(EffectRegistry.getInstance().effectNinjaHidden);
+            return player.hasEffect(EffectRegistry.effectNinjaHidden);
         }
         return invisibilityMap.containsKey(player.getUUID()) && invisibilityMap.get(player.getUUID());
     }

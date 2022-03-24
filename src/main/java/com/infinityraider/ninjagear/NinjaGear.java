@@ -45,23 +45,23 @@ public class NinjaGear extends InfinityMod<IProxy, Config> {
     }
 
     @Override
-    public Object getModBlockRegistry() {
-        return BlockRegistry.getInstance();
+    public Class<?> getModBlockRegistry() {
+        return BlockRegistry.class;
     }
 
     @Override
-    public Object getModItemRegistry() {
-        return ItemRegistry.getInstance();
+    public Class<?> getModItemRegistry() {
+        return ItemRegistry.class;
     }
 
     @Override
-    public Object getModEntityRegistry() {
-        return EntityRegistry.getInstance();
+    public Class<?> getModEntityRegistry() {
+        return EntityRegistry.class;
     }
 
     @Override
-    public Object getModEffectRegistry() {
-        return EffectRegistry.getInstance();
+    public Class<?> getModEffectRegistry() {
+        return EffectRegistry.class;
     }
 
     @Override

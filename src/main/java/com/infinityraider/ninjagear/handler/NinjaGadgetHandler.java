@@ -72,11 +72,11 @@ public class NinjaGadgetHandler {
     }
 
     public enum Gadgets {
-        KATANA(ItemRegistry.getInstance().itemKatana),
-        SAI(ItemRegistry.getInstance().itemSai),
-        SHURIKEN(ItemRegistry.getInstance().itemShuriken),
-        SMOKE_BOMB(ItemRegistry.getInstance().itemSmokeBomb),
-        ROPE_COIL(ItemRegistry.getInstance().itemRopeCoil);
+        KATANA(ItemRegistry.itemKatana),
+        SAI(ItemRegistry.itemSai),
+        SHURIKEN(ItemRegistry.itemShuriken),
+        SMOKE_BOMB(ItemRegistry.itemSmokeBomb),
+        ROPE_COIL(ItemRegistry.itemRopeCoil);
 
         private final Item item;
 

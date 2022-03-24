@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @MethodsReturnNonnullByDefault
 public class RenderEntityRopeCoil extends RenderEntityAsItem<EntityRopeCoil> {
     public RenderEntityRopeCoil(EntityRendererProvider.Context renderManager) {
-        super(renderManager, new ItemStack(ItemRegistry.getInstance().itemRopeCoil));
+        super(renderManager, new ItemStack(ItemRegistry.itemRopeCoil));
     }
 
     @Override

@@ -35,7 +35,7 @@ public class ItemShuriken extends ItemBase implements IHiddenItem {
     @ParametersAreNonnullByDefault
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if(!world.isClientSide()) {
-            boolean crit = player.hasEffect(EffectRegistry.getInstance().effectNinjaHidden);
+            boolean crit = player.hasEffect(EffectRegistry.effectNinjaHidden);
             EntityShuriken shuriken = new EntityShuriken(player, crit);
             world.addFreshEntity(shuriken);
             if (!player.isCreative()) {

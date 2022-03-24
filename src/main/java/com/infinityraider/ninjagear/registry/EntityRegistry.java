@@ -11,42 +11,30 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public class EntityRegistry {
-    private static final EntityRegistry INSTANCE = new EntityRegistry();
-
-    public static EntityRegistry getInstance() {
-        return INSTANCE;
-    }
-
-    private EntityRegistry() {
-        this.entitySmokeBomb = EntityTypeBase.entityTypeBuilder(Names.Items.SMOKE_BOMB, EntitySmokeBomb.class, EntitySmokeBomb.SpawnFactory.getInstance(),
-                MobCategory.MISC, EntityDimensions.fixed(Constants.UNIT, Constants.UNIT))
-
+    public static final EntityType<EntitySmokeBomb> entitySmokeBomb = EntityTypeBase.entityTypeBuilder(
+            Names.Items.SMOKE_BOMB, EntitySmokeBomb.class, EntitySmokeBomb.SpawnFactory.getInstance(),
+            MobCategory.MISC, EntityDimensions.fixed(Constants.UNIT, Constants.UNIT))
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
                 .setVelocityUpdates(true)
                 .setRenderFactory(EntitySmokeBomb.RenderFactory.getInstance())
                 .build();
 
-        this.entityShuriken = EntityTypeBase.entityTypeBuilder(Names.Items.SHURIKEN, EntityShuriken.class, EntityShuriken.SpawnFactory.getInstance(),
-                MobCategory.MISC, EntityDimensions.fixed(Constants.UNIT, Constants.UNIT))
-
+    public static final EntityType<EntityShuriken> entityShuriken = EntityTypeBase.entityTypeBuilder(
+            Names.Items.SHURIKEN, EntityShuriken.class, EntityShuriken.SpawnFactory.getInstance(),
+            MobCategory.MISC, EntityDimensions.fixed(Constants.UNIT, Constants.UNIT))
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
                 .setVelocityUpdates(true)
                 .setRenderFactory(EntityShuriken.RenderFactory.getInstance())
                 .build();
 
-        this.entityRopeCoil = EntityTypeBase.entityTypeBuilder(Names.Items.ROPE_COIL, EntityRopeCoil.class, EntityRopeCoil.SpawnFactory.getInstance(),
-                MobCategory.MISC, EntityDimensions.fixed(Constants.UNIT, Constants.UNIT))
-
+    public static final EntityType<EntityRopeCoil> entityRopeCoil = EntityTypeBase.entityTypeBuilder(
+            Names.Items.ROPE_COIL, EntityRopeCoil.class, EntityRopeCoil.SpawnFactory.getInstance(),
+            MobCategory.MISC, EntityDimensions.fixed(Constants.UNIT, Constants.UNIT))
                 .setTrackingRange(32)
                 .setUpdateInterval(1)
                 .setVelocityUpdates(true)
                 .setRenderFactory(EntityRopeCoil.RenderFactory.getInstance())
                 .build();
-    }
-
-    public final EntityType<EntitySmokeBomb> entitySmokeBomb;
-    public final EntityType<EntityShuriken> entityShuriken;
-    public final EntityType<EntityRopeCoil> entityRopeCoil;
 }

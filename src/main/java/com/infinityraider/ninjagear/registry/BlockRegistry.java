@@ -4,18 +4,7 @@ import com.infinityraider.ninjagear.block.BlockRope;
 import com.infinityraider.ninjagear.block.BlockSmoke;
 import net.minecraft.world.level.block.Block;
 
-public class BlockRegistry {
-    private static final BlockRegistry INSTANCE = new BlockRegistry();
-
-    public static BlockRegistry getInstance() {
-        return INSTANCE;
-    }
-
-    private BlockRegistry() {
-        this.blockSmoke = new BlockSmoke();
-        this.blockRope = new BlockRope();
-    }
-
-    public Block blockSmoke;
-    public Block blockRope;
+public final class BlockRegistry {
+    public static final Block blockSmoke = new BlockSmoke();
+    public static final Block blockRope = new BlockRope();
 }
