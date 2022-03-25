@@ -1,5 +1,8 @@
 Changelog
 ---------
+2.1.0
+ - CHANGE: Ported to Minecraft version 1.18.2
+
 2.0.4
  - FIXED: Server crash after attacking a zombie from invisibility
 
