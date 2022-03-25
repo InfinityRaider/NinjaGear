@@ -7,7 +7,6 @@ import com.infinityraider.ninjagear.block.BlockSmoke;
 import com.infinityraider.ninjagear.registry.EffectRegistry;
 import com.infinityraider.ninjagear.registry.EntityRegistry;
 import com.infinityraider.ninjagear.render.entity.RenderEntitySmokeBomb;
-import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
