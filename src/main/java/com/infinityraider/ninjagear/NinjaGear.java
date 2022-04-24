@@ -60,7 +60,7 @@ public class NinjaGear extends InfinityMod<IProxy, Config> {
     }
 
     @Override
-    public EffectRegistry getModEffectRegistry() {
+    public EffectRegistry getModMobEffectRegistry() {
         return EffectRegistry.getInstance();
     }
 

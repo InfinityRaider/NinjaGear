@@ -1,7 +1,7 @@
 package com.infinityraider.ninjagear.potion;
 
 import com.infinityraider.infinitylib.modules.synchronizedeffects.ISynchronizedEffect;
-import com.infinityraider.infinitylib.potion.PotionEffectBase;
+import com.infinityraider.infinitylib.potion.MobEffectBase;
 import com.infinityraider.ninjagear.reference.Names;
 import com.infinityraider.ninjagear.registry.EffectRegistry;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -9,8 +9,8 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.awt.*;
 
-public class PotionEffectNinjaSmoked extends PotionEffectBase implements ISynchronizedEffect {
-    public PotionEffectNinjaSmoked()  {
+public class MobEffectNinjaSmoked extends MobEffectBase implements ISynchronizedEffect {
+    public MobEffectNinjaSmoked()  {
         super(Names.Effects.NINJA_SMOKED, MobEffectCategory.NEUTRAL, new Color(0, 0, 0).getRGB());
     }
 

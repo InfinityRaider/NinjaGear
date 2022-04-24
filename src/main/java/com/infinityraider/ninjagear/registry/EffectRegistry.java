@@ -11,25 +11,25 @@ public final class EffectRegistry extends ModContentRegistry {
         return INSTANCE;
     }
 
-    private final RegistryInitializer<PotionEffectNinjaHidden> ninjaHidden;
-    private final RegistryInitializer<PotionEffectNinjaRevealed> ninjaRevealed;
-    private final RegistryInitializer<PotionEffectNinjaSmoked> ninjaSmoked;
+    private final RegistryInitializer<MobEffectNinjaHidden> ninjaHidden;
+    private final RegistryInitializer<MobEffectNinjaRevealed> ninjaRevealed;
+    private final RegistryInitializer<MobEffectNinjaSmoked> ninjaSmoked;
 
     private EffectRegistry() {
-        this.ninjaHidden = this.mobEffect(PotionEffectNinjaHidden::new);
-        this.ninjaRevealed = this.mobEffect(PotionEffectNinjaRevealed::new);
-        this.ninjaSmoked = this.mobEffect(PotionEffectNinjaSmoked::new);
+        this.ninjaHidden = this.mobEffect(MobEffectNinjaHidden::new);
+        this.ninjaRevealed = this.mobEffect(MobEffectNinjaRevealed::new);
+        this.ninjaSmoked = this.mobEffect(MobEffectNinjaSmoked::new);
     }
 
-    public PotionEffectNinjaHidden getNinjaHiddenEffect() {
+    public MobEffectNinjaHidden getNinjaHiddenEffect() {
         return this.ninjaHidden.get();
     }
 
-    public PotionEffectNinjaRevealed getNinjaRevealedEffect() {
+    public MobEffectNinjaRevealed getNinjaRevealedEffect() {
         return this.ninjaRevealed.get();
     }
 
-    public PotionEffectNinjaSmoked getNinjaSmokedEffect() {
+    public MobEffectNinjaSmoked getNinjaSmokedEffect() {
         return this.ninjaSmoked.get();
     }
 }
