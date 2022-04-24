@@ -25,15 +25,15 @@ public class NinjaAuraHandler {
     private NinjaAuraHandler() {}
 
     public void revealEntity(Player player, int duration, boolean breakSmoke) {
-        boolean smoked = player.hasEffect(EffectRegistry.effectNinjaSmoked);
+        boolean smoked = player.hasEffect(EffectRegistry.getInstance().getNinjaSmokedEffect());
         if (smoked) {
             if(breakSmoke) {
-                player.removeEffect(EffectRegistry.effectNinjaSmoked);
+                player.removeEffect(EffectRegistry.getInstance().getNinjaSmokedEffect());
             } else {
                 return;
             }
         }
-        player.addEffect(new MobEffectInstance(EffectRegistry.effectNinjaRevealed, duration, 0, false, true));
+        player.addEffect(new MobEffectInstance(EffectRegistry.getInstance().getNinjaRevealedEffect(), duration, 0, false, true));
     }
 
     private boolean isWearingFullNinjaArmor(Player player) {
@@ -48,8 +48,8 @@ public class NinjaAuraHandler {
     }
 
     private boolean checkHidingRequirements(Player player) {
-        boolean revealed = player.hasEffect(EffectRegistry.effectNinjaRevealed);
-        boolean smoked = player.hasEffect(EffectRegistry.effectNinjaSmoked);
+        boolean revealed = player.hasEffect(EffectRegistry.getInstance().getNinjaRevealedEffect());
+        boolean smoked = player.hasEffect(EffectRegistry.getInstance().getNinjaRevealedEffect());
         if(revealed && !smoked) {
             return false;
         }
@@ -93,15 +93,15 @@ public class NinjaAuraHandler {
         Player player = (Player) entity;
         if(this.isWearingFullNinjaArmor(player)) {
             boolean shouldBeHidden = this.checkHidingRequirements(player);
-            boolean isHidden = player.hasEffect(EffectRegistry.effectNinjaHidden);
+            boolean isHidden = player.hasEffect(EffectRegistry.getInstance().getNinjaHiddenEffect());
             if(shouldBeHidden != isHidden) {
                 if(shouldBeHidden) {
-                    player.addEffect(new MobEffectInstance(EffectRegistry.effectNinjaHidden, Integer.MAX_VALUE, 0, false, true));
+                    player.addEffect(new MobEffectInstance(EffectRegistry.getInstance().getNinjaHiddenEffect(), Integer.MAX_VALUE, 0, false, true));
                     if(!entity.getLevel().isClientSide()) {
                         new MessageInvisibility(player, true).sendToAll();
                     }
                 } else {
-                    player.removeEffect(EffectRegistry.effectNinjaHidden);
+                    player.removeEffect(EffectRegistry.getInstance().getNinjaHiddenEffect());
                     this.revealEntity(player, NinjaGear.instance.getConfig().getHidingCooldown(), true);
                     if(!entity.getLevel().isClientSide()) {
                         new MessageInvisibility(player, false).sendToAll();
@@ -109,11 +109,11 @@ public class NinjaAuraHandler {
                 }
             }
         } else {
-            if(player.hasEffect(EffectRegistry.effectNinjaHidden)) {
-                player.removeEffect(EffectRegistry.effectNinjaHidden);
+            if(player.hasEffect(EffectRegistry.getInstance().getNinjaHiddenEffect())) {
+                player.removeEffect(EffectRegistry.getInstance().getNinjaHiddenEffect());
             }
-            if(player.hasEffect(EffectRegistry.effectNinjaRevealed)) {
-                player.removeEffect(EffectRegistry.effectNinjaRevealed);
+            if(player.hasEffect(EffectRegistry.getInstance().getNinjaRevealedEffect())) {
+                player.removeEffect(EffectRegistry.getInstance().getNinjaRevealedEffect());
             }
         }
     }

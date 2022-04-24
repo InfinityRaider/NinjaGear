@@ -34,7 +34,7 @@ public class EntityShuriken extends EntityThrowableBase {
     }
 
     public EntityShuriken(LivingEntity thrower, boolean crit) {
-        super(EntityRegistry.entityShuriken, thrower);
+        super(EntityRegistry.getInstance().getShurikenEntityType(), thrower);
         this.direction = thrower.getLookAngle();
         this.shoot(direction.x(), direction.y(), direction.z(), 4F, 0.2F);
         this.crit = crit ? NinjaGear.instance.getConfig().getCitMultiplier() : 1;
@@ -85,7 +85,7 @@ public class EntityShuriken extends EntityThrowableBase {
 
     public void dropAsItem(double x, double y, double z) {
         ItemEntity item = new ItemEntity(getLevel(), x, y, z,
-                new ItemStack(ItemRegistry.itemShuriken));
+                new ItemStack(ItemRegistry.getInstance().getShurikenItem()));
         this.getLevel().addFreshEntity(item);
         this.kill();
     }

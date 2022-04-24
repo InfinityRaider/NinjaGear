@@ -140,7 +140,7 @@ public class ItemSai extends ItemBase implements IHiddenItem {
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
         ItemStack offHand = player.getItemBySlot(EquipmentSlot.OFFHAND);
         if(offHand.getItem() == this) {
-            if(player.hasEffect(EffectRegistry.effectNinjaHidden)) {
+            if(player.hasEffect(EffectRegistry.getInstance().getNinjaHiddenEffect())) {
                 player.getAttributes().addTransientAttributeModifiers(this.attributeModifiersCrit);
             } else {
                 player.getAttributes().addTransientAttributeModifiers(this.attributeModifiers);

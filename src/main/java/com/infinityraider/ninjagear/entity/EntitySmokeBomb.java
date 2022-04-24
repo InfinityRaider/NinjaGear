@@ -33,7 +33,7 @@ public class EntitySmokeBomb extends EntityThrowableBase {
     }
 
     public EntitySmokeBomb(LivingEntity thrower, float velocity) {
-        super(EntityRegistry.entitySmokeBomb, thrower);
+        super(EntityRegistry.getInstance().getSmokeBombEntityType(), thrower);
         Vec3 vec = thrower.getLookAngle();
         this.shoot(vec.x(), vec.y(), vec.z(), velocity, 0.2F);
     }
@@ -72,12 +72,12 @@ public class EntitySmokeBomb extends EntityThrowableBase {
                 .filter(entity -> entity != null && (entity instanceof LivingEntity))
                 .forEach(entity -> {
                     LivingEntity living = (LivingEntity) entity;
-                    if (living.hasEffect(EffectRegistry.effectNinjaRevealed)) {
-                        living.removeEffect(EffectRegistry.effectNinjaRevealed);
+                    if (living.hasEffect(EffectRegistry.getInstance().getNinjaRevealedEffect())) {
+                        living.removeEffect(EffectRegistry.getInstance().getNinjaRevealedEffect());
                     }
                     int duration = NinjaGear.instance.getConfig().getSmokeBuffDuration();
                     if(duration > 0) {
-                        living.addEffect(new MobEffectInstance(EffectRegistry.effectNinjaSmoked, duration));
+                        living.addEffect(new MobEffectInstance(EffectRegistry.getInstance().getNinjaSmokedEffect(), duration));
                     }
                 });
     }

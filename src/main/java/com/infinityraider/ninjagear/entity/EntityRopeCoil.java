@@ -33,7 +33,7 @@ public class EntityRopeCoil extends EntityThrowableBase {
     }
 
     public EntityRopeCoil(Player thrower) {
-        super(EntityRegistry.entityRopeCoil, thrower);
+        super(EntityRegistry.getInstance().getRopeCoilEntityType(), thrower);
         Vec3 vec = thrower.getLookAngle();
         this.shoot(vec.x(), vec.y(), vec.z(), 2F, 0.2F);
     }
@@ -59,7 +59,7 @@ public class EntityRopeCoil extends EntityThrowableBase {
             if (!world.isClientSide()) {
                 BlockPos pos = this.getBlockPosFromImpact((BlockHitResult) impact);
                 BlockState state = world.getBlockState(pos);
-                BlockState rope = BlockRegistry.blockRope.defaultBlockState();
+                BlockState rope = BlockRegistry.getInstance().getRopeBlock().defaultBlockState();
                 if (state.getBlock() instanceof BlockRope) {
                     BlockRope ropeBlock = (BlockRope) state.getBlock();
                     this.addRemainingToInventory(ropeBlock.extendRope(world, pos, NinjaGear.instance.getConfig().getRopeCoilLength()));
@@ -74,7 +74,7 @@ public class EntityRopeCoil extends EntityThrowableBase {
 
     public void dropAsItem(double x, double y, double z) {
         ItemEntity item = new ItemEntity(this.getLevel(), x, y, z,
-                new ItemStack(ItemRegistry.itemRopeCoil));
+                new ItemStack(ItemRegistry.getInstance().getRopeItem()));
         this.getLevel().addFreshEntity(item);
         this.kill();
     }
@@ -88,7 +88,7 @@ public class EntityRopeCoil extends EntityThrowableBase {
     }
 
     private int placeRope(Level world, BlockPos pos, int ropeCount) {
-        BlockRope ropeBlock = (BlockRope) BlockRegistry.blockRope;
+        BlockRope ropeBlock = (BlockRope) BlockRegistry.getInstance().getRopeBlock();
         BlockState rope = ropeBlock.getStateForPlacement(world, pos);
         world.setBlock(pos, rope, 3);
         return ropeBlock.extendRope(world, pos, ropeCount - 1);
@@ -96,7 +96,7 @@ public class EntityRopeCoil extends EntityThrowableBase {
 
     private void addRemainingToInventory(int remaining) {
         if(remaining > 0) {
-            ItemStack stack = new ItemStack(ItemRegistry.itemRope, remaining);
+            ItemStack stack = new ItemStack(ItemRegistry.getInstance().getRopeItem(), remaining);
             if(this.getOwner() != null && !this.getOwner().getInventory().add(stack)) {
                 ItemEntity item = new ItemEntity(this.getLevel(), this.getX(), this.getY(), this.getZ(), stack);
                 this.getLevel().addFreshEntity(item);

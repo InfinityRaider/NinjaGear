@@ -15,6 +15,8 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 
+import java.util.function.Supplier;
+
 /**
  * Every client checks for changes in items equipped in the inventory.
  * If a change is detected, a message is sent to the server which sends the change to all other clients.
@@ -72,23 +74,23 @@ public class NinjaGadgetHandler {
     }
 
     public enum Gadgets {
-        KATANA(ItemRegistry.itemKatana),
-        SAI(ItemRegistry.itemSai),
-        SHURIKEN(ItemRegistry.itemShuriken),
-        SMOKE_BOMB(ItemRegistry.itemSmokeBomb),
-        ROPE_COIL(ItemRegistry.itemRopeCoil);
+        KATANA(ItemRegistry.getInstance()::getKatanaItem),
+        SAI(ItemRegistry.getInstance()::getSaiItem),
+        SHURIKEN(ItemRegistry.getInstance()::getShurikenItem),
+        SMOKE_BOMB(ItemRegistry.getInstance()::getSmokeBombItem),
+        ROPE_COIL(ItemRegistry.getInstance()::getRopeCoilItem);
 
-        private final Item item;
+        private final Supplier<Item> item;
 
         private int counter;
         private int prevCount;
 
-        Gadgets(Item item) {
+        Gadgets(Supplier<Item> item) {
             this.item = item;
         }
 
         public Item getItem() {
-            return item;
+            return this.item.get();
         }
 
         public void increment() {

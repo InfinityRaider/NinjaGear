@@ -1,6 +1,5 @@
 package com.infinityraider.ninjagear.item;
 
-import com.infinityraider.infinitylib.block.IInfinityBlock;
 import com.infinityraider.infinitylib.item.BlockItemBase;
 import com.infinityraider.ninjagear.NinjaGear;
 import com.infinityraider.ninjagear.reference.Reference;
@@ -36,11 +35,12 @@ import java.util.List;
 
 @MethodsReturnNonnullByDefault
 public class ItemRope extends BlockItemBase implements IHiddenItem {
-    private final BlockRope block;
+    public ItemRope() {
+        super(BlockRegistry.getInstance().getRopeBlock(), new Properties().tab(ItemRegistry.CREATIVE_TAB));
+    }
 
-    public ItemRope(IInfinityBlock block) {
-        super(block, new Properties().tab(ItemRegistry.CREATIVE_TAB));
-        this.block = (BlockRope) BlockRegistry.blockRope;
+    public BlockRope getRopeBlock() {
+        return BlockRegistry.getInstance().getRopeBlock();
     }
 
     @Override
@@ -65,9 +65,9 @@ public class ItemRope extends BlockItemBase implements IHiddenItem {
             pos = pos.relative(context.getClickedFace());
         }
         if (stack.getCount() != 0 && player.mayUseItemAt(pos, face, stack) && blockContext.canPlace()) {
-            BlockState newState = this.block.getStateForPlacement(blockContext);
+            BlockState newState = this.getRopeBlock().getStateForPlacement(blockContext);
             if (newState != null && newState.canSurvive(world, pos) && placeBlockAt(stack, player, world, pos, newState)) {
-                SoundType soundtype = this.block.getSoundType(state, world, pos, player);
+                SoundType soundtype = this.getRopeBlock().getSoundType(state, world, pos, player);
                 world.playSound(player, pos, soundtype.getPlaceSound(), SoundSource.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                 stack.setCount(stack.getCount() - 1);
             }
@@ -95,7 +95,7 @@ public class ItemRope extends BlockItemBase implements IHiddenItem {
     public void attemptToCreateRopeCoil(Player player) {
         ItemStack stack = player.getInventory().getSelected();
         if(stack.getItem() instanceof ItemRope && stack.getCount() >= NinjaGear.instance.getConfig().getRopeCoilLength()) {
-            ItemStack coil = new ItemStack(ItemRegistry.itemRopeCoil, 1);
+            ItemStack coil = new ItemStack(ItemRegistry.getInstance().getRopeCoilItem(), 1);
             if(player.getInventory().add(coil) && !player.isCreative()) {
                 player.getInventory().removeItem(player.getInventory().selected, NinjaGear.instance.getConfig().getRopeCoilLength());
             }
@@ -117,8 +117,8 @@ public class ItemRope extends BlockItemBase implements IHiddenItem {
             return false;
         }
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock() == this.block) {
-            this.block.setPlacedBy(world, pos, state, player, stack);
+        if (state.getBlock() == this.getRopeBlock()) {
+            this.getRopeBlock().setPlacedBy(world, pos, state, player, stack);
         }
         return true;
     }

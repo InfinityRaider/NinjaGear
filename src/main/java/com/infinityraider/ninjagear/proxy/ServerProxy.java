@@ -11,6 +11,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ServerProxy implements IProxy, IServerProxyBase<Config> {
     @Override
     public boolean isPlayerHidden(Player player) {
-        return player.hasEffect(EffectRegistry.effectNinjaHidden);
+        return player.hasEffect(EffectRegistry.getInstance().getNinjaHiddenEffect());
     }
 }
